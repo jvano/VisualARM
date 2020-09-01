@@ -3,6 +3,6 @@
 ################################################################################
 
 /.vs/AzureResourceManagerClient/v15
-/bin/Debug
-/obj/Debug
+/bin
+/obj
 /packages
