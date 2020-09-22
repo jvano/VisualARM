@@ -2,6 +2,8 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -24,6 +26,8 @@ namespace Vano.Tools.Azure
         private string _certThumbprint;
         private string _privateGeoEndpoint;
         private TemplateDocument _customTemplatesDocument;
+        private BindingList<Request> _requests = new BindingList<Request>();
+        private int MaxRequestsToKeep = 100;
 
         public MainForm()
         {
@@ -36,6 +40,7 @@ namespace Vano.Tools.Azure
         private void MainForm_Load(object sender, EventArgs e)
         {
             LoadTemplates();
+            BindRequestLog();
             ShowConnectDialog();
         }
 
@@ -58,6 +63,25 @@ namespace Vano.Tools.Azure
                     this.cloudTypeToolStripComboBox.SelectedIndex = this.cloudTypeToolStripComboBox.Items.Count - 1;
                 }
             }
+        }
+
+        private void BindRequestLog()
+        {
+            this._requests.AllowEdit = true;
+            this._requests.AllowNew = true;
+            this._requests.AllowRemove = true;
+
+            this.requestLogListBox.DataSource = this._requests;
+            this.requestLogListBox.DisplayMember = "DisplayLabel";
+            this.requestLogListBox.ValueMember = "DisplayLabel";
+            Request dummyRequest = new Request()
+            {
+                Verb = "GET",
+                Path = "your_requests_will_appear_here",
+                Body = "Some request Body"
+            };
+
+            this.AddRequest(dummyRequest);
         }
 
         private async void cloudTypeToolStripComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -187,6 +211,7 @@ namespace Vano.Tools.Azure
 
         private async void SendRequest()
         {
+            Guid newRequestGuid = Guid.NewGuid();
             try
             {
                 if (autoClearToolStripButton.Checked)
@@ -238,6 +263,18 @@ namespace Vano.Tools.Azure
                 Trace.WriteLine("REQUEST: " + verbToolStripComboBox.SelectedItem.ToString() + " " + pathToolStripTextBox.Text);
                 Trace.WriteLine("SECRET: " + tenantToken);
 
+                Request newRequestToLog = new Request()
+                {
+                    Body = body,
+                    Path = path,
+                    Verb = verbToolStripComboBox.SelectedItem.ToString(),
+                    Id = newRequestGuid
+                };
+
+                this.AddRequest(newRequestToLog);
+
+                string responseToLog = string.Empty;
+
                 string response = await _client.CallAzureResourceManager(
                     method: verbToolStripComboBox.SelectedItem.ToString(),
                     path: path,
@@ -248,22 +285,39 @@ namespace Vano.Tools.Azure
                 
                 if (string.IsNullOrWhiteSpace(response))
                 {
-                    Trace.WriteLine("The request has completed successfully!");
+                    responseToLog = "The request has completed successfully!";
+                    Trace.WriteLine(responseToLog);
+                    
                 }
                 else
                 {
-                    Trace.WriteLine("RESPONSE:");
-                    Trace.WriteLine(JsonHelper.FormatJson(response));                    
+                    StringBuilder responseToLogBuilder = new StringBuilder();
+                    responseToLogBuilder.AppendLine("RESPONSE: ");
+                    responseToLogBuilder.AppendLine(JsonHelper.FormatJson(response));
+                    responseToLog = responseToLogBuilder.ToString();
+
+                    Trace.WriteLine(responseToLog);
                 }
+
+                UpdateRequestResponse(newRequestGuid, responseToLog);
 
                 Trace.WriteLine(string.Empty);
             }
             catch (Exception ex)
             {
-                Trace.WriteLine(string.Empty);
-                Trace.WriteLine("ERROR:");
-                Trace.WriteLine(JsonHelper.FormatJson(ex.Message));
-                Trace.WriteLine(string.Empty);
+                string responseToLog = string.Empty;
+                StringBuilder responseToLogBuilder = new StringBuilder();
+
+
+                responseToLogBuilder.AppendLine(string.Empty);
+                responseToLogBuilder.AppendLine("ERROR:");
+                responseToLogBuilder.AppendLine(JsonHelper.FormatJson(ex.Message));
+                responseToLogBuilder.AppendLine(string.Empty);
+                responseToLog = responseToLogBuilder.ToString();
+
+                Trace.WriteLine(responseToLog);
+
+                UpdateRequestResponse(newRequestGuid, responseToLog);
             }
         }
 
@@ -890,6 +944,75 @@ namespace Vano.Tools.Azure
             {
                 // DO NOTHING
             }
+        }
+
+        private void sitesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ShowSitesBatchDialog();
+        }
+
+        private void ShowSitesBatchDialog()
+        {
+            string resourceGroupParameter = this.pathToolStripTextBox.Text;
+
+            if (this.SelectedResourceGroup != null)
+            {
+                resourceGroupParameter = this.SelectedResourceGroup.Id;
+            }
+
+
+            using (SitesBatchDialog dialog = new SitesBatchDialog(resourceGroupParameter, this.bodyColoredTextBox.Text))
+            {
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+
+                    decimal numberOfSites = dialog.NumberOfSites;
+                    string siteNamePrefix = dialog.SiteNamePrefix;
+
+                    for (int i = 0; i < numberOfSites; i++)
+                    {
+                        string siteName = string.Concat(dialog.SiteNamePrefix, "-", i);
+                        this.pathToolStripTextBox.Text = string.Concat(dialog.ResourceGroup, "/providers/Microsoft.Web/sites/", siteName, "?api-version=2016-09-01");
+                        this.bodyColoredTextBox.Text = dialog.RequestBodyTemplate.Replace("<sitename>", siteName);
+                        SendRequest();
+                    }
+                }
+            }
+        }
+
+        private void AddRequest(Request newRequest)
+        {
+            if (this._requests.Count == MaxRequestsToKeep)
+            {
+                this._requests.RemoveAt(0);
+            }
+
+            this._requests.Add(newRequest);
+        }
+
+        private void UpdateRequestResponse(Guid RequestId, string response)
+        {
+            Request requestToEdit = this._requests.SingleOrDefault(r => r.Id == RequestId);
+
+            if (requestToEdit != null)
+            {
+                requestToEdit.Response = response;
+            }
+        }
+
+
+        private void clearRequestsToolStripButton_Click(object sender, EventArgs e)
+        {
+            this._requests.Clear();
+        }
+
+        private void requestLogListBox_DoubleClick(object sender, EventArgs e)
+        {
+
+            this.bodyColoredTextBox.Text = ((Request)this.requestLogListBox.SelectedItem).Body;
+            this.verbToolStripComboBox.Text = ((Request)this.requestLogListBox.SelectedItem).Verb;
+            this.pathToolStripTextBox.Text = ((Request)this.requestLogListBox.SelectedItem).Path;
+            this.traceColoredTextBox.Text = ((Request)this.requestLogListBox.SelectedItem).Response;
         }
     }
 }
