@@ -14,7 +14,7 @@ namespace Vano.Tools.Azure.Dialogs
     {
         // App Service on Azure - Dogfood and CSM-Direct defaults
         private const string DefaultGeoProxyPrivateStampEndpoint = "joaquinvvmssgeo";
-        private const string DefaultCsmDirectPrivateStampEndpoint = "joaquinvvmssgeo.cloudapp.net:444";
+        private const string DefaultCsmDirectPrivateStampEndpoint = "geomaster.joaquinvvmss.antares-test.windows-int.net:444";
 
         // App Service on Azure Stack Hub defaults
         private const string DefaultAzureStackAdminArmEndpoint = "az-vanox:30005";

@@ -5,21 +5,28 @@ using System.Windows.Forms;
 
 namespace Vano.Tools.Azure
 {
-    static class Program
+    public static class Program
     {
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
+        public static void Main(string[] args)
         {
+            if (args.Length == 0)
+            {
+                ReRunProgram();
+
+                return;
+            }
+
             // For private deployments let's not enforce SSL validation
             ServicePointManager.ServerCertificateValidationCallback = ((sender, certificate, chain, sslPolicyErrors) =>
             {
                 return true;
             });
 
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls13;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
@@ -35,6 +42,15 @@ namespace Vano.Tools.Azure
             {
                 Trace.WriteLine(e.ToString());
             }
+        }
+
+        private static void ReRunProgram()
+        {
+            Process process = new Process();
+            process.StartInfo.FileName = Process.GetCurrentProcess().MainModule.FileName;
+            process.StartInfo.Verb = "runas"; 
+            process.StartInfo.Arguments = "/elevated";                
+            process.Start();
         }
     }
 }

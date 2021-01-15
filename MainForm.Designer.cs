@@ -167,7 +167,7 @@
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(92, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(93, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             // 
             // batchToolStripMenuItem
@@ -633,7 +633,7 @@
             this.excludeBodyToolStripButton.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.excludeBodyToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.excludeBodyToolStripButton.Name = "excludeBodyToolStripButton";
-            this.excludeBodyToolStripButton.Size = new System.Drawing.Size(97, 22);
+            this.excludeBodyToolStripButton.Size = new System.Drawing.Size(98, 22);
             this.excludeBodyToolStripButton.Text = "Exclude body";
             // 
             // clearBodyToolStripButton
@@ -699,7 +699,7 @@
         '\'',
         '\''};
             this.traceColoredTextBox.AutoIndentCharsPatterns = "\r\n^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;]+);\r\n";
-            this.traceColoredTextBox.AutoScrollMinSize = new System.Drawing.Size(2, 15);
+            this.traceColoredTextBox.AutoScrollMinSize = new System.Drawing.Size(25, 15);
             this.traceColoredTextBox.BackBrush = null;
             this.traceColoredTextBox.BracketsHighlightStrategy = FastColoredTextBoxNS.BracketsHighlightStrategy.Strategy2;
             this.traceColoredTextBox.CharHeight = 15;
@@ -945,7 +945,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
-            this.Text = "Visual Azure Resource Manager Client";
+            this.Text = "Visual ARM - Azure Resource Manager";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.menuStrip1.ResumeLayout(false);
