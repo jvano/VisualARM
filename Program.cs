@@ -14,12 +14,12 @@ namespace Vano.Tools.Azure
         static void Main()
         {
             // For private deployments let's not enforce SSL validation
-            System.Net.ServicePointManager.ServerCertificateValidationCallback = ((sender, certificate, chain, sslPolicyErrors) =>
+            ServicePointManager.ServerCertificateValidationCallback = ((sender, certificate, chain, sslPolicyErrors) =>
             {
                 return true;
             });
 
-            System.Net.ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls13;
 
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 

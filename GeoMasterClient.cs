@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.ServiceModel;
 using System.ServiceModel.Description;
@@ -229,13 +230,18 @@ namespace Vano.Tools.Azure
             }
             catch (WebException e)
             {
-                using (Stream receiveStream = e.Response.GetResponseStream())
+                if (e.Response != null)
                 {
-                    using (StreamReader readStream = new StreamReader(receiveStream, Encoding.UTF8))
+                    using (Stream receiveStream = e.Response.GetResponseStream())
                     {
-                        throw new Exception(e.Message + Environment.NewLine + readStream.ReadToEnd());
+                        using (StreamReader readStream = new StreamReader(receiveStream, Encoding.UTF8))
+                        {
+                            throw new Exception(e.Message + Environment.NewLine + readStream.ReadToEnd());
+                        }
                     }
                 }
+
+                throw;
             }
         }
 

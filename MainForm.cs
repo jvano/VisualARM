@@ -74,14 +74,6 @@ namespace Vano.Tools.Azure
             this.requestLogListBox.DataSource = this._requests;
             this.requestLogListBox.DisplayMember = "DisplayLabel";
             this.requestLogListBox.ValueMember = "DisplayLabel";
-            Request dummyRequest = new Request()
-            {
-                Verb = "GET",
-                Path = "your_requests_will_appear_here",
-                Body = "Some request Body"
-            };
-
-            this.AddRequest(dummyRequest);
         }
 
         private async void cloudTypeToolStripComboBox_SelectedIndexChanged(object sender, EventArgs e)
