@@ -57,6 +57,7 @@
             this.okButton.TabIndex = 0;
             this.okButton.Text = "Ok";
             this.okButton.UseVisualStyleBackColor = true;
+            this.okButton.Click += new System.EventHandler(this.okButton_Click);
             // 
             // cancelButton
             // 
@@ -191,7 +192,6 @@
             this.privateGeoEndpointTextBox.Name = "privateGeoEndpointTextBox";
             this.privateGeoEndpointTextBox.Size = new System.Drawing.Size(391, 20);
             this.privateGeoEndpointTextBox.TabIndex = 2;
-            this.privateGeoEndpointTextBox.Text = "joaquinvvmssgeo";
             // 
             // label5
             // 
