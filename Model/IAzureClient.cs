@@ -10,6 +10,8 @@ namespace Vano.Tools.Azure.Model
     {
         string ResouceManagerEndpoint { get; }
 
+        HttpHeadersProcessor HttpHeadersProcessor { get; set; }
+
         Task<string> GetAuthSecret(string tenantId = null);
 
         Task<IEnumerable<Subscription>> GetSubscriptions();
