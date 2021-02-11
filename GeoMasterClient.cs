@@ -68,6 +68,8 @@ namespace Vano.Tools.Azure
 
         public string ApiVersion { get; private set; }
 
+        public HttpHeadersProcessor HttpHeadersProcessor { get; set; }
+
         #endregion
 
         #region Public Methods - ARM Operations
@@ -204,6 +206,11 @@ namespace Vano.Tools.Azure
             request.ContentType = "application/json";
             request.ClientCertificates.Add(_cert);
 
+            if (HttpHeadersProcessor != null)
+            {
+                HttpHeadersProcessor.CaptureRequest(request.Host, request.Headers);
+            }
+
             if (string.IsNullOrWhiteSpace(body))
             {
                 request.ContentLength = 0;
@@ -220,6 +227,12 @@ namespace Vano.Tools.Azure
             try
             {
                 HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync();
+
+                if (HttpHeadersProcessor != null)
+                {
+                    HttpHeadersProcessor.CaptureResponse(response.StatusCode, response.Headers);
+                }
+
                 using (Stream receiveStream = response.GetResponseStream())
                 {
                     using (StreamReader readStream = new StreamReader(receiveStream, Encoding.UTF8))
