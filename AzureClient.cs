@@ -23,6 +23,7 @@ namespace Vano.Tools.Azure
         private SemaphoreSlim _lock = new SemaphoreSlim(1, 1);
         private AuthenticationContext _authContext;
         private TokenCache _cache = new TokenCache();
+
         #endregion
 
         #region Constants
@@ -84,6 +85,8 @@ namespace Vano.Tools.Azure
         public string AuthenticationEndpoint { get; private set; }
 
         public string AppResourceId { get; private set; }
+
+        public HttpHeadersProcessor HttpHeadersProcessor { get; set; }
 
         #endregion
 
@@ -419,11 +422,6 @@ namespace Vano.Tools.Azure
             return new JObject();
         }
 
-        private async Task<string> CallAzureResourceManager(string method, string path, AuthenticationResult token, string body = null, Dictionary<string, string> parameters = null, string armEndpoint = null, string apiVersion = null)
-        {
-            return await CallAzureResourceManager(method, path, token != null ? token.CreateAuthorizationHeader() : null, body, parameters, armEndpoint, apiVersion);
-        }
-
         public async Task<string> CallAzureResourceManager(string method, string path, string token, string body = null, Dictionary<string, string> parameters = null, string armEndpoint = null, string apiVersion = null)
         {
             Uri requestUri = CreateAzureResourceManagerUri(path, parameters, armEndpoint, apiVersion);
@@ -432,6 +430,11 @@ namespace Vano.Tools.Azure
             request.Method = method;
             request.Headers["Authorization"] = token;
             request.ContentType = "application/json";
+
+            if (HttpHeadersProcessor != null)
+            {
+                HttpHeadersProcessor.CaptureRequest(request.Host, request.Headers);
+            }
 
             if (string.IsNullOrWhiteSpace(body))
             {
@@ -449,6 +452,12 @@ namespace Vano.Tools.Azure
             try
             {
                 HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync();
+
+                if (HttpHeadersProcessor != null)
+                {
+                    HttpHeadersProcessor.CaptureResponse(response.StatusCode, response.Headers);
+                }
+
                 using (Stream receiveStream = response.GetResponseStream())
                 {
                     using (StreamReader readStream = new StreamReader(receiveStream, Encoding.UTF8))

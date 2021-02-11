@@ -254,6 +254,7 @@ namespace Vano.Tools.Azure
 
                 Trace.WriteLine("REQUEST: " + verbToolStripComboBox.SelectedItem.ToString() + " " + pathToolStripTextBox.Text);
                 Trace.WriteLine("SECRET: " + tenantToken);
+                Trace.WriteLine(string.Empty);
 
                 Request newRequestToLog = new Request()
                 {
@@ -267,6 +268,8 @@ namespace Vano.Tools.Azure
 
                 string responseToLog = string.Empty;
 
+                _client.HttpHeadersProcessor = new HttpHeadersProcessor();
+
                 string response = await _client.CallAzureResourceManager(
                     method: verbToolStripComboBox.SelectedItem.ToString(),
                     path: path,
@@ -274,22 +277,26 @@ namespace Vano.Tools.Azure
                     body: body,
                     parameters: null,
                     apiVersion: null);
-                
+
+                Trace.WriteLine("REQUEST HEADERS: ");
+                Trace.WriteLine(_client.HttpHeadersProcessor.GetFormattedRequestHeaders());
+
+                StringBuilder responseToLogBuilder = new StringBuilder();
+                responseToLogBuilder.AppendLine("RESPONSE HEADERS: ");
+                responseToLogBuilder.AppendLine(_client.HttpHeadersProcessor.GetFormattedResponseHeaders());
+                responseToLogBuilder.AppendLine("RESPONSE: ");
+
                 if (string.IsNullOrWhiteSpace(response))
                 {
-                    responseToLog = "The request has completed successfully!";
-                    Trace.WriteLine(responseToLog);
-                    
+                    responseToLogBuilder.AppendLine("The request has completed successfully!");
                 }
                 else
-                {
-                    StringBuilder responseToLogBuilder = new StringBuilder();
-                    responseToLogBuilder.AppendLine("RESPONSE: ");
+                {                 
                     responseToLogBuilder.AppendLine(JsonHelper.FormatJson(response));
-                    responseToLog = responseToLogBuilder.ToString();
-
-                    Trace.WriteLine(responseToLog);
                 }
+
+                responseToLog = responseToLogBuilder.ToString();
+                Trace.WriteLine(responseToLog);
 
                 UpdateRequestResponse(newRequestGuid, responseToLog);
 
@@ -310,6 +317,11 @@ namespace Vano.Tools.Azure
                 Trace.WriteLine(responseToLog);
 
                 UpdateRequestResponse(newRequestGuid, responseToLog);
+            }
+            finally 
+            {
+                // Remove http header processor from the client instance
+                _client.HttpHeadersProcessor = null;
             }
         }
 

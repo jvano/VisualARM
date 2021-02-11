@@ -2,8 +2,9 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
+/.vs/AzureResourceManagerClient/v15
+/.vs/AzureResourceManagerClient/v16
 /app.publish
 /bin
 /obj
 /packages
-/.vs
