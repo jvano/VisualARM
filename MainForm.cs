@@ -201,8 +201,29 @@ namespace Vano.Tools.Azure
             }
         }
 
+        public bool IsBusy
+        {
+            get
+            {
+                return !this.runToolStripButton.Enabled;
+            }
+            set
+            {
+                this.requestTreeProgressBar.Visible = value;
+                this.runToolStripButton.Enabled = !value;
+            }
+        }
+
         private async void SendRequest()
         {
+            if (this.IsBusy)
+            {
+                return;
+            }
+
+            // Update the UI
+            this.IsBusy = true;
+
             Guid newRequestGuid = Guid.NewGuid();
             try
             {
@@ -253,7 +274,7 @@ namespace Vano.Tools.Azure
                 }
 
                 Trace.WriteLine("REQUEST: " + verbToolStripComboBox.SelectedItem.ToString() + " " + pathToolStripTextBox.Text);
-                Trace.WriteLine("SECRET: " + tenantToken);
+                Trace.WriteLine("SECRET: " + (this.hideTokensToolStripButton.Checked ? "●●●●●●" : tenantToken));
                 Trace.WriteLine(string.Empty);
 
                 Request newRequestToLog = new Request()
@@ -322,6 +343,9 @@ namespace Vano.Tools.Azure
             {
                 // Remove http header processor from the client instance
                 _client.HttpHeadersProcessor = null;
+
+                // Update the UI
+                this.IsBusy = false;
             }
         }
 

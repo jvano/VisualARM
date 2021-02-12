@@ -77,9 +77,7 @@
             this.clearBodyToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.panel1 = new System.Windows.Forms.Panel();
             this.Body = new System.Windows.Forms.Label();
-            this.splitContainer3 = new System.Windows.Forms.SplitContainer();
-            this.traceColoredTextBox = new FastColoredTextBoxNS.FastColoredTextBox();
-            this.documentMap2 = new FastColoredTextBoxNS.DocumentMap();
+            this.requestTreeProgressBar = new System.Windows.Forms.ProgressBar();
             this.toolStrip3 = new System.Windows.Forms.ToolStrip();
             this.copyToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.clearToolStripButton = new System.Windows.Forms.ToolStripButton();
@@ -98,6 +96,11 @@
             this.pathToolStripTextBox = new Vano.Tools.Azure.Controls.ToolStripSpringTextBox();
             this.toolStrip2 = new System.Windows.Forms.ToolStrip();
             this.runToolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.splitContainer3 = new System.Windows.Forms.SplitContainer();
+            this.traceColoredTextBox = new FastColoredTextBoxNS.FastColoredTextBox();
+            this.documentMap2 = new FastColoredTextBoxNS.DocumentMap();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.hideTokensToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -128,11 +131,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.bodyColoredTextBox)).BeginInit();
             this.toolStrip5.SuspendLayout();
             this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).BeginInit();
-            this.splitContainer3.Panel1.SuspendLayout();
-            this.splitContainer3.Panel2.SuspendLayout();
-            this.splitContainer3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.traceColoredTextBox)).BeginInit();
             this.toolStrip3.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer5)).BeginInit();
@@ -142,6 +140,11 @@
             this.toolStrip7.SuspendLayout();
             this.panel5.SuspendLayout();
             this.toolStrip2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).BeginInit();
+            this.splitContainer3.Panel1.SuspendLayout();
+            this.splitContainer3.Panel2.SuspendLayout();
+            this.splitContainer3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.traceColoredTextBox)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -530,6 +533,7 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.splitContainer3);
+            this.splitContainer1.Panel2.Controls.Add(this.requestTreeProgressBar);
             this.splitContainer1.Panel2.Controls.Add(this.toolStrip3);
             this.splitContainer1.Panel2.Controls.Add(this.panel2);
             this.splitContainer1.Size = new System.Drawing.Size(824, 603);
@@ -667,72 +671,15 @@
             this.Body.TabIndex = 0;
             this.Body.Text = "Request body:";
             // 
-            // splitContainer3
+            // requestTreeProgressBar
             // 
-            this.splitContainer3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer3.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
-            this.splitContainer3.Location = new System.Drawing.Point(0, 50);
-            this.splitContainer3.Name = "splitContainer3";
-            // 
-            // splitContainer3.Panel1
-            // 
-            this.splitContainer3.Panel1.Controls.Add(this.traceColoredTextBox);
-            // 
-            // splitContainer3.Panel2
-            // 
-            this.splitContainer3.Panel2.Controls.Add(this.documentMap2);
-            this.splitContainer3.Size = new System.Drawing.Size(824, 321);
-            this.splitContainer3.SplitterDistance = 714;
-            this.splitContainer3.TabIndex = 11;
-            // 
-            // traceColoredTextBox
-            // 
-            this.traceColoredTextBox.AutoCompleteBracketsList = new char[] {
-        '(',
-        ')',
-        '{',
-        '}',
-        '[',
-        ']',
-        '\"',
-        '\"',
-        '\'',
-        '\''};
-            this.traceColoredTextBox.AutoIndentCharsPatterns = "\r\n^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;]+);\r\n";
-            this.traceColoredTextBox.AutoScrollMinSize = new System.Drawing.Size(25, 15);
-            this.traceColoredTextBox.BackBrush = null;
-            this.traceColoredTextBox.BracketsHighlightStrategy = FastColoredTextBoxNS.BracketsHighlightStrategy.Strategy2;
-            this.traceColoredTextBox.CharHeight = 15;
-            this.traceColoredTextBox.CharWidth = 7;
-            this.traceColoredTextBox.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.traceColoredTextBox.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
-            this.traceColoredTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.traceColoredTextBox.Font = new System.Drawing.Font("Consolas", 9.75F);
-            this.traceColoredTextBox.IsReplaceMode = false;
-            this.traceColoredTextBox.Language = FastColoredTextBoxNS.Language.JS;
-            this.traceColoredTextBox.LeftBracket = '(';
-            this.traceColoredTextBox.LeftBracket2 = '{';
-            this.traceColoredTextBox.Location = new System.Drawing.Point(0, 0);
-            this.traceColoredTextBox.Name = "traceColoredTextBox";
-            this.traceColoredTextBox.Paddings = new System.Windows.Forms.Padding(0);
-            this.traceColoredTextBox.RightBracket = ')';
-            this.traceColoredTextBox.RightBracket2 = '}';
-            this.traceColoredTextBox.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
-            this.traceColoredTextBox.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("traceColoredTextBox.ServiceColors")));
-            this.traceColoredTextBox.Size = new System.Drawing.Size(714, 321);
-            this.traceColoredTextBox.TabIndex = 3;
-            this.traceColoredTextBox.Zoom = 100;
-            // 
-            // documentMap2
-            // 
-            this.documentMap2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.documentMap2.ForeColor = System.Drawing.Color.Maroon;
-            this.documentMap2.Location = new System.Drawing.Point(0, 0);
-            this.documentMap2.Name = "documentMap2";
-            this.documentMap2.Size = new System.Drawing.Size(106, 321);
-            this.documentMap2.TabIndex = 3;
-            this.documentMap2.Target = this.traceColoredTextBox;
-            this.documentMap2.Text = "documentMap2";
+            this.requestTreeProgressBar.Dock = System.Windows.Forms.DockStyle.Top;
+            this.requestTreeProgressBar.Location = new System.Drawing.Point(0, 50);
+            this.requestTreeProgressBar.Name = "requestTreeProgressBar";
+            this.requestTreeProgressBar.Size = new System.Drawing.Size(824, 11);
+            this.requestTreeProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
+            this.requestTreeProgressBar.TabIndex = 15;
+            this.requestTreeProgressBar.Visible = false;
             // 
             // toolStrip3
             // 
@@ -740,6 +687,8 @@
             this.toolStrip3.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.copyToolStripButton,
             this.clearToolStripButton,
+            this.toolStripSeparator1,
+            this.hideTokensToolStripButton,
             this.autoClearToolStripButton});
             this.toolStrip3.Location = new System.Drawing.Point(0, 25);
             this.toolStrip3.Name = "toolStrip3";
@@ -932,6 +881,91 @@
             this.runToolStripButton.Text = "Send";
             this.runToolStripButton.Click += new System.EventHandler(this.runToolStripButton_Click);
             // 
+            // splitContainer3
+            // 
+            this.splitContainer3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer3.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
+            this.splitContainer3.Location = new System.Drawing.Point(0, 61);
+            this.splitContainer3.Name = "splitContainer3";
+            // 
+            // splitContainer3.Panel1
+            // 
+            this.splitContainer3.Panel1.Controls.Add(this.traceColoredTextBox);
+            // 
+            // splitContainer3.Panel2
+            // 
+            this.splitContainer3.Panel2.Controls.Add(this.documentMap2);
+            this.splitContainer3.Size = new System.Drawing.Size(824, 310);
+            this.splitContainer3.SplitterDistance = 714;
+            this.splitContainer3.TabIndex = 16;
+            // 
+            // traceColoredTextBox
+            // 
+            this.traceColoredTextBox.AutoCompleteBracketsList = new char[] {
+        '(',
+        ')',
+        '{',
+        '}',
+        '[',
+        ']',
+        '\"',
+        '\"',
+        '\'',
+        '\''};
+            this.traceColoredTextBox.AutoIndentCharsPatterns = "\r\n^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;]+);\r\n";
+            this.traceColoredTextBox.AutoScrollMinSize = new System.Drawing.Size(25, 15);
+            this.traceColoredTextBox.BackBrush = null;
+            this.traceColoredTextBox.BracketsHighlightStrategy = FastColoredTextBoxNS.BracketsHighlightStrategy.Strategy2;
+            this.traceColoredTextBox.CharHeight = 15;
+            this.traceColoredTextBox.CharWidth = 7;
+            this.traceColoredTextBox.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.traceColoredTextBox.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.traceColoredTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.traceColoredTextBox.Font = new System.Drawing.Font("Consolas", 9.75F);
+            this.traceColoredTextBox.IsReplaceMode = false;
+            this.traceColoredTextBox.Language = FastColoredTextBoxNS.Language.JS;
+            this.traceColoredTextBox.LeftBracket = '(';
+            this.traceColoredTextBox.LeftBracket2 = '{';
+            this.traceColoredTextBox.Location = new System.Drawing.Point(0, 0);
+            this.traceColoredTextBox.Name = "traceColoredTextBox";
+            this.traceColoredTextBox.Paddings = new System.Windows.Forms.Padding(0);
+            this.traceColoredTextBox.RightBracket = ')';
+            this.traceColoredTextBox.RightBracket2 = '}';
+            this.traceColoredTextBox.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
+            this.traceColoredTextBox.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("traceColoredTextBox.ServiceColors")));
+            this.traceColoredTextBox.Size = new System.Drawing.Size(714, 310);
+            this.traceColoredTextBox.TabIndex = 3;
+            this.traceColoredTextBox.Zoom = 100;
+            // 
+            // documentMap2
+            // 
+            this.documentMap2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.documentMap2.ForeColor = System.Drawing.Color.Maroon;
+            this.documentMap2.Location = new System.Drawing.Point(0, 0);
+            this.documentMap2.Name = "documentMap2";
+            this.documentMap2.Size = new System.Drawing.Size(106, 310);
+            this.documentMap2.TabIndex = 3;
+            this.documentMap2.Target = this.traceColoredTextBox;
+            this.documentMap2.Text = "documentMap2";
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            // 
+            // hideTokensToolStripButton
+            // 
+            this.hideTokensToolStripButton.Checked = true;
+            this.hideTokensToolStripButton.CheckOnClick = true;
+            this.hideTokensToolStripButton.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.hideTokensToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("hideTokensToolStripButton.Image")));
+            this.hideTokensToolStripButton.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.hideTokensToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.hideTokensToolStripButton.Name = "hideTokensToolStripButton";
+            this.hideTokensToolStripButton.Size = new System.Drawing.Size(82, 22);
+            this.hideTokensToolStripButton.Text = "Hide Secrets";
+            this.hideTokensToolStripButton.ToolTipText = "Auto Clear";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -991,11 +1025,6 @@
             this.toolStrip5.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
-            this.splitContainer3.Panel1.ResumeLayout(false);
-            this.splitContainer3.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).EndInit();
-            this.splitContainer3.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.traceColoredTextBox)).EndInit();
             this.toolStrip3.ResumeLayout(false);
             this.toolStrip3.PerformLayout();
             this.panel2.ResumeLayout(false);
@@ -1011,6 +1040,11 @@
             this.panel5.PerformLayout();
             this.toolStrip2.ResumeLayout(false);
             this.toolStrip2.PerformLayout();
+            this.splitContainer3.Panel1.ResumeLayout(false);
+            this.splitContainer3.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).EndInit();
+            this.splitContainer3.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.traceColoredTextBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1054,9 +1088,6 @@
         private System.Windows.Forms.SplitContainer splitContainer2;
         private FastColoredTextBoxNS.FastColoredTextBox bodyColoredTextBox;
         private FastColoredTextBoxNS.DocumentMap documentMap1;
-        private System.Windows.Forms.SplitContainer splitContainer3;
-        private FastColoredTextBoxNS.FastColoredTextBox traceColoredTextBox;
-        private FastColoredTextBoxNS.DocumentMap documentMap2;
         private System.Windows.Forms.TreeView resourcesTreeView;
         private System.Windows.Forms.SplitContainer resourcesSplitContainer;
         private System.Windows.Forms.ProgressBar resourcesTreeProgressBar;
@@ -1086,6 +1117,12 @@
         private System.Windows.Forms.Panel panel5;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.ListBox requestLogListBox;
+        private System.Windows.Forms.ProgressBar requestTreeProgressBar;
+        private System.Windows.Forms.SplitContainer splitContainer3;
+        private FastColoredTextBoxNS.FastColoredTextBox traceColoredTextBox;
+        private FastColoredTextBoxNS.DocumentMap documentMap2;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripButton hideTokensToolStripButton;
     }
 }
 
