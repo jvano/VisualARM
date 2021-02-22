@@ -250,17 +250,24 @@ namespace Vano.Tools.Azure.Dialogs
         private void LoadSavedSettings()
         {
             Dictionary<string, string> settings = new Dictionary<string, string>();
-
+            
             string settingsFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "VisualARM.settings");
             if (File.Exists(settingsFile))
             {
-                foreach (string setting in File.ReadAllLines(settingsFile))
+                try
                 {
-                    string[] parts = setting.Split(new char[] { '=' }, count: 2, options: StringSplitOptions.RemoveEmptyEntries);
-                    settings.Add(parts[0], parts[1]);
+                    foreach (string setting in File.ReadAllLines(settingsFile))
+                    {
+                        string[] parts = setting.Split(new char[] { '=' }, count: 2, options: StringSplitOptions.RemoveEmptyEntries);
+                        settings.Add(parts[0], parts[1]);
+                    }
+                }
+                catch
+                {
+                    File.Delete(settingsFile);
                 }
             }
-
+            
             this.SavedSettings = settings;
         }
 
