@@ -1042,5 +1042,21 @@ namespace Vano.Tools.Azure
             this.pathToolStripTextBox.Text = ((Request)this.requestLogListBox.SelectedItem).Path;
             this.traceColoredTextBox.Text = ((Request)this.requestLogListBox.SelectedItem).Response;
         }
+
+        private void verbToolStripComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            bool excludeBody;
+            string selectedVerb = verbToolStripComboBox.Text.ToUpper();
+            if (selectedVerb == "GET" || selectedVerb == "DELETE" || selectedVerb == "HEAD")
+            {
+                excludeBody = true;
+            }
+            else
+            {
+                excludeBody = false;
+            }
+
+            excludeBodyToolStripButton.Checked = excludeBody;
+        }
     }
 }
