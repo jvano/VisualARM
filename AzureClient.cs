@@ -120,7 +120,7 @@ namespace Vano.Tools.Azure
                 {
                     // dogfood environment uses a different api version for the metadata endpoint.
                     this.Metadata = await GetAzureMetadata(
-                        this.ResouceManagerEndpoint, 
+                        this.ResouceManagerEndpoint,
                         apiVersion: this.ResouceManagerEndpoint.Contains("dogfood") ? "2014-11-01-privatepreview" : "1.0");
                 }
 
@@ -206,6 +206,11 @@ namespace Vano.Tools.Azure
                 try
                 {
                     AuthenticationResult tenantToken = await GetTenantToken(tenantId);
+
+                    if (tenantToken == null)
+                    {
+                        continue;
+                    }
 
                     JObject response = await CallAzureResourceManagerAsJObject("GET", "/subscriptions", tenantToken);
 
@@ -314,8 +319,8 @@ namespace Vano.Tools.Azure
 
         public async Task<string> GetAuthSecret(string tenantId = null)
         {
-            AuthenticationResult result =  tenantId == null ?
-                await GetToken() : 
+            AuthenticationResult result = tenantId == null ?
+                await GetToken() :
                 await GetTenantToken(tenantId);
 
             return result.CreateAuthorizationHeader();
@@ -369,9 +374,9 @@ namespace Vano.Tools.Azure
             }
             catch (AdalException ex)
             {
-                Trace.TraceError(ex.ToString());
+                Trace.TraceError($"TenantId: {tenantId}. Error: {ex.Message}");
 
-                throw;
+                return null;
             }
 
             return result;
