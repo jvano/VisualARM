@@ -79,7 +79,7 @@ namespace Vano.Tools.Azure.Dialogs
                 // Azure ARM
                 case 0:
                     this.ConnectionType = ConnectionType.AzureResourceManager;
-                    this.azureResourceManagerEndpointTextBox.Enabled = false;
+                    this.azureResourceManagerEndpointTextBox.Enabled = true;
                     this.certificateComboBox.Enabled = false;
                     this.azureResourceManagerEndpointTextBox.Text = "management.azure.com";
                     this.moreInfoLinkLabel.Enabled = false;
