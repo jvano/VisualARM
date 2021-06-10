@@ -12,6 +12,31 @@ namespace Vano.Tools.Azure.Dialogs
 {
     public partial class CloudConnectionDialog : Form
     {
+        private const string AzurePublic = "Azure [Public]";
+        private const string AzureCanary = "Azure [Public Canary]";
+        private const string AzureChina = "Azure [China]";
+        private const string AzureFairfax = "Azure [Farilfax]";
+        private const string AzureDogfood = "Azure [Dogfood] (Private Geo with GeoProxy)";
+        private const string AzureCsmDirect = "Azure [CSM-Direct] (Private Geo)";
+        private const string AzureStackAsdkTenant = "Azure Stack [ASDK Tenant]";
+        private const string AzureStackAsdkAdmin = "Azure Stack [ASDK Admin]";
+        private const string AzureStackDevTenant = "Azure Stack [DEV Tenant]";
+        private const string AzureStackDevAdmin = "Azure Stack [DEV Admin]";
+
+        private readonly string[] ArmEndpoints = new string []
+        {
+            AzurePublic,
+            AzureCanary,
+            AzureChina,
+            AzureFairfax,
+            AzureDogfood,
+            AzureCsmDirect,
+            AzureStackAsdkAdmin,
+            AzureStackAsdkTenant,
+            AzureStackDevAdmin,
+            AzureStackDevTenant
+        };
+
         // App Service on Azure - Dogfood and CSM-Direct defaults
         private const string DefaultGeoProxyPrivateStampEndpoint = "joaquinvvmssgeo";
         private const string DefaultCsmDirectPrivateStampEndpoint = "geomaster.joaquinvvmss.antares-test.windows-int.net:444";
@@ -23,6 +48,8 @@ namespace Vano.Tools.Azure.Dialogs
         public CloudConnectionDialog()
         {
             InitializeComponent();
+
+            this.environmentTypeComboBox.Items.AddRange(ArmEndpoints);
         }
 
         private void AzureStackConnectionDialog_Load(object sender, EventArgs e)
@@ -74,20 +101,31 @@ namespace Vano.Tools.Azure.Dialogs
 
         private void environmentTypeComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            switch (this.environmentTypeComboBox.SelectedIndex)
+            string selectedEndpoint = (string)this.environmentTypeComboBox.SelectedItem;
+            switch (selectedEndpoint)
             {
                 // Azure ARM
-                case 0:
+                case AzurePublic:
                     this.ConnectionType = ConnectionType.AzureResourceManager;
-                    this.azureResourceManagerEndpointTextBox.Enabled = false;
+                    this.azureResourceManagerEndpointTextBox.Enabled = true;
                     this.certificateComboBox.Enabled = false;
                     this.azureResourceManagerEndpointTextBox.Text = "management.azure.com";
                     this.moreInfoLinkLabel.Enabled = false;
                     this.privateGeoEndpointTextBox.Enabled = false;
                     this.privateGeoEndpointTextBox.Text = string.Empty;
                     break;
+                // Azure Canary
+                case AzureCanary:
+                    this.ConnectionType = ConnectionType.AzureResourceManager;
+                    this.azureResourceManagerEndpointTextBox.Enabled = false;
+                    this.certificateComboBox.Enabled = false;
+                    this.azureResourceManagerEndpointTextBox.Text = "brazilus.management.azure.com";
+                    this.moreInfoLinkLabel.Enabled = false;
+                    this.privateGeoEndpointTextBox.Enabled = false;
+                    this.privateGeoEndpointTextBox.Text = string.Empty;
+                    break;
                 // Azure China
-                case 1:
+                case AzureChina:
                     this.ConnectionType = ConnectionType.AzureResourceManager;
                     this.azureResourceManagerEndpointTextBox.Enabled = false;
                     this.certificateComboBox.Enabled = false;
@@ -97,7 +135,7 @@ namespace Vano.Tools.Azure.Dialogs
                     this.privateGeoEndpointTextBox.Text = string.Empty;
                     break;
                 // Azure FairFax
-                case 2:
+                case AzureFairfax:
                     this.ConnectionType = ConnectionType.AzureResourceManager;
                     this.azureResourceManagerEndpointTextBox.Enabled = false;
                     this.certificateComboBox.Enabled = false;
@@ -107,7 +145,7 @@ namespace Vano.Tools.Azure.Dialogs
                     this.privateGeoEndpointTextBox.Text = string.Empty;
                     break;
                 // Azure Dogfood
-                case 3:
+                case AzureDogfood:
                     this.ConnectionType = ConnectionType.AzureResourceManagerProxy;
                     this.azureResourceManagerEndpointTextBox.Enabled = false;
                     this.certificateComboBox.Enabled = false;
@@ -117,7 +155,7 @@ namespace Vano.Tools.Azure.Dialogs
                     this.privateGeoEndpointTextBox.Text = GetSetting("DefaultGeoProxyPrivateStampEndpoint", defaultValue: DefaultGeoProxyPrivateStampEndpoint);
                     break;
                 // Azure DEV - GeoMaster ARM
-                case 4:
+                case AzureCsmDirect:
                     this.ConnectionType = ConnectionType.GeoMasterStamp;
                     this.azureResourceManagerEndpointTextBox.Enabled = true;
                     this.certificateComboBox.Enabled = true;
@@ -128,7 +166,7 @@ namespace Vano.Tools.Azure.Dialogs
                     this.privateGeoEndpointTextBox.Text = string.Empty;
                     break;
                 // OneBox - Tenant ARM
-                case 5:
+                case AzureStackAsdkTenant:
                     this.ConnectionType = ConnectionType.AzureResourceManager;
                     this.azureResourceManagerEndpointTextBox.Enabled = true;
                     this.certificateComboBox.Enabled = false;
@@ -138,7 +176,7 @@ namespace Vano.Tools.Azure.Dialogs
                     this.privateGeoEndpointTextBox.Text = string.Empty;
                     break;
                 // OneBox - Admin ARM
-                case 6:
+                case AzureStackAsdkAdmin:
                     this.ConnectionType = ConnectionType.AzureResourceManager;
                     this.azureResourceManagerEndpointTextBox.Enabled = true;
                     this.certificateComboBox.Enabled = false;
@@ -148,7 +186,7 @@ namespace Vano.Tools.Azure.Dialogs
                     this.privateGeoEndpointTextBox.Text = string.Empty;
                     break;
                 // DEV - Tenant ARM
-                case 7:
+                case AzureStackDevTenant:
                     this.ConnectionType = ConnectionType.AzureResourceManager;
                     this.azureResourceManagerEndpointTextBox.Enabled = true;
                     this.certificateComboBox.Enabled = false;
@@ -158,7 +196,7 @@ namespace Vano.Tools.Azure.Dialogs
                     this.privateGeoEndpointTextBox.Text = string.Empty;
                     break;
                 // DEV - Admin ARM
-                case 8:
+                case AzureStackDevAdmin:
                     this.ConnectionType = ConnectionType.AzureResourceManager;
                     this.azureResourceManagerEndpointTextBox.Enabled = true;
                     this.certificateComboBox.Enabled = false;

@@ -105,17 +105,7 @@
             this.environmentTypeComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.environmentTypeComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.environmentTypeComboBox.FormattingEnabled = true;
-            this.environmentTypeComboBox.Items.AddRange(new object[] {
-            "Azure [Public]",
-            "Azure [China]",
-            "Azure [Fairfax]",
-            "Azure [Dogfood] (Private Geo with GeoProxy)",
-            "Azure [CSM-Direct] (Private Geo)",
-            "Azure Stack [ASDK Tenant]",
-            "Azure Stack [ASDK Admin]",
-            "Azure Stack [DEV Tenant]",
-            "Azure Stack [DEV Admin]"});
+            this.environmentTypeComboBox.FormattingEnabled = true;           
             this.environmentTypeComboBox.Location = new System.Drawing.Point(123, 86);
             this.environmentTypeComboBox.Name = "environmentTypeComboBox";
             this.environmentTypeComboBox.Size = new System.Drawing.Size(391, 21);
