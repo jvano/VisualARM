@@ -87,6 +87,8 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.hideTokensToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.autoClearToolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.wordWrapToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.panel2 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.splitContainer5 = new System.Windows.Forms.SplitContainer();
@@ -756,7 +758,9 @@
             this.clearToolStripButton,
             this.toolStripSeparator1,
             this.hideTokensToolStripButton,
-            this.autoClearToolStripButton});
+            this.autoClearToolStripButton,
+            this.toolStripSeparator3,
+            this.wordWrapToolStripButton});
             this.toolStrip3.Location = new System.Drawing.Point(0, 25);
             this.toolStrip3.Name = "toolStrip3";
             this.toolStrip3.Size = new System.Drawing.Size(824, 25);
@@ -815,6 +819,21 @@
             this.autoClearToolStripButton.Size = new System.Drawing.Size(83, 22);
             this.autoClearToolStripButton.Text = "Auto Clear";
             this.autoClearToolStripButton.ToolTipText = "Auto Clear";
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
+            // 
+            // wordWrapToolStripButton
+            // 
+            this.wordWrapToolStripButton.CheckOnClick = true;
+            this.wordWrapToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.wordWrapToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.wordWrapToolStripButton.Name = "wordWrapToolStripButton";
+            this.wordWrapToolStripButton.Size = new System.Drawing.Size(69, 22);
+            this.wordWrapToolStripButton.Text = "Word wrap";
+            this.wordWrapToolStripButton.Click += new System.EventHandler(this.wordWrapToolStripButton_Click);
             // 
             // panel2
             // 
@@ -1124,6 +1143,8 @@
         private FastColoredTextBoxNS.DocumentMap documentMap2;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripButton hideTokensToolStripButton;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripButton wordWrapToolStripButton;
     }
 }
 
