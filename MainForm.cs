@@ -1058,5 +1058,10 @@ namespace Vano.Tools.Azure
 
             excludeBodyToolStripButton.Checked = excludeBody;
         }
+
+        private void wordWrapToolStripButton_Click(object sender, EventArgs e)
+        {
+            traceColoredTextBox.WordWrap = wordWrapToolStripButton.Checked;
+        }
     }
 }
