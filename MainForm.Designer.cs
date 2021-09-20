@@ -87,7 +87,6 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.hideTokensToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.autoClearToolStripButton = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.wordWrapToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.panel2 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
@@ -103,6 +102,7 @@
             this.pathToolStripTextBox = new Vano.Tools.Azure.Controls.ToolStripSpringTextBox();
             this.toolStrip2 = new System.Windows.Forms.ToolStrip();
             this.runToolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -614,6 +614,7 @@
             this.toolStrip5.ImageScalingSize = new System.Drawing.Size(32, 32);
             this.toolStrip5.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.copyBodyToolStripButton,
+            this.toolStripSeparator3,
             this.excludeBodyToolStripButton,
             this.clearBodyToolStripButton});
             this.toolStrip5.Location = new System.Drawing.Point(0, 25);
@@ -756,11 +757,10 @@
             this.toolStrip3.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.copyToolStripButton,
             this.clearToolStripButton,
+            this.wordWrapToolStripButton,
             this.toolStripSeparator1,
             this.hideTokensToolStripButton,
-            this.autoClearToolStripButton,
-            this.toolStripSeparator3,
-            this.wordWrapToolStripButton});
+            this.autoClearToolStripButton});
             this.toolStrip3.Location = new System.Drawing.Point(0, 25);
             this.toolStrip3.Name = "toolStrip3";
             this.toolStrip3.Size = new System.Drawing.Size(824, 25);
@@ -820,18 +820,14 @@
             this.autoClearToolStripButton.Text = "Auto Clear";
             this.autoClearToolStripButton.ToolTipText = "Auto Clear";
             // 
-            // toolStripSeparator3
-            // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
-            // 
             // wordWrapToolStripButton
             // 
             this.wordWrapToolStripButton.CheckOnClick = true;
-            this.wordWrapToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.wordWrapToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("wordWrapToolStripButton.Image")));
+            this.wordWrapToolStripButton.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.wordWrapToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.wordWrapToolStripButton.Name = "wordWrapToolStripButton";
-            this.wordWrapToolStripButton.Size = new System.Drawing.Size(69, 22);
+            this.wordWrapToolStripButton.Size = new System.Drawing.Size(85, 22);
             this.wordWrapToolStripButton.Text = "Word wrap";
             this.wordWrapToolStripButton.Click += new System.EventHandler(this.wordWrapToolStripButton_Click);
             // 
@@ -985,6 +981,11 @@
             this.runToolStripButton.Size = new System.Drawing.Size(53, 22);
             this.runToolStripButton.Text = "Send";
             this.runToolStripButton.Click += new System.EventHandler(this.runToolStripButton_Click);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
             // 
             // MainForm
             // 
@@ -1143,8 +1144,8 @@
         private FastColoredTextBoxNS.DocumentMap documentMap2;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripButton hideTokensToolStripButton;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripButton wordWrapToolStripButton;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
     }
 }
 
