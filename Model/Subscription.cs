@@ -1,6 +1,4 @@
-﻿using Microsoft.IdentityModel.Clients.ActiveDirectory;
-
-namespace Vano.Tools.Azure.Model
+﻿namespace Vano.Tools.Azure.Model
 {
     public class Subscription
     {

@@ -13,13 +13,6 @@ namespace Vano.Tools.Azure
         [STAThread]
         public static void Main(string[] args)
         {
-            if (args.Length == 0)
-            {
-                ReRunProgram();
-
-                return;
-            }
-
             // For private deployments let's not enforce SSL validation
             ServicePointManager.ServerCertificateValidationCallback = ((sender, certificate, chain, sslPolicyErrors) =>
             {
@@ -42,15 +35,6 @@ namespace Vano.Tools.Azure
             {
                 Trace.WriteLine(e.ToString());
             }
-        }
-
-        private static void ReRunProgram()
-        {
-            Process process = new Process();
-            process.StartInfo.FileName = Process.GetCurrentProcess().MainModule.FileName;
-            process.StartInfo.Verb = "runas"; 
-            process.StartInfo.Arguments = "/elevated";                
-            process.Start();
         }
     }
 }
