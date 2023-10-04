@@ -74,7 +74,7 @@ namespace Vano.Tools.Azure
 
         #region Public Methods - ARM Operations
 
-        public async Task<IEnumerable<Subscription>> GetSubscriptions()
+        public async Task<IEnumerable<Subscription>> GetSubscriptions(CancellationToken cancellationToken = new CancellationToken())
         {
             List<Subscription> subscriptions = new List<Subscription>();
 
@@ -111,7 +111,7 @@ namespace Vano.Tools.Azure
             return subscriptions.OrderBy(sub => sub.DisplayName);
         }
 
-        public async Task<IEnumerable<Location>> GetLocations(Subscription subscription)
+        public async Task<IEnumerable<Location>> GetLocations(Subscription subscription, CancellationToken cancellationToken = new CancellationToken())
         {
             List<Location> locations = new List<Location>();
             try
@@ -197,7 +197,7 @@ namespace Vano.Tools.Azure
             return new JObject();
         }
 
-        public async Task<string> CallAzureResourceManager(string method, string path, string token, string body = null, Dictionary<string, string> parameters = null, string armEndpoint = null, string apiVersion = null)
+        public async Task<string> CallAzureResourceManager(string method, string path, string token, string body = null, Dictionary<string, string> parameters = null, string armEndpoint = null, string apiVersion = null, CancellationToken cancellationToken = new CancellationToken())
         {
             Uri requestUri = CreateAzureResourceManagerUri(path, parameters, armEndpoint, apiVersion);
 
@@ -208,7 +208,7 @@ namespace Vano.Tools.Azure
 
             if (HttpHeadersProcessor != null)
             {
-                HttpHeadersProcessor.CaptureRequest(request.Host, request.Headers);
+                HttpHeadersProcessor.CaptureWebHeadersFromRequest(request.Host, request.Headers);
             }
 
             if (string.IsNullOrWhiteSpace(body))
@@ -230,7 +230,7 @@ namespace Vano.Tools.Azure
 
                 if (HttpHeadersProcessor != null)
                 {
-                    HttpHeadersProcessor.CaptureResponse(response.StatusCode, response.Headers);
+                    HttpHeadersProcessor.CaptureWebHeadersFromResponse(response.StatusCode, response.Headers);
                 }
 
                 using (Stream receiveStream = response.GetResponseStream())

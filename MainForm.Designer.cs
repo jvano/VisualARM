@@ -73,6 +73,7 @@
             this.documentMap1 = new FastColoredTextBoxNS.DocumentMap();
             this.toolStrip5 = new System.Windows.Forms.ToolStrip();
             this.copyBodyToolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.excludeBodyToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.clearBodyToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -84,10 +85,10 @@
             this.toolStrip3 = new System.Windows.Forms.ToolStrip();
             this.copyToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.clearToolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.wordWrapToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.hideTokensToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.autoClearToolStripButton = new System.Windows.Forms.ToolStripButton();
-            this.wordWrapToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.panel2 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.splitContainer5 = new System.Windows.Forms.SplitContainer();
@@ -101,8 +102,8 @@
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.pathToolStripTextBox = new Vano.Tools.Azure.Controls.ToolStripSpringTextBox();
             this.toolStrip2 = new System.Windows.Forms.ToolStrip();
+            this.cancelToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.runToolStripButton = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -633,6 +634,11 @@
             this.copyBodyToolStripButton.Text = "Copy";
             this.copyBodyToolStripButton.Click += new System.EventHandler(this.copyBodyToolStripButton_Click);
             // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
+            // 
             // excludeBodyToolStripButton
             // 
             this.excludeBodyToolStripButton.CheckOnClick = true;
@@ -788,6 +794,17 @@
             this.clearToolStripButton.Text = "Clear";
             this.clearToolStripButton.Click += new System.EventHandler(this.clearToolStripButton_Click);
             // 
+            // wordWrapToolStripButton
+            // 
+            this.wordWrapToolStripButton.CheckOnClick = true;
+            this.wordWrapToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("wordWrapToolStripButton.Image")));
+            this.wordWrapToolStripButton.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.wordWrapToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.wordWrapToolStripButton.Name = "wordWrapToolStripButton";
+            this.wordWrapToolStripButton.Size = new System.Drawing.Size(85, 22);
+            this.wordWrapToolStripButton.Text = "Word wrap";
+            this.wordWrapToolStripButton.Click += new System.EventHandler(this.wordWrapToolStripButton_Click);
+            // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
@@ -819,17 +836,6 @@
             this.autoClearToolStripButton.Size = new System.Drawing.Size(83, 22);
             this.autoClearToolStripButton.Text = "Auto Clear";
             this.autoClearToolStripButton.ToolTipText = "Auto Clear";
-            // 
-            // wordWrapToolStripButton
-            // 
-            this.wordWrapToolStripButton.CheckOnClick = true;
-            this.wordWrapToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("wordWrapToolStripButton.Image")));
-            this.wordWrapToolStripButton.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.wordWrapToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.wordWrapToolStripButton.Name = "wordWrapToolStripButton";
-            this.wordWrapToolStripButton.Size = new System.Drawing.Size(85, 22);
-            this.wordWrapToolStripButton.Text = "Word wrap";
-            this.wordWrapToolStripButton.Click += new System.EventHandler(this.wordWrapToolStripButton_Click);
             // 
             // panel2
             // 
@@ -950,6 +956,7 @@
             // 
             // pathToolStripTextBox
             // 
+            this.pathToolStripTextBox.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.pathToolStripTextBox.Name = "pathToolStripTextBox";
             this.pathToolStripTextBox.Size = new System.Drawing.Size(100, 25);
             this.pathToolStripTextBox.Text = "/subscriptions/";
@@ -963,12 +970,26 @@
             this.verbToolStripComboBox,
             this.toolStripLabel1,
             this.pathToolStripTextBox,
+            this.cancelToolStripButton,
             this.runToolStripButton});
             this.toolStrip2.Location = new System.Drawing.Point(0, 49);
             this.toolStrip2.Name = "toolStrip2";
             this.toolStrip2.Size = new System.Drawing.Size(1505, 25);
             this.toolStrip2.TabIndex = 4;
             this.toolStrip2.Text = "toolStrip2";
+            // 
+            // cancelToolStripButton
+            // 
+            this.cancelToolStripButton.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.cancelToolStripButton.Enabled = false;
+            this.cancelToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("cancelToolStripButton.Image")));
+            this.cancelToolStripButton.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.cancelToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.cancelToolStripButton.Name = "cancelToolStripButton";
+            this.cancelToolStripButton.Size = new System.Drawing.Size(63, 22);
+            this.cancelToolStripButton.Text = "Cancel";
+            this.cancelToolStripButton.ToolTipText = "Cancel";
+            this.cancelToolStripButton.Click += new System.EventHandler(this.cancelToolStripButton_Click);
             // 
             // runToolStripButton
             // 
@@ -981,11 +1002,6 @@
             this.runToolStripButton.Size = new System.Drawing.Size(53, 22);
             this.runToolStripButton.Text = "Send";
             this.runToolStripButton.Click += new System.EventHandler(this.runToolStripButton_Click);
-            // 
-            // toolStripSeparator3
-            // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
             // 
             // MainForm
             // 
@@ -1146,6 +1162,7 @@
         private System.Windows.Forms.ToolStripButton hideTokensToolStripButton;
         private System.Windows.Forms.ToolStripButton wordWrapToolStripButton;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripButton cancelToolStripButton;
     }
 }
 

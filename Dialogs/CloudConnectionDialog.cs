@@ -23,6 +23,8 @@ namespace Vano.Tools.Azure.Dialogs
         private const string AzureStackDevTenant = "Azure Stack [DEV Tenant]";
         private const string AzureStackDevAdmin = "Azure Stack [DEV Admin]";
 
+        private static readonly string SettingsFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "VisualARM.settings");
+
         private readonly string[] ArmEndpoints = new string []
         {
             AzurePublic,
@@ -38,8 +40,8 @@ namespace Vano.Tools.Azure.Dialogs
         };
 
         // App Service on Azure - Dogfood and CSM-Direct defaults
-        private const string DefaultGeoProxyPrivateStampEndpoint = "joaquinvvmssgeo";
-        private const string DefaultCsmDirectPrivateStampEndpoint = "geomaster.joaquinvvmss.antares-test.windows-int.net:444";
+        private const string DefaultGeoProxyPrivateStampEndpoint = "joaquinvmss1geo";
+        private const string DefaultCsmDirectPrivateStampEndpoint = "geomaster.joaquinvmss1.antares-test.windows-int.net:444";
 
         // App Service on Azure Stack Hub defaults
         private const string DefaultAzureStackAdminArmEndpoint = "az-vanox:30005";
@@ -332,11 +334,27 @@ namespace Vano.Tools.Azure.Dialogs
         {
             this.CollectSettingsToSave();
 
-            string settingsFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "VisualARM.settings");
-
             string[] settings = this.SavedSettings.Select(pair => String.Concat(pair.Key, "=", pair.Value)).ToArray();
 
-            File.WriteAllLines(settingsFile, contents: settings.ToArray());            
+            File.WriteAllLines(SettingsFile, contents: settings.ToArray());            
+        }
+
+        private void clearSavedSettingsLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            try
+            {
+                File.Delete(SettingsFile);
+
+                MessageBox.Show("Settings file has been deleted successfully", "Visual ARM", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Visual ARM", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }            
+            finally
+            {
+                this.environmentTypeComboBox.SelectedIndex = 0;
+            }
         }
     }
 }

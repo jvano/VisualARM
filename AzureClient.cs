@@ -6,6 +6,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -20,6 +23,7 @@ namespace Vano.Tools.Azure
         #region Private members
 
         private bool _initialized = false;
+        private HttpClient _client;
         private SemaphoreSlim _lock = new SemaphoreSlim(1, 1);
         private AuthenticationContext _authContext;
         private TokenCache _cache = new TokenCache();
@@ -53,23 +57,29 @@ namespace Vano.Tools.Azure
         public AzureClient(
             string resourceManagerEndpoint = "management.azure.com",
             string apiVersion = "2015-01-01",
-            AzureMetadata metadata = null)
+            AzureMetadata metadata = null,
+            Func<HttpMessageHandler> handlerFactory = null)
         {
             this.ResouceManagerEndpoint = resourceManagerEndpoint;
             this.ApiVersion = apiVersion;
             this.Metadata = metadata;
+
+            _client = CreateHttpClient(handlerFactory);
         }
 
         public AzureClient(
             string resourceManagerEndpoint = "management.azure.com",
             string apiVersion = "2015-01-01",
             string authenticationEndpoint = "https://login.windows.net",
-            string appResourceId = "https://management.core.windows.net/")
+            string appResourceId = "https://management.core.windows.net/",
+            Func<HttpMessageHandler> handlerFactory = null)
         {
             this.ResouceManagerEndpoint = resourceManagerEndpoint;
             this.ApiVersion = apiVersion;
             this.AuthenticationEndpoint = authenticationEndpoint;
             this.AppResourceId = appResourceId;
+
+            _client = CreateHttpClient(handlerFactory);
         }
 
         #endregion
@@ -176,11 +186,11 @@ namespace Vano.Tools.Azure
 
         #region Public Methods - ARM Operations
 
-        public async Task<IEnumerable<string>> GetTenantsIds()
+        public async Task<IEnumerable<string>> GetTenantsIds(CancellationToken cancellationToken = new CancellationToken())
         {
             AuthenticationResult token = await GetToken();
 
-            JObject response = await CallAzureResourceManagerAsJObject("GET", "/tenants", token);
+            JObject response = await CallAzureResourceManagerAsJObject("GET", "/tenants", token, cancellationToken: cancellationToken);
             IEnumerable<string> tenantIds = response
                 .Value<JArray>("value")
                 .Select(tenant => tenant.Value<string>("tenantId"));
@@ -193,7 +203,7 @@ namespace Vano.Tools.Azure
             return tenantIds;
         }
 
-        public async Task<IEnumerable<Subscription>> GetSubscriptions()
+        public async Task<IEnumerable<Subscription>> GetSubscriptions(CancellationToken cancellationToken = new CancellationToken())
         {
             await Initialize();
 
@@ -212,7 +222,7 @@ namespace Vano.Tools.Azure
                         continue;
                     }
 
-                    JObject response = await CallAzureResourceManagerAsJObject("GET", "/subscriptions", tenantToken);
+                    JObject response = await CallAzureResourceManagerAsJObject("GET", "/subscriptions", tenantToken, cancellationToken: cancellationToken);
 
                     subscriptionsInTenant = response
                         .Value<JArray>("value")
@@ -244,11 +254,11 @@ namespace Vano.Tools.Azure
             return subscriptions.OrderBy(sub => sub.DisplayName);
         }
 
-        public async Task<IEnumerable<Location>> GetLocations(Subscription subscription)
+        public async Task<IEnumerable<Location>> GetLocations(Subscription subscription, CancellationToken cancellationToken = new CancellationToken())
         {
             AuthenticationResult tenantToken = await GetTenantToken(subscription.TenantId);
 
-            JObject response = await CallAzureResourceManagerAsJObject("GET", string.Format(@"/subscriptions/{0}/locations", subscription.Id), tenantToken);
+            JObject response = await CallAzureResourceManagerAsJObject("GET", string.Format(@"/subscriptions/{0}/locations", subscription.Id), tenantToken, cancellationToken: cancellationToken);
 
             IEnumerable<Location> locations = response.Value<JArray>("value").ToObject<IEnumerable<Location>>();
 
@@ -386,6 +396,22 @@ namespace Vano.Tools.Azure
 
         #region Private Methods - ARM Helper Methods
 
+        private static HttpClient CreateHttpClient(Func<HttpMessageHandler> handlerFactory = null)
+        {
+            HttpClient client = handlerFactory != null ?
+                new HttpClient(handlerFactory()) :
+                new HttpClient();
+
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            if (!client.DefaultRequestHeaders.Contains("User-Agent"))
+            {
+                client.DefaultRequestHeaders.Add("User-Agent", "Visual ARM client");
+            }
+
+            return client;
+        }
+
         private Uri CreateAzureResourceManagerUri(string path, Dictionary<string, string> parameters = null, string armEndpoint = null, string apiVersion = null)
         {
             armEndpoint = string.IsNullOrEmpty(armEndpoint) ? this.ResouceManagerEndpoint : armEndpoint;
@@ -411,14 +437,14 @@ namespace Vano.Tools.Azure
                 .Replace(" ", "%20"));
         }
 
-        private async Task<JObject> CallAzureResourceManagerAsJObject(string method, string path, AuthenticationResult token, string body = null, Dictionary<string, string> parameters = null, string armEndpoint = null, string apiVersion = null)
+        private async Task<JObject> CallAzureResourceManagerAsJObject(string method, string path, AuthenticationResult token, string body = null, Dictionary<string, string> parameters = null, string armEndpoint = null, string apiVersion = null, CancellationToken cancellationToken = new CancellationToken())
         {
-            return await CallAzureResourceManagerAsJObject(method, path, token != null ? token.CreateAuthorizationHeader() : null, body, parameters, armEndpoint, apiVersion);
+            return await CallAzureResourceManagerAsJObject(method, path, token != null ? token.CreateAuthorizationHeader() : null, body, parameters, armEndpoint, apiVersion, cancellationToken);
         }
 
-        private async Task<JObject> CallAzureResourceManagerAsJObject(string method, string path, string token, string body = null, Dictionary<string, string> parameters = null, string armEndpoint = null, string apiVersion = null)
+        private async Task<JObject> CallAzureResourceManagerAsJObject(string method, string path, string token, string body = null, Dictionary<string, string> parameters = null, string armEndpoint = null, string apiVersion = null, CancellationToken cancellationToken = new CancellationToken())
         {
-            string response = await CallAzureResourceManager(method, path, token, body, parameters, armEndpoint, apiVersion);
+            string response = await CallAzureResourceManager(method, path, token, body, parameters, armEndpoint, apiVersion, cancellationToken);
             if (!string.IsNullOrWhiteSpace(response))
             {
                 return JObject.Parse(response);
@@ -427,59 +453,39 @@ namespace Vano.Tools.Azure
             return new JObject();
         }
 
-        public async Task<string> CallAzureResourceManager(string method, string path, string token, string body = null, Dictionary<string, string> parameters = null, string armEndpoint = null, string apiVersion = null)
+        public async Task<string> CallAzureResourceManager(string method, string path, string token, string body = null, Dictionary<string, string> parameters = null, string armEndpoint = null, string apiVersion = null, CancellationToken cancellationToken = new CancellationToken())
         {
             Uri requestUri = CreateAzureResourceManagerUri(path, parameters, armEndpoint, apiVersion);
 
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(requestUri);
-            request.Method = method;
-            request.Headers["Authorization"] = token;
-            request.ContentType = "application/json";
+            HttpRequestMessage request = new HttpRequestMessage(new HttpMethod(method), requestUri);
+            request.Headers.Add("Authorization", token);
+            //request.Headers.Authorization = new AuthenticationHeaderValue("Basic", parameter);
 
             if (HttpHeadersProcessor != null)
             {
-                HttpHeadersProcessor.CaptureRequest(request.Host, request.Headers);
+                HttpHeadersProcessor.CaptureHttpHeadersFromRequest(requestUri.Host, request.Headers);
             }
 
-            if (string.IsNullOrWhiteSpace(body))
+            if (!string.IsNullOrWhiteSpace(body))
             {
-                request.ContentLength = 0;
-            }
-            else
-            {
-                using (Stream requestStream = await request.GetRequestStreamAsync())
-                {
-                    byte[] content = Encoding.UTF8.GetBytes(body);
-                    requestStream.Write(content, 0, content.Length);
-                }
+                request.Content = new StringContent(body, Encoding.UTF8, "application/json");
             }
 
-            try
+            using (HttpResponseMessage response = await _client.SendAsync(request, cancellationToken))
             {
-                HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync();
-
                 if (HttpHeadersProcessor != null)
                 {
-                    HttpHeadersProcessor.CaptureResponse(response.StatusCode, response.Headers);
+                    HttpHeadersProcessor.CaptureHttpHeadersFromResponse(response.StatusCode, response.Headers);
                 }
 
-                using (Stream receiveStream = response.GetResponseStream())
+                string output = await response.Content.ReadAsStringAsync();
+
+                if (!response.IsSuccessStatusCode)
                 {
-                    using (StreamReader readStream = new StreamReader(receiveStream, Encoding.UTF8))
-                    {
-                        return await readStream.ReadToEndAsync();
-                    }
+                    throw new Exception(output);
                 }
-            }
-            catch (WebException e)
-            {
-                using (Stream receiveStream = e.Response.GetResponseStream())
-                {
-                    using (StreamReader readStream = new StreamReader(receiveStream, Encoding.UTF8))
-                    {
-                        throw new Exception(e.Message + Environment.NewLine + readStream.ReadToEnd());
-                    }
-                }
+
+                return output;
             }
         }
 

@@ -118,13 +118,18 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="infoTextBox.Text" xml:space="preserve">
-    <value>[CSM-Direct]
+    <value>[FOR CSM-Direct]
 AntaresCmd.exe CreateUser USAAnywhereUser
 AntaresCmd.exe CreateSubscription 00000000-0000-0000-0000-000000000000 /ownerUserName:USAAnywhereUser
-AntaresCmd.exe CreateWebSpace 00000000-0000-0000-0000-000000000000 USAAnywhereWebspace VirtualDedicatedPlan /geoRegion:"USAAnywhere" /geoLocation:"Location 1" /stampName:"s1"
-AntaresCmd.exe UpdateGeoRegion "USAAnywhere" /orgDomain:"PUBLIC;DREAMSPARK;MSFTPUBLIC;FUNCTIONS;DYNAMIC;LINUX;DSERIES;XENON;XENONV3"
+AntaresCmd.exe CreateWebSpace 00000000-0000-0000-0000-000000000000 USAAnywhereWebspace VirtualDedicatedPlan /geoRegion:"West US 3" /geoLocation:"usw3" /stampName:"joaquinvmss1"
+AntaresCmd.exe UpdateGeoRegion "West US 3" /orgDomain:"PUBLIC;DREAMSPARK;MSFTPUBLIC;FUNCTIONS;DYNAMIC;LINUX;DSERIES;XENON;XENONV3"
 
-[DOGFOOD] use auxtm230@live.com to login
+NOTE: You can use the following commands to get the info you need to configure CSM-Direct:
+GeoRegion: AntaresCmd.exe ListGeoRegions
+GeoLocation: AntaresCmd.exe ListGeoLocations &lt;geoRegion&gt;
+StampName: AntaresCmd.exe ListStamps &lt;GeoLocation&gt;
+
+[FOR DOGFOOD ENVIRONMENT] use auxtm230@live.com to login
 AntaresCmd.exe AddGeoRegion "East US" /displayName:"East US" /sortOrder:1 /orgDomain:"PUBLIC;DREAMSPARK;MSFTPUBLIC;FUNCTIONS;DYNAMIC;LINUX;DSERIES;XENON;XENONV3"
 AntaresCmd.exe AddGeoLocation "East US" BLU
 AntaresCmd.exe AddStamp BLU BLU1 Online /stampAddress:"https://joaquinvvmss.api.joaquinvvmss.antares-test.windows-int.net:454"
@@ -137,7 +142,7 @@ AntaresCmd.exe CreateWebSpace 00e7bb72-7725-4249-8e6b-0d2632b3bfc1 EastUSwebspac
   <data name="pictureBox3.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGOfPtRkwAAACBjSFJNAAB6
-        JQAAgIMAAPn/AACA6QAAdTAAAOpgAAA6mAAAF2+SX8VGAAAACXBIWXMAAAsTAAALEwEAmpwYAAABwUlE
+        JQAAgIMAAPn/AACA6QAAdTAAAOpgAAA6mAAAF2+SX8VGAAAACXBIWXMAAAsSAAALEgHS3X78AAABwUlE
         QVQ4T52RTS8DURSGm0isJJKqIhVSob5FsGl8bkSREJb1B3Rp5x/Y+AP+gSL2YuGjFK1GEG2qEaIl1NdM
         Z6alXbzuuWNGW7OyeHLvPec973knYwJgSGDV4mS8/OA00hCGRYINRa+27Ljxd4DuRhrCsMgGXAyID6NQ
         XicR9FaSictI+6fAhCW0MbzdiJwyy9FSUK9YX/AgmMgd8FogPbl0g/SbnsJdrC94MEEpbYruOJBLz7Gu

@@ -19,6 +19,8 @@ namespace Vano.Tools.Azure
     public partial class MainForm : Form
     {
         private IAzureClient _client = null;
+        private CancellationTokenSource _cts = new CancellationTokenSource();
+
         private string _azureResourceManagerEndpoint = null;
         private IEnumerable<Subscription> _subscriptions = null;
         private ConnectionType _connectionType = ConnectionType.AzureResourceManager;
@@ -92,7 +94,7 @@ namespace Vano.Tools.Azure
                         apiVersion: "2016-09-01",
                         certThumbprint: _certThumbprint));
 
-                _subscriptions = await _client.GetSubscriptions();
+                _subscriptions = await _client.GetSubscriptions(_cts.Token);
 
                 if (_subscriptions.Count() == 0)
                 {
@@ -204,12 +206,13 @@ namespace Vano.Tools.Azure
         public bool IsBusy
         {
             get
-            {
+            {                
                 return !this.runToolStripButton.Enabled;
             }
             set
             {
-                this.requestTreeProgressBar.Visible = value;
+                _cts = new CancellationTokenSource();
+                this.cancelToolStripButton.Enabled = this.requestTreeProgressBar.Visible = value;
                 this.runToolStripButton.Enabled = !value;
             }
         }
@@ -297,7 +300,8 @@ namespace Vano.Tools.Azure
                     token: tenantToken,
                     body: body,
                     parameters: null,
-                    apiVersion: null);
+                    apiVersion: null,
+                    cancellationToken: _cts.Token);
 
                 Trace.WriteLine("REQUEST HEADERS: ");
                 Trace.WriteLine(_client.HttpHeadersProcessor.GetFormattedRequestHeaders());
@@ -499,7 +503,8 @@ namespace Vano.Tools.Azure
                 method: "GET",
                 path: string.Format(@"/subscriptions/{0}/providers", subscription.Id),
                 token: tenantToken,
-                body: null);
+                body: null,
+                cancellationToken: _cts.Token);
 
             if (!string.IsNullOrWhiteSpace(response))
             {
@@ -555,7 +560,8 @@ namespace Vano.Tools.Azure
                 method: "GET",
                 path: string.Format(@"/subscriptions/{0}/resourceGroups", subscription.Id),
                 token: tenantToken,
-                body: null);
+                body: null,
+                cancellationToken: _cts.Token);
 
             if (!string.IsNullOrWhiteSpace(response))
             {
@@ -1062,6 +1068,11 @@ namespace Vano.Tools.Azure
         private void wordWrapToolStripButton_Click(object sender, EventArgs e)
         {
             traceColoredTextBox.WordWrap = wordWrapToolStripButton.Checked;
+        }
+
+        private void cancelToolStripButton_Click(object sender, EventArgs e)
+        {
+            _cts.Cancel();
         }
     }
 }

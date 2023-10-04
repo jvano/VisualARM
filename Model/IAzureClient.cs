@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Vano.Tools.Azure.Model
@@ -14,10 +15,10 @@ namespace Vano.Tools.Azure.Model
 
         Task<string> GetAuthSecret(string tenantId = null);
 
-        Task<IEnumerable<Subscription>> GetSubscriptions();
+        Task<IEnumerable<Subscription>> GetSubscriptions(CancellationToken cancellationToken = new CancellationToken());
 
-        Task<IEnumerable<Location>> GetLocations(Subscription subscription);
+        Task<IEnumerable<Location>> GetLocations(Subscription subscription, CancellationToken cancellationToken = new CancellationToken());
 
-        Task<string> CallAzureResourceManager(string method, string path, string token, string body = null, Dictionary<string, string> parameters = null, string armEndpoint = null, string apiVersion = null);
+        Task<string> CallAzureResourceManager(string method, string path, string token, string body = null, Dictionary<string, string> parameters = null, string armEndpoint = null, string apiVersion = null, CancellationToken cancellationToken = new CancellationToken());
     }
 }

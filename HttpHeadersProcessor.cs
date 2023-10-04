@@ -1,7 +1,7 @@
-﻿using FastColoredTextBoxNS;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Net.Http.Headers;
 using System.Text;
 
 namespace Vano.Tools.Azure
@@ -42,19 +42,21 @@ namespace Vano.Tools.Azure
             }
         }
 
-        public void CaptureRequest(string host, WebHeaderCollection requestHeaders)
+        #region WebHeaders
+
+        public void CaptureWebHeadersFromRequest(string host, WebHeaderCollection requestHeaders)
         {
             _host = host;
-            CaptureHeaders(requestHeaders, RequestHeaders);
+            CaptureWebHeaders(requestHeaders, RequestHeaders);
         }
 
-        public void CaptureResponse(HttpStatusCode statusCode, WebHeaderCollection responseHeaders)
+        public void CaptureWebHeadersFromResponse(HttpStatusCode statusCode, WebHeaderCollection responseHeaders)
         {
             _statusCode = string.Format("{0} ({1})", ((int)statusCode).ToString(), statusCode.ToString());
-            CaptureHeaders(responseHeaders, ResponseHeaders);
+            CaptureWebHeaders(responseHeaders, ResponseHeaders);
         }
 
-        private IList<Tuple<string, string>> CaptureHeaders(WebHeaderCollection headers, IList<Tuple<string, string>> target)
+        private IList<Tuple<string, string>> CaptureWebHeaders(WebHeaderCollection headers, IList<Tuple<string, string>> target)
         {
             target.Clear();
 
@@ -75,6 +77,44 @@ namespace Vano.Tools.Azure
 
             return target;
         }
+
+        #endregion
+
+        #region HttpHeaders
+
+        public void CaptureHttpHeadersFromRequest(string host, HttpHeaders requestHeaders)
+        {
+            _host = host;
+            CaptureHttpHeaders(requestHeaders, RequestHeaders);
+        }
+
+        public void CaptureHttpHeadersFromResponse(HttpStatusCode statusCode, HttpHeaders responseHeaders)
+        {
+            _statusCode = string.Format("{0} ({1})", ((int)statusCode).ToString(), statusCode.ToString());
+            CaptureHttpHeaders(responseHeaders, ResponseHeaders);
+        }
+
+        private IList<Tuple<string, string>> CaptureHttpHeaders(HttpHeaders headers, IList<Tuple<string, string>> target)
+        {
+            target.Clear();
+
+            foreach(KeyValuePair<string, IEnumerable<string>> header in headers)
+            {
+                if (_headersToExclude.Contains(header.Key))
+                {
+                    continue;
+                }
+
+                foreach (string value in header.Value)
+                {
+                    target.Add(new Tuple<string, string>(header.Key, value));
+                }
+            }
+
+            return target;
+        }
+
+        #endregion
 
         public string GetFormattedRequestHeaders()
         {
