@@ -255,20 +255,6 @@ namespace Vano.Tools.Azure
                     Trace.WriteLine(string.Empty);
                 }
 
-                IEnumerable<string> parametersInBody = FindMissingParameters(body).Distinct();
-                if (parametersInBody.Count() > 0)
-                {
-                    valid = false;
-
-                    Trace.WriteLine("BODY: The following parameters require a value:");
-                    foreach (string parameter in parametersInBody)
-                    {
-                        Trace.WriteLine("    " + parameter);
-                    }
-
-                    Trace.WriteLine(string.Empty);
-                }
-
                 if (!valid)
                 {
                     return;
@@ -362,8 +348,15 @@ namespace Vano.Tools.Azure
                 }
             }
 
-            return parameters;
+            foreach (Match m in Regex.Matches(input: str, pattern: @"{[\w-]+}"))
+            {
+                if (!parameters.Contains(m.Value))
+                {
+                    parameters.Add(m.Value);
+                }
+            }
 
+            return parameters;
         }
 
         private void loadResourcesToolStripButton_Click(object sender, EventArgs e)
@@ -907,15 +900,20 @@ namespace Vano.Tools.Azure
                 verbToolStripComboBox.Text = template.Verb;
                 pathToolStripTextBox.Text = template.Path
                     .Replace("<subscription>", subscription)
+                    .Replace("{subscriptionId}", subscription)
                     .Replace("<resourcegroup>", resourceGroup)
+                    .Replace("{resourceGroupName}", resourceGroup)
                     .Replace("stamp=<stamp>&", geoProxyStampParameter)
                     .Replace("<api-version>", defaultApiVersion);
 
                 bodyColoredTextBox.Text = string.IsNullOrWhiteSpace(template.Body) ? string.Empty :
                     template.Body
                         .Replace("<subscription>", subscription)
+                        .Replace("{subscriptionId}", subscription)
                         .Replace("<resourcegroup>", resourceGroup)
-                        .Replace("<location>", location);
+                        .Replace("{resourceGroupName}", resourceGroup)
+                        .Replace("<location>", location)
+                        .Replace("{location}", location);
 
                 if (MessageBox.Show(string.Format("Would you like to run the '{0}' template?", template.Name), this.Text, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
