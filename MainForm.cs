@@ -22,7 +22,7 @@ namespace Vano.Tools.Azure
         private string _azureResourceManagerEndpoint = null;
         private IEnumerable<Subscription> _subscriptions = null;
         private ConnectionType _connectionType = ConnectionType.AzureResourceManager;
-        private IEnumerable<Template> _templates = TemplateFactory.GetTemplates();
+        private IEnumerable<Template> _templates = null;
         private string _certThumbprint;
         private string _privateGeoEndpoint;
         private TemplateDocument _customTemplatesDocument;
@@ -817,9 +817,11 @@ namespace Vano.Tools.Azure
             }
         }
 
-        private void LoadTemplates()
+        private async void LoadTemplates()
         {
             templatesToolStripComboBox.Items.Clear();
+
+            _templates = await TemplateFactory.GetTemplates();
 
             IEnumerable<Template> templatesToDisplay = null;
 
@@ -858,7 +860,7 @@ namespace Vano.Tools.Azure
 
             if (templatesToolStripComboBox.Items.Count > 0)
             {
-                templatesToolStripComboBox.SelectedIndex = !hasCustomTemplates ? 0 : templatesToolStripComboBox.Items.Count - 1;
+                templatesToolStripComboBox.SelectedIndex = 0;
             }
         }
 
@@ -889,8 +891,10 @@ namespace Vano.Tools.Azure
                 }
 
                 string geoProxyStampParameter = !string.IsNullOrEmpty(_privateGeoEndpoint) ? "stamp=" + _privateGeoEndpoint + "&" : "";
+
                 string resourceGroup = "<resourcegroup>";
                 string location = "<location>";
+                string subscription = this.SelectedSubscription?.Id ?? "<subscription>";
                 string defaultResourceGroup = this.SelectedResourceGroup?.Name;
                 if (!string.IsNullOrEmpty(defaultResourceGroup))
                 {
@@ -902,15 +906,16 @@ namespace Vano.Tools.Azure
 
                 verbToolStripComboBox.Text = template.Verb;
                 pathToolStripTextBox.Text = template.Path
-                    .Replace("<subscription>", this.SelectedSubscription?.Id)
+                    .Replace("<subscription>", subscription)
                     .Replace("<resourcegroup>", resourceGroup)
                     .Replace("stamp=<stamp>&", geoProxyStampParameter)
                     .Replace("<api-version>", defaultApiVersion);
 
-                bodyColoredTextBox.Text = template.Body
-                    .Replace("<subscription>", this.SelectedSubscription?.Id)
-                    .Replace("<resourcegroup>", resourceGroup)
-                    .Replace("<location>", location);
+                bodyColoredTextBox.Text = string.IsNullOrWhiteSpace(template.Body) ? string.Empty :
+                    template.Body
+                        .Replace("<subscription>", subscription)
+                        .Replace("<resourcegroup>", resourceGroup)
+                        .Replace("<location>", location);
 
                 if (MessageBox.Show(string.Format("Would you like to run the '{0}' template?", template.Name), this.Text, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question) == DialogResult.Yes)
                 {

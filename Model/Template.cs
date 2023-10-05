@@ -97,6 +97,8 @@ namespace Vano.Tools.Azure.Model
 
         public string Name { get; set; }
 
+        public string Summary { get; set; }
+
         public string Verb { get; set; }
 
         public string Path { get; set; }
@@ -105,7 +107,9 @@ namespace Vano.Tools.Azure.Model
 
         public override string ToString()
         {
-            return this.Name;
+            return !string.IsNullOrWhiteSpace(Summary) ?
+                this.Name + " - " + this.Summary :
+                this.Name;
         }
     }
 }
