@@ -316,15 +316,12 @@ namespace Vano.Tools.Azure
                 addressPostfix = addressPostfix.Substring(1);
             }
 
-            WebHttpBinding webHttpBinding = new WebHttpBinding();
+            WebHttpBinding webHttpBinding = new WebHttpBinding();           
             webHttpBinding.UseDefaultWebProxy = true;
             webHttpBinding.Security.Mode = WebHttpSecurityMode.Transport;
             webHttpBinding.Security.Transport.ClientCredentialType = HttpClientCredentialType.Certificate;
             webHttpBinding.MaxReceivedMessageSize = MaxReceivedMessageSize;
             webHttpBinding.ReaderQuotas.MaxStringContentLength = MaxStringContentLength;
-
-            // Do not check a validity of the certificate
-            ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
 
             if (supportsWebSystem && !String.IsNullOrEmpty(WebSystemName))
             {

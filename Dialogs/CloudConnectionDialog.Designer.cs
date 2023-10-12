@@ -32,6 +32,7 @@
             this.okButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.clearSavedSettingsLinkLabel = new System.Windows.Forms.LinkLabel();
             this.label1 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.environmentTypeComboBox = new System.Windows.Forms.ComboBox();
@@ -43,7 +44,6 @@
             this.moreInfoLinkLabel = new System.Windows.Forms.LinkLabel();
             this.privateGeoEndpointTextBox = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
-            this.clearSavedSettingsLinkLabel = new System.Windows.Forms.LinkLabel();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -52,6 +52,7 @@
             // 
             this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.okButton.Enabled = false;
             this.okButton.Location = new System.Drawing.Point(358, 232);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(75, 23);
@@ -82,6 +83,18 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(526, 63);
             this.panel1.TabIndex = 2;
+            // 
+            // clearSavedSettingsLinkLabel
+            // 
+            this.clearSavedSettingsLinkLabel.AutoSize = true;
+            this.clearSavedSettingsLinkLabel.Location = new System.Drawing.Point(412, 27);
+            this.clearSavedSettingsLinkLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.clearSavedSettingsLinkLabel.Name = "clearSavedSettingsLinkLabel";
+            this.clearSavedSettingsLinkLabel.Size = new System.Drawing.Size(102, 13);
+            this.clearSavedSettingsLinkLabel.TabIndex = 11;
+            this.clearSavedSettingsLinkLabel.TabStop = true;
+            this.clearSavedSettingsLinkLabel.Text = "Clear saved settings";
+            this.clearSavedSettingsLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.clearSavedSettingsLinkLabel_LinkClicked);
             // 
             // label1
             // 
@@ -141,6 +154,7 @@
             this.azureResourceManagerEndpointTextBox.Name = "azureResourceManagerEndpointTextBox";
             this.azureResourceManagerEndpointTextBox.Size = new System.Drawing.Size(391, 20);
             this.azureResourceManagerEndpointTextBox.TabIndex = 1;
+            this.azureResourceManagerEndpointTextBox.TextChanged += new System.EventHandler(this.azureResourceManagerEndpointTextBox_TextChanged);
             // 
             // label4
             // 
@@ -162,6 +176,7 @@
             this.certificateComboBox.Name = "certificateComboBox";
             this.certificateComboBox.Size = new System.Drawing.Size(391, 21);
             this.certificateComboBox.TabIndex = 3;
+            this.certificateComboBox.SelectedIndexChanged += new System.EventHandler(this.certificateComboBox_SelectedIndexChanged);
             // 
             // moreInfoLinkLabel
             // 
@@ -184,6 +199,7 @@
             this.privateGeoEndpointTextBox.Name = "privateGeoEndpointTextBox";
             this.privateGeoEndpointTextBox.Size = new System.Drawing.Size(391, 20);
             this.privateGeoEndpointTextBox.TabIndex = 2;
+            this.privateGeoEndpointTextBox.TextChanged += new System.EventHandler(this.privateGeoEndpointTextBox_TextChanged);
             // 
             // label5
             // 
@@ -193,18 +209,6 @@
             this.label5.Size = new System.Drawing.Size(104, 13);
             this.label5.TabIndex = 10;
             this.label5.Text = "Stamp for GeoProxy:";
-            // 
-            // clearSavedSettingsLinkLabel
-            // 
-            this.clearSavedSettingsLinkLabel.AutoSize = true;
-            this.clearSavedSettingsLinkLabel.Location = new System.Drawing.Point(412, 27);
-            this.clearSavedSettingsLinkLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.clearSavedSettingsLinkLabel.Name = "clearSavedSettingsLinkLabel";
-            this.clearSavedSettingsLinkLabel.Size = new System.Drawing.Size(102, 13);
-            this.clearSavedSettingsLinkLabel.TabIndex = 11;
-            this.clearSavedSettingsLinkLabel.TabStop = true;
-            this.clearSavedSettingsLinkLabel.Text = "Clear saved settings";
-            this.clearSavedSettingsLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.clearSavedSettingsLinkLabel_LinkClicked);
             // 
             // CloudConnectionDialog
             // 

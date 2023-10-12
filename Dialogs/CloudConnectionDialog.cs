@@ -15,7 +15,7 @@ namespace Vano.Tools.Azure.Dialogs
         private const string AzurePublic = "Azure [Public]";
         private const string AzureCanary = "Azure [Public Canary]";
         private const string AzureChina = "Azure [China]";
-        private const string AzureFairfax = "Azure [Farilfax]";
+        private const string AzureFairfax = "Azure [Fairfax]";
         private const string AzureDogfood = "Azure [Dogfood] (Private Geo with GeoProxy)";
         private const string AzureCsmDirect = "Azure [CSM-Direct] (Private Geo)";
         private const string AzureStackAsdkTenant = "Azure Stack [ASDK Tenant]";
@@ -70,6 +70,20 @@ namespace Vano.Tools.Azure.Dialogs
         }
 
         public ConnectionType ConnectionType { get; private set; }
+
+        public bool IsAzureStackEndpoint
+        {
+            get
+            {
+                string endpoint = (string)this.environmentTypeComboBox.SelectedItem;
+
+                return 
+                    endpoint == AzureStackAsdkTenant ||
+                    endpoint == AzureStackAsdkAdmin ||
+                    endpoint == AzureStackDevTenant ||
+                    endpoint == AzureStackDevAdmin;
+            }
+        }
 
         public string CertThumbprint
         {
@@ -172,7 +186,7 @@ namespace Vano.Tools.Azure.Dialogs
                     this.ConnectionType = ConnectionType.AzureResourceManager;
                     this.azureResourceManagerEndpointTextBox.Enabled = true;
                     this.certificateComboBox.Enabled = false;
-                    this.azureResourceManagerEndpointTextBox.Text = "management.local.azurestack.external";
+                    this.azureResourceManagerEndpointTextBox.Text = GetSetting("DefaultAzureStackTenantArmEndpoint", defaultValue: "management.local.azurestack.external");
                     this.moreInfoLinkLabel.Enabled = false;
                     this.privateGeoEndpointTextBox.Enabled = false;
                     this.privateGeoEndpointTextBox.Text = string.Empty;
@@ -182,7 +196,7 @@ namespace Vano.Tools.Azure.Dialogs
                     this.ConnectionType = ConnectionType.AzureResourceManager;
                     this.azureResourceManagerEndpointTextBox.Enabled = true;
                     this.certificateComboBox.Enabled = false;
-                    this.azureResourceManagerEndpointTextBox.Text = "adminmanagement.local.azurestack.external";
+                    this.azureResourceManagerEndpointTextBox.Text = GetSetting("DefaultAzureStackAdminArmEndpoint", defaultValue: "adminmanagement.local.azurestack.external");
                     this.moreInfoLinkLabel.Enabled = false;
                     this.privateGeoEndpointTextBox.Enabled = false;
                     this.privateGeoEndpointTextBox.Text = string.Empty;
@@ -208,6 +222,8 @@ namespace Vano.Tools.Azure.Dialogs
                     this.privateGeoEndpointTextBox.Text = string.Empty;
                     break;
             }
+
+            ValidateForm();
         }
 
         private void LoadCertificates()
@@ -261,26 +277,36 @@ namespace Vano.Tools.Azure.Dialogs
             switch (this.environmentTypeComboBox.SelectedIndex)
             {
                 // Azure Dogfood
-                case 3:
+                case 4:
                     this.SavedSettings["DefaultGeoProxyPrivateStampEndpoint"] = this.PrivateGeoEndpoint;
 
                     break;
 
                 // Azure DEV - GeoMaster ARM
-                case 4:
+                case 5:
                     this.SavedSettings["DefaultCsmDirectPrivateStampEndpoint"] = this.AzureResourceManager;
                     this.SavedSettings["DefaultCertificateThumbprint"] = this.CertThumbprint;
 
                     break;
+                // ASDK - Tenant ARM
+                case 6:
+                    this.SavedSettings["DefaultAzureStackTenantArmEndpoint"] = this.AzureResourceManager;
 
-                // DEV - Tenant ARM
+                    break;
+
+                // ASDK - Admin ARM
                 case 7:
+                    this.SavedSettings["DefaultAzureStackAdminArmEndpoint"] = this.AzureResourceManager;
+
+                    break;
+                // DEV - Tenant ARM
+                case 8:
                     this.SavedSettings["DefaultAzureStackTenantArmEndpoint"] = this.AzureResourceManager;
 
                     break;
 
                 // DEV - Admin ARM
-                case 8:
+                case 9:
                     this.SavedSettings["DefaultAzureStackAdminArmEndpoint"] = this.AzureResourceManager;
 
                     break;
@@ -355,6 +381,44 @@ namespace Vano.Tools.Azure.Dialogs
             {
                 this.environmentTypeComboBox.SelectedIndex = 0;
             }
+        }
+
+        private void ValidateForm()
+        {
+            this.okButton.Enabled =
+                (
+                    this.environmentTypeComboBox.SelectedIndex != -1 &&
+                    ((string)this.environmentTypeComboBox.SelectedItem) != AzureDogfood &&
+                    ((string)this.environmentTypeComboBox.SelectedItem) != AzureCsmDirect &&
+                    !string.IsNullOrWhiteSpace(azureResourceManagerEndpointTextBox.Text)
+                ) ||
+                (
+                    this.environmentTypeComboBox.SelectedIndex != -1 &&
+                    ((string)this.environmentTypeComboBox.SelectedItem) == AzureDogfood &&
+                    !string.IsNullOrWhiteSpace(azureResourceManagerEndpointTextBox.Text) &&
+                    !string.IsNullOrWhiteSpace(privateGeoEndpointTextBox.Text)
+                ) ||
+                (
+                    this.environmentTypeComboBox.SelectedIndex != -1 &&
+                    ((string)this.environmentTypeComboBox.SelectedItem) == AzureCsmDirect &&
+                    !string.IsNullOrWhiteSpace(azureResourceManagerEndpointTextBox.Text) &&
+                    this.certificateComboBox.SelectedIndex != -1
+                );                
+        }
+
+        private void certificateComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ValidateForm();
+        }
+
+        private void azureResourceManagerEndpointTextBox_TextChanged(object sender, EventArgs e)
+        {
+            ValidateForm();
+        }
+
+        private void privateGeoEndpointTextBox_TextChanged(object sender, EventArgs e)
+        {
+            ValidateForm();
         }
     }
 }

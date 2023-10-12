@@ -11,7 +11,9 @@ namespace Vano.Tools.Azure
 {
     public static class TemplateFactory
     {
-        // For more info: https://learn.microsoft.com/en-us/rest/api/appservice/
+        // For more info:
+        // https://learn.microsoft.com/en-us/rest/api/appservice/
+        // https://github.com/Azure/azure-rest-api-specs/blob/main/specification/web/resource-manager/readme.md
         public const string SwaggerBranch = "stable";
         public const string SwaggerApiVersion = "2022-09-01";
         public const string SwaggerEndpointBase = "https://raw.githubusercontent.com/Azure/azure-rest-api-specs/main/specification/web/resource-manager";

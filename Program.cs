@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Net;
+using System.Runtime.ConstrainedExecution;
 using System.Windows.Forms;
 
 namespace Vano.Tools.Azure
@@ -13,13 +14,14 @@ namespace Vano.Tools.Azure
         [STAThread]
         public static void Main(string[] args)
         {
-            // For private deployments let's not enforce SSL validation
-            ServicePointManager.ServerCertificateValidationCallback = ((sender, certificate, chain, sslPolicyErrors) =>
+            if (args.Length == 0 && !Debugger.IsAttached)
             {
-                return true;
-            });
+                ReRunProgram();
 
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+                return;
+            }
+
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls13;
 
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
@@ -35,6 +37,15 @@ namespace Vano.Tools.Azure
             {
                 Trace.WriteLine(e.ToString());
             }
+        }
+
+        private static void ReRunProgram()
+        {
+            Process process = new Process();
+            process.StartInfo.FileName = Process.GetCurrentProcess().MainModule.FileName;
+            process.StartInfo.Verb = "runas";
+            process.StartInfo.Arguments = "/elevated";
+            process.Start();
         }
     }
 }

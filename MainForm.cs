@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -32,6 +33,7 @@ namespace Vano.Tools.Azure
         public MainForm()
         {
             InitializeComponent();
+
             //Trace.Listeners.Add(new TextBoxTraceListener(this.traceTextBox));
             Trace.Listeners.Add(new ColoredTextBoxTraceListener(this.traceColoredTextBox));
             verbToolStripComboBox.SelectedIndex = 0;
@@ -61,6 +63,15 @@ namespace Vano.Tools.Azure
 
                     this.cloudTypeToolStripComboBox.Items.Add(dialog.AzureResourceManager);
                     this.cloudTypeToolStripComboBox.SelectedIndex = this.cloudTypeToolStripComboBox.Items.Count - 1;
+
+                    // For private deployments let's not enforce SSL validation
+                    if (dialog.IsAzureStackEndpoint)
+                    {
+                        ServicePointManager.ServerCertificateValidationCallback = ((sender, certificate, chain, sslPolicyErrors) =>
+                        {
+                            return true;
+                        });
+                    }
                 }
             }
         }
@@ -85,11 +96,11 @@ namespace Vano.Tools.Azure
                 _client = _connectionType == ConnectionType.AzureResourceManager || _connectionType == ConnectionType.AzureResourceManagerProxy ?
                     ((IAzureClient)new AzureClient(
                         resourceManagerEndpoint: _azureResourceManagerEndpoint,
-                        apiVersion: "2016-09-01",
+                        apiVersion: "2022-09-01",
                         metadata: null)) :
                     ((IAzureClient)new GeoMasterClient(
                         geoMasterEndpoint: _azureResourceManagerEndpoint,
-                        apiVersion: "2016-09-01",
+                        apiVersion: "2022-09-01",
                         certThumbprint: _certThumbprint));
 
                 _subscriptions = await _client.GetSubscriptions(_cts.Token);
