@@ -1,10 +1,9 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Net;
-using System.Net.Security;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Security.Cryptography.X509Certificates;
 using System.ServiceModel;
 using System.ServiceModel.Description;
@@ -25,7 +24,7 @@ namespace Vano.Tools.Azure
         private const long MaxReceivedMessageSize = 10 * 1024 * 1024;  // 10 MB
         private const int MaxStringContentLength = 1024 * 1024;        //  1 MB
 
-        private SemaphoreSlim _lock = new SemaphoreSlim(1, 1);
+        private HttpClient _client;
         private string _certThumbprint;
         private X509Certificate2 _cert;
 
@@ -56,6 +55,8 @@ namespace Vano.Tools.Azure
             _cert = GetCertificate(certThumbprint);
             this.GeoMasterEndpoint = geoMasterEndpoint;
             this.ApiVersion = apiVersion;
+
+            _client = CreateHttpClient();
         }
 
         #endregion
@@ -160,7 +161,27 @@ namespace Vano.Tools.Azure
 
         #endregion
 
-        #region ARM Helper Methods
+        #region Private Methods - ARM Helper Methods
+
+        private HttpClient CreateHttpClient()
+        {
+            HttpClientHandler handler = new HttpClientHandler()
+            {
+                ClientCertificateOptions = ClientCertificateOption.Manual
+            };
+
+            handler.ClientCertificates.Add(_cert);
+
+            HttpClient client = new HttpClient(handler);
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            if (!client.DefaultRequestHeaders.Contains("User-Agent"))
+            {
+                client.DefaultRequestHeaders.Add("User-Agent", "Visual ARM client");
+            }
+
+            return client;
+        }
 
         private Uri CreateAzureResourceManagerUri(string path, Dictionary<string, string> parameters = null, string endpoint = null, string apiVersion = null)
         {
@@ -201,60 +222,33 @@ namespace Vano.Tools.Azure
         {
             Uri requestUri = CreateAzureResourceManagerUri(path, parameters, armEndpoint, apiVersion);
 
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(requestUri);
-            request.Method = method;
-            request.ContentType = "application/json";
-            request.ClientCertificates.Add(_cert);
+            HttpRequestMessage request = new HttpRequestMessage(new HttpMethod(method), requestUri);
 
             if (HttpHeadersProcessor != null)
             {
-                HttpHeadersProcessor.CaptureWebHeadersFromRequest(request.Host, request.Headers);
+                HttpHeadersProcessor.CaptureHttpHeadersFromRequest(requestUri.Host, request.Headers);
             }
 
-            if (string.IsNullOrWhiteSpace(body))
+            if (!string.IsNullOrWhiteSpace(body))
             {
-                request.ContentLength = 0;
-            }
-            else
-            {
-                using (Stream requestStream = await request.GetRequestStreamAsync())
-                {
-                    byte[] content = Encoding.UTF8.GetBytes(body);
-                    requestStream.Write(content, 0, content.Length);
-                }
+                request.Content = new StringContent(body, Encoding.UTF8, "application/json");
             }
 
-            try
+            using (HttpResponseMessage response = await _client.SendAsync(request, cancellationToken))
             {
-                HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync();
-
                 if (HttpHeadersProcessor != null)
                 {
-                    HttpHeadersProcessor.CaptureWebHeadersFromResponse(response.StatusCode, response.Headers);
+                    HttpHeadersProcessor.CaptureHttpHeadersFromResponse(response.StatusCode, response.Headers);
                 }
 
-                using (Stream receiveStream = response.GetResponseStream())
+                string output = await response.Content.ReadAsStringAsync();
+
+                if (!response.IsSuccessStatusCode)
                 {
-                    using (StreamReader readStream = new StreamReader(receiveStream, Encoding.UTF8))
-                    {
-                        return await readStream.ReadToEndAsync();
-                    }
-                }
-            }
-            catch (WebException e)
-            {
-                if (e.Response != null)
-                {
-                    using (Stream receiveStream = e.Response.GetResponseStream())
-                    {
-                        using (StreamReader readStream = new StreamReader(receiveStream, Encoding.UTF8))
-                        {
-                            throw new Exception(e.Message + Environment.NewLine + readStream.ReadToEnd());
-                        }
-                    }
+                    throw new Exception(output);
                 }
 
-                throw;
+                return output;
             }
         }
 

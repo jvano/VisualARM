@@ -496,7 +496,6 @@ namespace Vano.Tools.Azure
 
             HttpRequestMessage request = new HttpRequestMessage(new HttpMethod(method), requestUri);
             request.Headers.Add("Authorization", token);
-            //request.Headers.Authorization = new AuthenticationHeaderValue("Basic", parameter);
 
             if (HttpHeadersProcessor != null)
             {
