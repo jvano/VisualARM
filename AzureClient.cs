@@ -1,4 +1,4 @@
-﻿using Microsoft.Identity.Client;
+﻿using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -9,6 +9,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.Expando;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -24,6 +25,8 @@ namespace Vano.Tools.Azure
         private bool _initialized = false;
         private HttpClient _client;
         private SemaphoreSlim _lock = new SemaphoreSlim(1, 1);
+        private AuthenticationContext _authContext;
+        private TokenCache _cache = new TokenCache();
 
         #endregion
 
@@ -93,8 +96,6 @@ namespace Vano.Tools.Azure
 
         public string AppResourceId { get; private set; }
 
-        public string AuthorityUrl { get; private set; }
-
         public HttpHeadersProcessor HttpHeadersProcessor { get; set; }
 
         #endregion
@@ -110,7 +111,7 @@ namespace Vano.Tools.Azure
                 {
                     if (!_initialized)
                     {
-                        await AcquireToken();
+                        await InitializeInternal();
                         _initialized = true;
                     }
                 }
@@ -121,7 +122,7 @@ namespace Vano.Tools.Azure
             }
         }
 
-        private async Task InitializeAuthenticationContext()
+        private async Task InitializeInternal()
         {
             if (string.IsNullOrEmpty(this.AuthenticationEndpoint) || string.IsNullOrEmpty(this.AppResourceId))
             {
@@ -142,26 +143,37 @@ namespace Vano.Tools.Azure
             ClearCookies();
 
             Uri authenticationUri = new Uri(this.AuthenticationEndpoint);
+            Uri commonAuthority = authenticationUri.LocalPath == "/" ? new Uri(authenticationUri, "common") : authenticationUri;
 
-            this.AuthorityUrl = (authenticationUri.LocalPath == "/" ? new Uri(authenticationUri, "common") : authenticationUri).AbsoluteUri;
-        }
+            _authContext = new AuthenticationContext(
+                authority: commonAuthority.ToString(),
+                validateAuthority: false,
+                tokenCache: _cache);
 
-        private async Task AcquireToken()
-        {
-            await this.InitializeAuthenticationContext();
-
+            AuthenticationResult result = null;
             try
             {
-                IEnumerable<string> scopes = new List<string> { $"{AppResourceId}/user_impersonation" };
-
-                IPublicClientApplication app = GetPublicClientApplication(
+                result = await _authContext.AcquireTokenAsync(
+                    resource: this.AppResourceId,
                     clientId: AppClientId,
-                    isAdfs: AzureMetadata.IsADFSAuthentication(this.AuthenticationEndpoint),
-                    authorityUri: this.AuthorityUrl,
-                    redirectUri: AppRedirectUri);
+                    redirectUri: new Uri(AppRedirectUri),
+                    parameters: new PlatformParameters(PromptBehavior.SelectAccount));
 
-                await app.AcquireTokenInteractive(scopes).ExecuteAsync();
-            }            
+                Trace.WriteLine("Authority: " + _authContext.Authority);
+            }
+            catch (AdalException ex)
+            {
+                if (ex.ErrorCode == "authentication_canceled")
+                {
+                    Trace.TraceInformation(ex.Message);
+
+                    throw new OperationCanceledException(ex.Message, ex);
+                }
+
+                Trace.TraceError(ex.ToString());
+
+                throw;
+            }
             catch (Exception ex)
             {
                 Trace.TraceError(ex.ToString());
@@ -313,30 +325,6 @@ namespace Vano.Tools.Azure
 
         #endregion
 
-        #region Private Methods - Client Cache
-
-        private Dictionary<string, IPublicClientApplication> PublicApplicationCache = new Dictionary<string, IPublicClientApplication>();
-
-        private IPublicClientApplication GetPublicClientApplication(string clientId, bool isAdfs, string authorityUri, string redirectUri)
-        {
-            var key = $"{clientId}|{isAdfs}|{authorityUri}|{redirectUri}".ToLower();
-
-            if (!PublicApplicationCache.ContainsKey(key))
-            {
-                var builder = PublicClientApplicationBuilder.Create(clientId)
-                    .WithRedirectUri(redirectUri)
-                    .WithCacheOptions(options: CacheOptions.EnableSharedCacheOptions);
-
-                builder = isAdfs ? builder.WithAdfsAuthority(authorityUri) : builder.WithAuthority(authorityUri);
-
-                PublicApplicationCache[key] = builder.Build();
-            }
-
-            return PublicApplicationCache[key];
-        }
-
-        #endregion
-
         #region Private Methods - Tokens
 
         public async Task<string> GetAuthSecret(string tenantId = null)
@@ -348,31 +336,18 @@ namespace Vano.Tools.Azure
             return result.CreateAuthorizationHeader();
         }
 
-        private async Task<AuthenticationResult> GetToken(string appResourceId)
+        private async Task<AuthenticationResult> GetToken()
         {
             AuthenticationResult result = null;
             try
             {
-                var scopes = new List<string> { $"{appResourceId}/user_impersonation" };
-
-                var app = GetPublicClientApplication(
+                result = await _authContext.AcquireTokenAsync(
+                    resource: this.AppResourceId,
                     clientId: AppClientId,
-                    isAdfs: AzureMetadata.IsADFSAuthentication(this.AuthenticationEndpoint),
-                    authorityUri: this.AuthorityUrl,
-                    redirectUri: AppRedirectUri);
-
-                var accounts = await app.GetAccountsAsync();
-
-                try
-                {
-                    result = await app.AcquireTokenSilent(scopes, accounts.FirstOrDefault()).ExecuteAsync();
-                }
-                catch (MsalUiRequiredException)
-                {
-                    result = await app.AcquireTokenInteractive(scopes).ExecuteAsync();
-                }
+                    redirectUri: new Uri(AppRedirectUri),
+                    parameters: new PlatformParameters(PromptBehavior.Never));
             }
-            catch (Exception ex)
+            catch (AdalException ex)
             {
                 Trace.TraceError(ex.ToString());
 
@@ -380,11 +355,6 @@ namespace Vano.Tools.Azure
             }
 
             return result;
-        }
-
-        private async Task<AuthenticationResult> GetToken()
-        {
-            return await this.GetToken(this.AppResourceId);
         }
 
         private async Task<AuthenticationResult> GetTenantToken(string tenantId)
@@ -397,27 +367,20 @@ namespace Vano.Tools.Azure
                 new Uri(authenticationUri, tenantId) :
                 new Uri(authenticationUri, authenticationUri.PathAndQuery + "/" + tenantId);
 
+            AuthenticationContext tenantAuthContext = new AuthenticationContext(
+                authority: tenantAuthority.ToString(),
+                validateAuthority: false,
+                tokenCache: _cache);
+
             AuthenticationResult result = null;
             try
             {
-                var scopes = new List<string> { $"{AppResourceId}/user_impersonation" };
-
-                var app = GetPublicClientApplication(
+                result = await tenantAuthContext.AcquireTokenAsync(
+                    resource: this.AppResourceId,
                     clientId: AppClientId,
-                    isAdfs: AzureMetadata.IsADFSAuthentication(this.AuthenticationEndpoint),
-                    authorityUri: tenantAuthority.ToString(),
-                    redirectUri: AppRedirectUri);
-
-                var accounts = await app.GetAccountsAsync();
-
-                try
-                {
-                    result = await app.AcquireTokenSilent(scopes, accounts.FirstOrDefault()).ExecuteAsync();
-                }
-                catch (MsalUiRequiredException)
-                {
-                    result = await app.AcquireTokenInteractive(scopes).ExecuteAsync();
-                }
+                    redirectUri: new Uri(AppRedirectUri),
+                    parameters: new PlatformParameters(PromptBehavior.Auto),
+                    userId: new UserIdentifier(token.UserInfo.DisplayableId, UserIdentifierType.OptionalDisplayableId));
             }
             catch (Exception ex)
             {
