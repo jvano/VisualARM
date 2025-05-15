@@ -12,7 +12,7 @@ namespace Vano.Tools.Azure.RDFE
 {
     public static class UserCredentialExtensions
     {
-        private static readonly AADAuthParameter UserAADAuthParameter = new AADAuthParameter()
+        public static readonly AADAuthParameter UserAADAuthParameter = new AADAuthParameter()
         {
             AuthorityHost = "https://login.microsoftonline.com/", // Hardcode to Public Azure
             Scope = "https://management.azure.com/.default",

@@ -165,15 +165,17 @@ namespace Vano.Tools.Azure
 
         private HttpClient CreateHttpClient()
         {
-            HttpClientHandler handler = new HttpClientHandler()
-            {
-                ClientCertificateOptions = ClientCertificateOption.Manual
-            };
+            //HttpClientHandler handler = new HttpClientHandler()
+            //{
+            //    ClientCertificateOptions = ClientCertificateOption.Manual
+            //};
 
-            handler.ClientCertificates.Add(_cert);
+            //handler.ClientCertificates.Add(_cert);
 
-            HttpClient client = new HttpClient(handler);
+            HttpClient client = new HttpClient();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", 
+                DefaultAzureCredentialHelper.GetUserToken(UserCredentialExtensions.UserAADAuthParameter.AuthorityHost, UserCredentialExtensions.UserAADAuthParameter.TenantId, UserCredentialExtensions.UserAADAuthParameter.Scope).Token);
 
             if (!client.DefaultRequestHeaders.Contains("User-Agent"))
             {
