@@ -285,8 +285,6 @@ namespace Vano.Tools.Azure
 
             SubscriptionClient client = new SubscriptionClient(endpoint);
 
-            ApplyRdfeClientSettings(client);
-
             return client;
         }
 
@@ -313,7 +311,7 @@ namespace Vano.Tools.Azure
             WebHttpBinding webHttpBinding = new WebHttpBinding();           
             webHttpBinding.UseDefaultWebProxy = true;
             webHttpBinding.Security.Mode = WebHttpSecurityMode.Transport;
-            webHttpBinding.Security.Transport.ClientCredentialType = HttpClientCredentialType.Certificate;
+            webHttpBinding.Security.Transport.ClientCredentialType = HttpClientCredentialType.None;
             webHttpBinding.MaxReceivedMessageSize = MaxReceivedMessageSize;
             webHttpBinding.ReaderQuotas.MaxStringContentLength = MaxStringContentLength;
 
@@ -323,15 +321,9 @@ namespace Vano.Tools.Azure
             }
 
             ServiceEndpoint serviceEndpoint = new ServiceEndpoint(contractDescription, webHttpBinding, new EndpointAddress(endpointAddress + addressPostfix));
-            serviceEndpoint.Behaviors.Add(new WebHttpBehavior());
+            serviceEndpoint.Behaviors.Add(UserCredentialExtensions.GetWebHttpBehavior());
 
             return serviceEndpoint;
-        }
-
-        private void ApplyRdfeClientSettings<T>(AdministrationClientBase<T> client) 
-            where T : class
-        {
-            client.ClientCredentials.ClientCertificate.SetCertificate(StoreLocation.CurrentUser, StoreName.My, X509FindType.FindByThumbprint, _certThumbprint);
         }
     }
 }
