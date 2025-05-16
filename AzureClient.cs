@@ -462,6 +462,7 @@ namespace Vano.Tools.Azure
 
             if (HttpHeadersProcessor != null)
             {
+                HttpHeadersProcessor.CaptureHttpHeadersFromRequest(requestUri.Host, _client.DefaultRequestHeaders);
                 HttpHeadersProcessor.CaptureHttpHeadersFromRequest(requestUri.Host, request.Headers);
             }
 
