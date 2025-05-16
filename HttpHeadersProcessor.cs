@@ -14,7 +14,7 @@ namespace Vano.Tools.Azure
         private string _statusCode;
         private string _host;
 
-        private readonly HashSet<string> _headersToExclude = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "Authorization" };
+        private readonly HashSet<string> _sensitiveHeaders = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "Authorization" };
 
         private IList<Tuple<string, string>> RequestHeaders 
         {
@@ -64,7 +64,7 @@ namespace Vano.Tools.Azure
             {
                 string header = headers.GetKey(i);
 
-                if (_headersToExclude.Contains(header))
+                if (_sensitiveHeaders.Contains(header))
                 {
                     continue;
                 }
@@ -82,32 +82,31 @@ namespace Vano.Tools.Azure
 
         #region HttpHeaders
 
-        public void CaptureHttpHeadersFromRequest(string host, HttpHeaders requestHeaders)
+        public void CaptureHttpHeadersFromRequest(string host, HttpHeaders requestHeaders, bool displaySecrets)
         {
             _host = host;
-            CaptureHttpHeaders(requestHeaders, RequestHeaders);
+            CaptureHttpHeaders(requestHeaders, RequestHeaders, displaySecrets);
         }
 
-        public void CaptureHttpHeadersFromResponse(HttpStatusCode statusCode, HttpHeaders responseHeaders)
+        public void CaptureHttpHeadersFromResponse(HttpStatusCode statusCode, HttpHeaders responseHeaders, bool displaySecrets)
         {
             _statusCode = string.Format("{0} ({1})", ((int)statusCode).ToString(), statusCode.ToString());
-            CaptureHttpHeaders(responseHeaders, ResponseHeaders);
+            CaptureHttpHeaders(responseHeaders, ResponseHeaders, displaySecrets);
         }
 
-        private IList<Tuple<string, string>> CaptureHttpHeaders(HttpHeaders headers, IList<Tuple<string, string>> target)
+        private IList<Tuple<string, string>> CaptureHttpHeaders(HttpHeaders headers, IList<Tuple<string, string>> target, bool displaySecrets)
         {
             target.Clear();
 
             foreach(KeyValuePair<string, IEnumerable<string>> header in headers)
             {
-                if (_headersToExclude.Contains(header.Key))
-                {
-                    continue;
-                }
-
                 foreach (string value in header.Value)
                 {
-                    target.Add(new Tuple<string, string>(header.Key, value));
+                    string postProcessedValue = _sensitiveHeaders.Contains(header.Key) && displaySecrets == false ? 
+                        "●●●●●●●●" : 
+                        value;
+                    
+                    target.Add(new Tuple<string, string>(header.Key, postProcessedValue));
                 }
             }
 

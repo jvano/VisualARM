@@ -24,7 +24,6 @@ namespace Vano.Tools.Azure
         private IEnumerable<Subscription> _subscriptions = null;
         private ConnectionType _connectionType = ConnectionType.AzureResourceManager;
         private IEnumerable<Template> _templates = null;
-        private string _certThumbprint;
         private string _privateGeoEndpoint;
         private TemplateDocument _customTemplatesDocument;
         private BindingList<Request> _requests = new BindingList<Request>();
@@ -58,7 +57,6 @@ namespace Vano.Tools.Azure
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
                     _connectionType = dialog.ConnectionType;
-                    _certThumbprint = dialog.CertThumbprint;
                     _privateGeoEndpoint = _connectionType == ConnectionType.AzureResourceManagerProxy ? dialog.PrivateGeoEndpoint : string.Empty;
 
                     this.cloudTypeToolStripComboBox.Items.Add(dialog.AzureResourceManager);
@@ -100,8 +98,7 @@ namespace Vano.Tools.Azure
                         metadata: null)) :
                     ((IAzureClient)new GeoMasterClient(
                         geoMasterEndpoint: _azureResourceManagerEndpoint,
-                        apiVersion: "2022-09-01",
-                        certThumbprint: _certThumbprint));
+                        apiVersion: "2022-09-01"));
 
                 _subscriptions = await _client.GetSubscriptions(_cts.Token);
 
@@ -272,7 +269,6 @@ namespace Vano.Tools.Azure
                 }
 
                 Trace.WriteLine("REQUEST: " + verbToolStripComboBox.SelectedItem.ToString() + " " + pathToolStripTextBox.Text);
-                Trace.WriteLine("SECRET: " + (this.hideTokensToolStripButton.Checked ? "●●●●●●" : tenantToken));
                 Trace.WriteLine(string.Empty);
 
                 Request newRequestToLog = new Request()
@@ -296,6 +292,7 @@ namespace Vano.Tools.Azure
                     body: body,
                     parameters: null,
                     apiVersion: null,
+                    displaySecrets: !this.hideTokensToolStripButton.Checked,
                     cancellationToken: _cts.Token);
 
                 Trace.WriteLine("REQUEST HEADERS: ");
@@ -506,6 +503,7 @@ namespace Vano.Tools.Azure
                 path: string.Format(@"/subscriptions/{0}/providers", subscription.Id),
                 token: tenantToken,
                 body: null,
+                displaySecrets: !this.hideTokensToolStripButton.Checked,
                 cancellationToken: _cts.Token);
 
             if (!string.IsNullOrWhiteSpace(response))
@@ -563,6 +561,7 @@ namespace Vano.Tools.Azure
                 path: string.Format(@"/subscriptions/{0}/resourceGroups", subscription.Id),
                 token: tenantToken,
                 body: null,
+                displaySecrets: !this.hideTokensToolStripButton.Checked,
                 cancellationToken: _cts.Token);
 
             if (!string.IsNullOrWhiteSpace(response))

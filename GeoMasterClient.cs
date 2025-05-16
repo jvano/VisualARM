@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Azure.Core;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,8 +26,6 @@ namespace Vano.Tools.Azure
         private const int MaxStringContentLength = 1024 * 1024;        //  1 MB
 
         private HttpClient _client;
-        private string _certThumbprint;
-        private X509Certificate2 _cert;
 
         #endregion
 
@@ -48,11 +47,8 @@ namespace Vano.Tools.Azure
 
         public GeoMasterClient(
             string geoMasterEndpoint,
-            string certThumbprint,
             string apiVersion = "2015-01-01")
         {
-            _certThumbprint = certThumbprint;
-            _cert = GetCertificate(certThumbprint);
             this.GeoMasterEndpoint = geoMasterEndpoint;
             this.ApiVersion = apiVersion;
 
@@ -89,7 +85,7 @@ namespace Vano.Tools.Azure
                     {
                         Id = rdfeSubscription.Name,
                         DisplayName = string.IsNullOrWhiteSpace(rdfeSubscription.Description) ? "[CSM-Direct]" : rdfeSubscription.Description,
-                        TenantId = _certThumbprint
+                        TenantId = "CsmDirect"
                     });
                 }
             }
@@ -101,7 +97,7 @@ namespace Vano.Tools.Azure
                     {
                         Id = "00000000-0000-0000-0000-000000000000",
                         DisplayName = "[CSM-Direct]",
-                        TenantId = _certThumbprint
+                        TenantId = "CsmDirect"
                     }
                 });
             }
@@ -156,7 +152,9 @@ namespace Vano.Tools.Azure
 
         public async Task<string> GetAuthSecret(string tenantId = null)
         {
-            return await Task.FromResult<string>(_certThumbprint);
+            AccessToken access = await DefaultAzureCredentialHelper.GetUserTokenAsync(UserCredentialExtensions.UserAADAuthParameter.AuthorityHost, UserCredentialExtensions.UserAADAuthParameter.TenantId, UserCredentialExtensions.UserAADAuthParameter.Scope);
+
+            return access.Token;
         }
 
         #endregion
@@ -165,18 +163,9 @@ namespace Vano.Tools.Azure
 
         private HttpClient CreateHttpClient()
         {
-            //HttpClientHandler handler = new HttpClientHandler()
-            //{
-            //    ClientCertificateOptions = ClientCertificateOption.Manual
-            //};
-
-            //handler.ClientCertificates.Add(_cert);
-
             HttpClient client = new HttpClient();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", 
-                DefaultAzureCredentialHelper.GetUserToken(UserCredentialExtensions.UserAADAuthParameter.AuthorityHost, UserCredentialExtensions.UserAADAuthParameter.TenantId, UserCredentialExtensions.UserAADAuthParameter.Scope).Token);
-
+            
             if (!client.DefaultRequestHeaders.Contains("User-Agent"))
             {
                 client.DefaultRequestHeaders.Add("User-Agent", "Visual ARM client");
@@ -220,15 +209,17 @@ namespace Vano.Tools.Azure
             return new JObject();
         }
 
-        public async Task<string> CallAzureResourceManager(string method, string path, string token, string body = null, Dictionary<string, string> parameters = null, string armEndpoint = null, string apiVersion = null, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<string> CallAzureResourceManager(string method, string path, string token, string body = null, Dictionary<string, string> parameters = null, string armEndpoint = null, string apiVersion = null, bool displaySecrets = false, CancellationToken cancellationToken = new CancellationToken())
         {
             Uri requestUri = CreateAzureResourceManagerUri(path, parameters, armEndpoint, apiVersion);
 
             HttpRequestMessage request = new HttpRequestMessage(new HttpMethod(method), requestUri);
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             if (HttpHeadersProcessor != null)
             {
-                HttpHeadersProcessor.CaptureHttpHeadersFromRequest(requestUri.Host, request.Headers);
+                HttpHeadersProcessor.CaptureHttpHeadersFromRequest(requestUri.Host, _client.DefaultRequestHeaders, displaySecrets);
+                HttpHeadersProcessor.CaptureHttpHeadersFromRequest(requestUri.Host, request.Headers, displaySecrets);
             }
 
             if (!string.IsNullOrWhiteSpace(body))
@@ -240,7 +231,7 @@ namespace Vano.Tools.Azure
             {
                 if (HttpHeadersProcessor != null)
                 {
-                    HttpHeadersProcessor.CaptureHttpHeadersFromResponse(response.StatusCode, response.Headers);
+                    HttpHeadersProcessor.CaptureHttpHeadersFromResponse(response.StatusCode, response.Headers, displaySecrets);
                 }
 
                 string output = await response.Content.ReadAsStringAsync();
@@ -251,31 +242,6 @@ namespace Vano.Tools.Azure
                 }
 
                 return output;
-            }
-        }
-
-        #endregion
-
-        #region Private Static Methods - Certs
-
-        private static X509Certificate2 GetCertificate(string thumbprint)
-        {
-            X509Store store = new X509Store(StoreName.My, StoreLocation.CurrentUser);
-            store.Open(OpenFlags.ReadOnly);
-
-            try
-            {
-                var results = store.Certificates.Find(X509FindType.FindByThumbprint, thumbprint, false);
-                if (results.Count == 0)
-                {
-                    throw new Exception(string.Format("Failed to load certificate with thumbprint {0}.", thumbprint));
-                }
-
-                return results[0];
-            }
-            finally
-            {
-                store.Close();
             }
         }
 
@@ -292,9 +258,9 @@ namespace Vano.Tools.Azure
 
         private ServiceEndpoint GetRdfeServiceEndpoint(ContractDescription contractDescription, string addressPostfix, bool supportsWebSystem = false)
         {
-            // CSM          joaquinvvmssgeo.cloudapp.net:444
-            // RDFE         joaquinvvmssgeo.cloudapp.net:443 GEO
-            // RDFE         joaquinvvmssgeo.cloudapp.net:454 STAMP
+            // CSM          geomaster.joaquinvmss1.antares-test.windows-int.net:444
+            // RDFE         geomaster.joaquinvmss1.antares-test.windows-int.net:443 GEO
+            // RDFE         geomaster.joaquinvmss1.antares-test.windows-int.net:454 STAMP
 
             Uri csmEndpoint = new Uri("https://" + this.GeoMasterEndpoint);
             UriBuilder rdfeEndpoint = new UriBuilder("https", csmEndpoint.Host, portNumber: 443);

@@ -39,8 +39,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.azureResourceManagerEndpointTextBox = new System.Windows.Forms.TextBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.certificateComboBox = new System.Windows.Forms.ComboBox();
             this.moreInfoLinkLabel = new System.Windows.Forms.LinkLabel();
             this.privateGeoEndpointTextBox = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
@@ -53,7 +51,7 @@
             this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.okButton.Enabled = false;
-            this.okButton.Location = new System.Drawing.Point(358, 232);
+            this.okButton.Location = new System.Drawing.Point(358, 198);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(75, 23);
             this.okButton.TabIndex = 0;
@@ -65,7 +63,7 @@
             // 
             this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(439, 232);
+            this.cancelButton.Location = new System.Drawing.Point(439, 198);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
             this.cancelButton.TabIndex = 1;
@@ -156,32 +154,11 @@
             this.azureResourceManagerEndpointTextBox.TabIndex = 1;
             this.azureResourceManagerEndpointTextBox.TextChanged += new System.EventHandler(this.azureResourceManagerEndpointTextBox_TextChanged);
             // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(12, 199);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(57, 13);
-            this.label4.TabIndex = 8;
-            this.label4.Text = "Certificate:";
-            // 
-            // certificateComboBox
-            // 
-            this.certificateComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.certificateComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.certificateComboBox.Enabled = false;
-            this.certificateComboBox.FormattingEnabled = true;
-            this.certificateComboBox.Location = new System.Drawing.Point(123, 196);
-            this.certificateComboBox.Name = "certificateComboBox";
-            this.certificateComboBox.Size = new System.Drawing.Size(391, 21);
-            this.certificateComboBox.TabIndex = 3;
-            this.certificateComboBox.SelectedIndexChanged += new System.EventHandler(this.certificateComboBox_SelectedIndexChanged);
-            // 
             // moreInfoLinkLabel
             // 
+            this.moreInfoLinkLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.moreInfoLinkLabel.AutoSize = true;
-            this.moreInfoLinkLabel.Location = new System.Drawing.Point(120, 232);
+            this.moreInfoLinkLabel.Location = new System.Drawing.Point(120, 198);
             this.moreInfoLinkLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.moreInfoLinkLabel.Name = "moreInfoLinkLabel";
             this.moreInfoLinkLabel.Size = new System.Drawing.Size(51, 13);
@@ -216,12 +193,10 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(526, 267);
+            this.ClientSize = new System.Drawing.Size(526, 233);
             this.Controls.Add(this.privateGeoEndpointTextBox);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.moreInfoLinkLabel);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.certificateComboBox);
             this.Controls.Add(this.azureResourceManagerEndpointTextBox);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
@@ -255,8 +230,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox azureResourceManagerEndpointTextBox;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.ComboBox certificateComboBox;
         private System.Windows.Forms.LinkLabel moreInfoLinkLabel;
         private System.Windows.Forms.TextBox privateGeoEndpointTextBox;
         private System.Windows.Forms.Label label5;

@@ -437,14 +437,14 @@ namespace Vano.Tools.Azure
                 .Replace(" ", "%20"));
         }
 
-        private async Task<JObject> CallAzureResourceManagerAsJObject(string method, string path, AuthenticationResult token, string body = null, Dictionary<string, string> parameters = null, string armEndpoint = null, string apiVersion = null, CancellationToken cancellationToken = new CancellationToken())
+        private async Task<JObject> CallAzureResourceManagerAsJObject(string method, string path, AuthenticationResult token, string body = null, Dictionary<string, string> parameters = null, string armEndpoint = null, string apiVersion = null, bool displaySecrets = false, CancellationToken cancellationToken = new CancellationToken())
         {
-            return await CallAzureResourceManagerAsJObject(method, path, token != null ? token.CreateAuthorizationHeader() : null, body, parameters, armEndpoint, apiVersion, cancellationToken);
+            return await CallAzureResourceManagerAsJObject(method, path, token != null ? token.CreateAuthorizationHeader() : null, body, parameters, armEndpoint, apiVersion, displaySecrets, cancellationToken);
         }
 
-        private async Task<JObject> CallAzureResourceManagerAsJObject(string method, string path, string token, string body = null, Dictionary<string, string> parameters = null, string armEndpoint = null, string apiVersion = null, CancellationToken cancellationToken = new CancellationToken())
+        private async Task<JObject> CallAzureResourceManagerAsJObject(string method, string path, string token, string body = null, Dictionary<string, string> parameters = null, string armEndpoint = null, string apiVersion = null, bool displaySecrets = false, CancellationToken cancellationToken = new CancellationToken())
         {
-            string response = await CallAzureResourceManager(method, path, token, body, parameters, armEndpoint, apiVersion, cancellationToken);
+            string response = await CallAzureResourceManager(method, path, token, body, parameters, armEndpoint, apiVersion, displaySecrets, cancellationToken);
             if (!string.IsNullOrWhiteSpace(response))
             {
                 return JObject.Parse(response);
@@ -453,7 +453,7 @@ namespace Vano.Tools.Azure
             return new JObject();
         }
 
-        public async Task<string> CallAzureResourceManager(string method, string path, string token, string body = null, Dictionary<string, string> parameters = null, string armEndpoint = null, string apiVersion = null, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<string> CallAzureResourceManager(string method, string path, string token, string body = null, Dictionary<string, string> parameters = null, string armEndpoint = null, string apiVersion = null, bool displaySecrets = false, CancellationToken cancellationToken = new CancellationToken())
         {
             Uri requestUri = CreateAzureResourceManagerUri(path, parameters, armEndpoint, apiVersion);
 
@@ -462,8 +462,8 @@ namespace Vano.Tools.Azure
 
             if (HttpHeadersProcessor != null)
             {
-                HttpHeadersProcessor.CaptureHttpHeadersFromRequest(requestUri.Host, _client.DefaultRequestHeaders);
-                HttpHeadersProcessor.CaptureHttpHeadersFromRequest(requestUri.Host, request.Headers);
+                HttpHeadersProcessor.CaptureHttpHeadersFromRequest(requestUri.Host, _client.DefaultRequestHeaders, displaySecrets);
+                HttpHeadersProcessor.CaptureHttpHeadersFromRequest(requestUri.Host, request.Headers, displaySecrets);
             }
 
             if (!string.IsNullOrWhiteSpace(body))
@@ -475,7 +475,7 @@ namespace Vano.Tools.Azure
             {
                 if (HttpHeadersProcessor != null)
                 {
-                    HttpHeadersProcessor.CaptureHttpHeadersFromResponse(response.StatusCode, response.Headers);
+                    HttpHeadersProcessor.CaptureHttpHeadersFromResponse(response.StatusCode, response.Headers, displaySecrets);
                 }
 
                 string output = await response.Content.ReadAsStringAsync();

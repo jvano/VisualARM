@@ -173,7 +173,7 @@
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(93, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(92, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             // 
             // batchToolStripMenuItem
@@ -300,7 +300,7 @@
             // toolStripStatusLabel3
             // 
             this.toolStripStatusLabel3.Name = "toolStripStatusLabel3";
-            this.toolStripStatusLabel3.Size = new System.Drawing.Size(964, 17);
+            this.toolStripStatusLabel3.Size = new System.Drawing.Size(995, 17);
             this.toolStripStatusLabel3.Spring = true;
             // 
             // toolStripStatusLabel4
@@ -646,7 +646,7 @@
             this.excludeBodyToolStripButton.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.excludeBodyToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.excludeBodyToolStripButton.Name = "excludeBodyToolStripButton";
-            this.excludeBodyToolStripButton.Size = new System.Drawing.Size(98, 22);
+            this.excludeBodyToolStripButton.Size = new System.Drawing.Size(97, 22);
             this.excludeBodyToolStripButton.Text = "Exclude body";
             // 
             // clearBodyToolStripButton

@@ -85,16 +85,6 @@ namespace Vano.Tools.Azure.Dialogs
             }
         }
 
-        public string CertThumbprint
-        {
-            get
-            {
-                return this.certificateComboBox.SelectedItem != null ? 
-                    this.certificateComboBox.SelectedItem.ToString() :
-                    null;
-            }
-        }
-
         public string PrivateGeoEndpoint
         {
             get
@@ -124,7 +114,6 @@ namespace Vano.Tools.Azure.Dialogs
                 case AzurePublic:
                     this.ConnectionType = ConnectionType.AzureResourceManager;
                     this.azureResourceManagerEndpointTextBox.Enabled = true;
-                    this.certificateComboBox.Enabled = false;
                     this.azureResourceManagerEndpointTextBox.Text = "management.azure.com";
                     this.moreInfoLinkLabel.Enabled = false;
                     this.privateGeoEndpointTextBox.Enabled = false;
@@ -134,7 +123,6 @@ namespace Vano.Tools.Azure.Dialogs
                 case AzureCanary:
                     this.ConnectionType = ConnectionType.AzureResourceManager;
                     this.azureResourceManagerEndpointTextBox.Enabled = false;
-                    this.certificateComboBox.Enabled = false;
                     this.azureResourceManagerEndpointTextBox.Text = "brazilus.management.azure.com";
                     this.moreInfoLinkLabel.Enabled = false;
                     this.privateGeoEndpointTextBox.Enabled = false;
@@ -144,7 +132,6 @@ namespace Vano.Tools.Azure.Dialogs
                 case AzureChina:
                     this.ConnectionType = ConnectionType.AzureResourceManager;
                     this.azureResourceManagerEndpointTextBox.Enabled = false;
-                    this.certificateComboBox.Enabled = false;
                     this.azureResourceManagerEndpointTextBox.Text = "management.core.chinacloudapi.cn";
                     this.moreInfoLinkLabel.Enabled = false;
                     this.privateGeoEndpointTextBox.Enabled = false;
@@ -154,7 +141,6 @@ namespace Vano.Tools.Azure.Dialogs
                 case AzureFairfax:
                     this.ConnectionType = ConnectionType.AzureResourceManager;
                     this.azureResourceManagerEndpointTextBox.Enabled = false;
-                    this.certificateComboBox.Enabled = false;
                     this.azureResourceManagerEndpointTextBox.Text = "management.usgovcloudapi.net";
                     this.moreInfoLinkLabel.Enabled = false;
                     this.privateGeoEndpointTextBox.Enabled = false;
@@ -164,7 +150,6 @@ namespace Vano.Tools.Azure.Dialogs
                 case AzureDogfood:
                     this.ConnectionType = ConnectionType.AzureResourceManagerProxy;
                     this.azureResourceManagerEndpointTextBox.Enabled = false;
-                    this.certificateComboBox.Enabled = false;
                     this.azureResourceManagerEndpointTextBox.Text = "api-dogfood.resources.windows-int.net";
                     this.moreInfoLinkLabel.Enabled = true;
                     this.privateGeoEndpointTextBox.Enabled = true;
@@ -174,9 +159,7 @@ namespace Vano.Tools.Azure.Dialogs
                 case AzureCsmDirect:
                     this.ConnectionType = ConnectionType.GeoMasterStamp;
                     this.azureResourceManagerEndpointTextBox.Enabled = true;
-                    this.certificateComboBox.Enabled = true;
                     this.azureResourceManagerEndpointTextBox.Text = GetSetting("DefaultCsmDirectPrivateStampEndpoint", defaultValue: DefaultCsmDirectPrivateStampEndpoint);
-                    this.LoadCertificates();
                     this.moreInfoLinkLabel.Enabled = true;
                     this.privateGeoEndpointTextBox.Enabled = false;
                     this.privateGeoEndpointTextBox.Text = string.Empty;
@@ -185,7 +168,6 @@ namespace Vano.Tools.Azure.Dialogs
                 case AzureStackAsdkTenant:
                     this.ConnectionType = ConnectionType.AzureResourceManager;
                     this.azureResourceManagerEndpointTextBox.Enabled = true;
-                    this.certificateComboBox.Enabled = false;
                     this.azureResourceManagerEndpointTextBox.Text = GetSetting("DefaultAzureStackTenantArmEndpoint", defaultValue: "management.local.azurestack.external");
                     this.moreInfoLinkLabel.Enabled = false;
                     this.privateGeoEndpointTextBox.Enabled = false;
@@ -195,7 +177,6 @@ namespace Vano.Tools.Azure.Dialogs
                 case AzureStackAsdkAdmin:
                     this.ConnectionType = ConnectionType.AzureResourceManager;
                     this.azureResourceManagerEndpointTextBox.Enabled = true;
-                    this.certificateComboBox.Enabled = false;
                     this.azureResourceManagerEndpointTextBox.Text = GetSetting("DefaultAzureStackAdminArmEndpoint", defaultValue: "adminmanagement.local.azurestack.external");
                     this.moreInfoLinkLabel.Enabled = false;
                     this.privateGeoEndpointTextBox.Enabled = false;
@@ -205,7 +186,6 @@ namespace Vano.Tools.Azure.Dialogs
                 case AzureStackDevTenant:
                     this.ConnectionType = ConnectionType.AzureResourceManager;
                     this.azureResourceManagerEndpointTextBox.Enabled = true;
-                    this.certificateComboBox.Enabled = false;
                     this.azureResourceManagerEndpointTextBox.Text = GetSetting("DefaultAzureStackTenantArmEndpoint", defaultValue: DefaultAzureStackTenantArmEndpoint);
                     this.moreInfoLinkLabel.Enabled = false;
                     this.privateGeoEndpointTextBox.Enabled = false;
@@ -215,7 +195,6 @@ namespace Vano.Tools.Azure.Dialogs
                 case AzureStackDevAdmin:
                     this.ConnectionType = ConnectionType.AzureResourceManager;
                     this.azureResourceManagerEndpointTextBox.Enabled = true;
-                    this.certificateComboBox.Enabled = false;
                     this.azureResourceManagerEndpointTextBox.Text = GetSetting("DefaultAzureStackAdminArmEndpoint", defaultValue: DefaultAzureStackAdminArmEndpoint);
                     this.moreInfoLinkLabel.Enabled = false;
                     this.privateGeoEndpointTextBox.Enabled = false;
@@ -224,38 +203,6 @@ namespace Vano.Tools.Azure.Dialogs
             }
 
             ValidateForm();
-        }
-
-        private void LoadCertificates()
-        {
-            string defaultCertificateThumbprint = GetSetting("DefaultCertificateThumbprint"); 
-            
-            this.certificateComboBox.Items.Clear();
-            var store = new X509Store(StoreName.My, StoreLocation.CurrentUser);
-            store.Open(OpenFlags.ReadOnly);
-            try
-            {
-                List<X509Certificate2> certs = new List<X509Certificate2>();
-                foreach (X509Certificate2 cert in store.Certificates)
-                {
-                    certs.Add(cert);
-                }
-
-                foreach (X509Certificate2 cert in certs.OrderBy(c => c.Thumbprint))
-                {
-                    int index = this.certificateComboBox.Items.Add(cert.Thumbprint);
-                    
-                    if (!string.IsNullOrEmpty(defaultCertificateThumbprint) &&
-                        cert.Thumbprint == defaultCertificateThumbprint)
-                    {
-                        this.certificateComboBox.SelectedIndex = index;
-                    }
-                }
-            }
-            finally
-            {
-                store.Close();
-            }
         }
 
         private void moreInfoLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -285,9 +232,9 @@ namespace Vano.Tools.Azure.Dialogs
                 // Azure DEV - GeoMaster ARM
                 case 5:
                     this.SavedSettings["DefaultCsmDirectPrivateStampEndpoint"] = this.AzureResourceManager;
-                    this.SavedSettings["DefaultCertificateThumbprint"] = this.CertThumbprint;
 
                     break;
+
                 // ASDK - Tenant ARM
                 case 6:
                     this.SavedSettings["DefaultAzureStackTenantArmEndpoint"] = this.AzureResourceManager;
@@ -299,6 +246,7 @@ namespace Vano.Tools.Azure.Dialogs
                     this.SavedSettings["DefaultAzureStackAdminArmEndpoint"] = this.AzureResourceManager;
 
                     break;
+
                 // DEV - Tenant ARM
                 case 8:
                     this.SavedSettings["DefaultAzureStackTenantArmEndpoint"] = this.AzureResourceManager;
@@ -401,8 +349,7 @@ namespace Vano.Tools.Azure.Dialogs
                 (
                     this.environmentTypeComboBox.SelectedIndex != -1 &&
                     ((string)this.environmentTypeComboBox.SelectedItem) == AzureCsmDirect &&
-                    !string.IsNullOrWhiteSpace(azureResourceManagerEndpointTextBox.Text) &&
-                    this.certificateComboBox.SelectedIndex != -1
+                    !string.IsNullOrWhiteSpace(azureResourceManagerEndpointTextBox.Text)
                 );                
         }
 
