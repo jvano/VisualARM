@@ -94,11 +94,11 @@ namespace Vano.Tools.Azure
                 _client = _connectionType == ConnectionType.AzureResourceManager || _connectionType == ConnectionType.AzureResourceManagerProxy ?
                     ((IAzureClient)new AzureClient(
                         resourceManagerEndpoint: _azureResourceManagerEndpoint,
-                        apiVersion: "2022-09-01",
+                        apiVersion: "2022-12-01",
                         metadata: null)) :
                     ((IAzureClient)new GeoMasterClient(
                         geoMasterEndpoint: _azureResourceManagerEndpoint,
-                        apiVersion: "2022-09-01"));
+                        apiVersion: "2022-12-01"));
 
                 _subscriptions = await _client.GetSubscriptions(_cts.Token);
 
@@ -322,9 +322,8 @@ namespace Vano.Tools.Azure
             catch (Exception ex)
             {
                 string responseToLog = string.Empty;
+
                 StringBuilder responseToLogBuilder = new StringBuilder();
-
-
                 responseToLogBuilder.AppendLine(string.Empty);
                 responseToLogBuilder.AppendLine("ERROR:");
                 responseToLogBuilder.AppendLine(JsonHelper.FormatJson(ex.Message));

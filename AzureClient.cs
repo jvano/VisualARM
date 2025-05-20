@@ -1,4 +1,4 @@
-﻿using Microsoft.IdentityModel.Clients.ActiveDirectory;
+﻿using Microsoft.Identity.Client;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,6 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.Expando;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -25,19 +24,16 @@ namespace Vano.Tools.Azure
         private bool _initialized = false;
         private HttpClient _client;
         private SemaphoreSlim _lock = new SemaphoreSlim(1, 1);
-        private AuthenticationContext _authContext;
-        private TokenCache _cache = new TokenCache();
+
+        private IPublicClientApplication _publicClientApp;
+        private AuthenticationResult _authResult;
 
         #endregion
 
         #region Constants
 
-        // Azure Stack PowerShell client id
-        // private const string AppClientId = "0a7bdc5c-7b57-40be-9939-d4c5fc7cd417";
-
         // Azure PowerShell client id
         private const string AppClientId = "1950a258-227b-4e31-a9cf-717495945fc2";
-
         private const string AppRedirectUri = "urn:ietf:wg:oauth:2.0:oob";
 
         /// <summary>
@@ -56,7 +52,7 @@ namespace Vano.Tools.Azure
 
         public AzureClient(
             string resourceManagerEndpoint = "management.azure.com",
-            string apiVersion = "2015-01-01",
+            string apiVersion = "2022-12-01",
             AzureMetadata metadata = null,
             Func<HttpMessageHandler> handlerFactory = null)
         {
@@ -69,7 +65,7 @@ namespace Vano.Tools.Azure
 
         public AzureClient(
             string resourceManagerEndpoint = "management.azure.com",
-            string apiVersion = "2015-01-01",
+            string apiVersion = "2022-12-01",
             string authenticationEndpoint = "https://login.windows.net",
             string appResourceId = "https://management.core.windows.net/",
             Func<HttpMessageHandler> handlerFactory = null)
@@ -143,41 +139,34 @@ namespace Vano.Tools.Azure
             ClearCookies();
 
             Uri authenticationUri = new Uri(this.AuthenticationEndpoint);
-            Uri commonAuthority = authenticationUri.LocalPath == "/" ? new Uri(authenticationUri, "common") : authenticationUri;
+            Uri commonAuthority = authenticationUri.LocalPath == "/" ? new Uri(authenticationUri, "organizations") : authenticationUri;
 
-            _authContext = new AuthenticationContext(
-                authority: commonAuthority.ToString(),
-                validateAuthority: false,
-                tokenCache: _cache);
+            // MSAL: Build the PublicClientApplication
+            _publicClientApp = PublicClientApplicationBuilder.Create(AppClientId)
+                .WithAuthority(commonAuthority, validateAuthority: false)
+                .WithCacheOptions(CacheOptions.EnableSharedCacheOptions)
+                .WithRedirectUri(AppRedirectUri)
+                .Build();
 
-            AuthenticationResult result = null;
+            // Try to acquire token interactively
             try
             {
-                result = await _authContext.AcquireTokenAsync(
-                    resource: this.AppResourceId,
-                    clientId: AppClientId,
-                    redirectUri: new Uri(AppRedirectUri),
-                    parameters: new PlatformParameters(PromptBehavior.SelectAccount));
+                string[] scopes = new[] { $"{this.AppResourceId.TrimEnd('/')}/.default" };
 
-                Trace.WriteLine("Authority: " + _authContext.Authority);
+                _authResult = await _publicClientApp.AcquireTokenInteractive(scopes)
+                    .WithPrompt(Prompt.SelectAccount)
+                    .ExecuteAsync();
+
+                Trace.WriteLine("Authority: " + _publicClientApp.Authority);
             }
-            catch (AdalException ex)
+            catch (MsalClientException ex) when (ex.ErrorCode == "authentication_canceled")
             {
-                if (ex.ErrorCode == "authentication_canceled")
-                {
-                    Trace.TraceInformation(ex.Message);
-
-                    throw new OperationCanceledException(ex.Message, ex);
-                }
-
-                Trace.TraceError(ex.ToString());
-
-                throw;
+                Trace.TraceInformation(ex.Message);
+                throw new OperationCanceledException(ex.Message, ex);
             }
             catch (Exception ex)
             {
                 Trace.TraceError(ex.ToString());
-
                 throw;
             }
         }
@@ -188,8 +177,7 @@ namespace Vano.Tools.Azure
 
         public async Task<IEnumerable<string>> GetTenantsIds(CancellationToken cancellationToken = new CancellationToken())
         {
-            AuthenticationResult token = await GetToken();
-
+            string token = await GetToken();
             JObject response = await CallAzureResourceManagerAsJObject("GET", "/tenants", token, cancellationToken: cancellationToken);
             IEnumerable<string> tenantIds = response
                 .Value<JArray>("value")
@@ -215,7 +203,7 @@ namespace Vano.Tools.Azure
                 IEnumerable<Subscription> subscriptionsInTenant = null;
                 try
                 {
-                    AuthenticationResult tenantToken = await GetTenantToken(tenantId);
+                    string tenantToken = await GetTenantToken(tenantId);
 
                     if (tenantToken == null)
                     {
@@ -237,12 +225,6 @@ namespace Vano.Tools.Azure
                 catch (Exception e)
                 {
                     Trace.WriteLine(e.ToString());
-
-                    // AADSTS50001: The application named https://<app>.<directory>.onmicrosoft.com was not found in the tenant named <tenantid>.
-                    if (e.HResult != -2146233088)
-                    {
-                        throw;
-                    }
                 }
 
                 if (subscriptionsInTenant != null)
@@ -256,7 +238,7 @@ namespace Vano.Tools.Azure
 
         public async Task<IEnumerable<Location>> GetLocations(Subscription subscription, CancellationToken cancellationToken = new CancellationToken())
         {
-            AuthenticationResult tenantToken = await GetTenantToken(subscription.TenantId);
+            var tenantToken = await GetTenantToken(subscription.TenantId);
 
             JObject response = await CallAzureResourceManagerAsJObject("GET", string.Format(@"/subscriptions/{0}/locations", subscription.Id), tenantToken, cancellationToken: cancellationToken);
 
@@ -276,12 +258,12 @@ namespace Vano.Tools.Azure
 
             AzureMetadata metadata = new AzureMetadata()
             {
+                GraphEndpoint = response.Value<string>("graphEndpoint"),
+                LoginEndpoint = authentication.Value<string>("loginEndpoint"),
                 Audiences = authentication
                     .Value<JArray>("audiences")
                     .Select(audience => audience.Value<string>())
-                    .ToArray(),
-                LoginEndpoint = authentication
-                    .Value<string>("loginEndpoint")
+                    .ToArray()
             };
 
             return metadata;
@@ -329,58 +311,38 @@ namespace Vano.Tools.Azure
 
         public async Task<string> GetAuthSecret(string tenantId = null)
         {
-            AuthenticationResult result = tenantId == null ?
+            string token = tenantId == null ?
                 await GetToken() :
                 await GetTenantToken(tenantId);
 
-            return result.CreateAuthorizationHeader();
+            return token;
         }
 
-        private async Task<AuthenticationResult> GetToken()
+        private async Task<string> GetToken()
         {
-            AuthenticationResult result = null;
-            try
-            {
-                result = await _authContext.AcquireTokenAsync(
-                    resource: this.AppResourceId,
-                    clientId: AppClientId,
-                    redirectUri: new Uri(AppRedirectUri),
-                    parameters: new PlatformParameters(PromptBehavior.Never));
-            }
-            catch (AdalException ex)
-            {
-                Trace.TraceError(ex.ToString());
+            await Task.Yield();
 
-                throw;
-            }
-
-            return result;
+            return _authResult.AccessToken;
         }
 
-        private async Task<AuthenticationResult> GetTenantToken(string tenantId)
+        private async Task<string> GetTenantToken(string tenantId)
         {
-            AuthenticationResult token = await GetToken();
-
-            Uri authenticationUri = new Uri(this.AuthenticationEndpoint);
-            Uri tenantAuthority =
-                authenticationUri.LocalPath == "/" ?
-                new Uri(authenticationUri, tenantId) :
-                new Uri(authenticationUri, authenticationUri.PathAndQuery + "/" + tenantId);
-
-            AuthenticationContext tenantAuthContext = new AuthenticationContext(
-                authority: tenantAuthority.ToString(),
-                validateAuthority: false,
-                tokenCache: _cache);
-
-            AuthenticationResult result = null;
             try
             {
-                result = await tenantAuthContext.AcquireTokenAsync(
-                    resource: this.AppResourceId,
-                    clientId: AppClientId,
-                    redirectUri: new Uri(AppRedirectUri),
-                    parameters: new PlatformParameters(PromptBehavior.Auto),
-                    userId: new UserIdentifier(token.UserInfo.DisplayableId, UserIdentifierType.OptionalDisplayableId));
+                var scopes = new[] { $"{this.AppResourceId}/.default" };
+                var authority = $"{this.AuthenticationEndpoint.TrimEnd('/')}/{tenantId}";
+                var app = PublicClientApplicationBuilder
+                    .Create(AppClientId)
+                    .WithAuthority(authority)
+                    .WithRedirectUri(AppRedirectUri)
+                    .WithCacheOptions(CacheOptions.EnableSharedCacheOptions)
+                    .Build();
+
+                var accounts = await app.GetAccountsAsync();
+
+                AuthenticationResult result = await app.AcquireTokenSilent(scopes, accounts.FirstOrDefault()).ExecuteAsync();
+
+                return result.AccessToken;
             }
             catch (Exception ex)
             {
@@ -388,8 +350,6 @@ namespace Vano.Tools.Azure
 
                 return null;
             }
-
-            return result;
         }
 
         #endregion
@@ -437,11 +397,6 @@ namespace Vano.Tools.Azure
                 .Replace(" ", "%20"));
         }
 
-        private async Task<JObject> CallAzureResourceManagerAsJObject(string method, string path, AuthenticationResult token, string body = null, Dictionary<string, string> parameters = null, string armEndpoint = null, string apiVersion = null, bool displaySecrets = false, CancellationToken cancellationToken = new CancellationToken())
-        {
-            return await CallAzureResourceManagerAsJObject(method, path, token != null ? token.CreateAuthorizationHeader() : null, body, parameters, armEndpoint, apiVersion, displaySecrets, cancellationToken);
-        }
-
         private async Task<JObject> CallAzureResourceManagerAsJObject(string method, string path, string token, string body = null, Dictionary<string, string> parameters = null, string armEndpoint = null, string apiVersion = null, bool displaySecrets = false, CancellationToken cancellationToken = new CancellationToken())
         {
             string response = await CallAzureResourceManager(method, path, token, body, parameters, armEndpoint, apiVersion, displaySecrets, cancellationToken);
@@ -458,7 +413,7 @@ namespace Vano.Tools.Azure
             Uri requestUri = CreateAzureResourceManagerUri(path, parameters, armEndpoint, apiVersion);
 
             HttpRequestMessage request = new HttpRequestMessage(new HttpMethod(method), requestUri);
-            request.Headers.Add("Authorization", token);
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             if (HttpHeadersProcessor != null)
             {

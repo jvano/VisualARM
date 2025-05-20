@@ -6,6 +6,8 @@ namespace Vano.Tools.Azure
     {
         public string LoginEndpoint { get; set; }
 
+        public string GraphEndpoint { get; set; }
+
         public string[] Audiences { get; set; }
 
         public bool IsADFS
