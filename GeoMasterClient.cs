@@ -1,11 +1,10 @@
 ﻿using Azure.Core;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Security.Cryptography.X509Certificates;
+using System.Reflection;
 using System.ServiceModel;
 using System.ServiceModel.Description;
 using System.Text;
@@ -168,7 +167,7 @@ namespace Vano.Tools.Azure
             
             if (!client.DefaultRequestHeaders.Contains("User-Agent"))
             {
-                client.DefaultRequestHeaders.Add("User-Agent", "Visual ARM client");
+                client.DefaultRequestHeaders.Add("User-Agent", $"VisualARM/{Assembly.GetExecutingAssembly().GetName().Version}");
             }
 
             return client;
@@ -198,23 +197,16 @@ namespace Vano.Tools.Azure
                 .Replace(" ", "%20"));
         }
 
-        private async Task<JObject> CallAzureResourceManagerAsJObject(string method, string path, string token = null, string body = null, Dictionary<string, string> parameters = null, string armEndpoint = null, string apiVersion = null)
-        {
-            string response = await CallAzureResourceManager(method, path, token, body, parameters, armEndpoint, apiVersion);
-            if (!string.IsNullOrWhiteSpace(response))
-            {
-                return JObject.Parse(response);
-            }
-
-            return new JObject();
-        }
-
         public async Task<string> CallAzureResourceManager(string method, string path, string token, string body = null, Dictionary<string, string> parameters = null, string armEndpoint = null, string apiVersion = null, bool displaySecrets = false, CancellationToken cancellationToken = new CancellationToken())
         {
             Uri requestUri = CreateAzureResourceManagerUri(path, parameters, armEndpoint, apiVersion);
 
             HttpRequestMessage request = new HttpRequestMessage(new HttpMethod(method), requestUri);
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            // Simulate the CSM headers that are added by ARM.
+            // http header "x-ms-client-authorization-source" to "legacy" if the caller is admin/co-admin and owner via RBAC.
+            request.Headers.Add("x-ms-client-authorization-source", "legacy");
 
             if (HttpHeadersProcessor != null)
             {
