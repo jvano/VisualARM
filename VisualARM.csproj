@@ -129,6 +129,7 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Model\AzureClientException.cs" />
     <Compile Include="Model\ConnectionType.cs" />
     <Compile Include="Model\IAzureClient.cs" />
     <Compile Include="Model\ProvisioningState.cs" />

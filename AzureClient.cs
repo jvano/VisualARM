@@ -127,23 +127,30 @@ namespace Vano.Tools.Azure
                     // dogfood environment uses a different api version for the metadata endpoint.
                     this.Metadata = await GetAzureMetadata(
                         this.ResouceManagerEndpoint,
-                        apiVersion: this.ResouceManagerEndpoint.Contains("dogfood") ? "2014-11-01-privatepreview" : "1.0");
+                        apiVersion: this.ResouceManagerEndpoint.Contains("dogfood") ?
+                            this.ApiVersion :
+                            "1.0");
                 }
 
-                //BUGBUG: The dogfood's metadata endpoint doesn't retieve correct login endpoint for the dogfood's environemnt
-                this.AuthenticationEndpoint = this.ResouceManagerEndpoint.Contains("dogfood") ? "https://login.windows-ppe.net" : this.Metadata.LoginEndpoint;
-                this.AppResourceId = this.Metadata.Audiences.FirstOrDefault();
+                this.AuthenticationEndpoint = this.Metadata.LoginEndpoint;
+
+                // dogfood's metadata doesn't retieve the correct audience endpoint for the dogfood's environemnt
+                this.AppResourceId = this.ResouceManagerEndpoint.Contains("dogfood") ? 
+                    "https://management.core.windows.net/" : 
+                    this.Metadata.Audiences.First();
             }
 
             // Also clear cookies from the browser control.
             ClearCookies();
 
             Uri authenticationUri = new Uri(this.AuthenticationEndpoint);
-            Uri commonAuthority = authenticationUri.LocalPath == "/" ? new Uri(authenticationUri, "organizations") : authenticationUri;
+            Uri authority = this.ResouceManagerEndpoint.Contains("dogfood") ?
+                new Uri(authenticationUri, "83abe5cd-bcc3-441a-bd86-e6a75360cecc") : // "Contoso Corp."
+                new Uri(authenticationUri, "organizations");
 
             // MSAL: Build the PublicClientApplication
             _publicClientApp = PublicClientApplicationBuilder.Create(AppClientId)
-                .WithAuthority(commonAuthority, validateAuthority: false)
+                .WithAuthority(authority, validateAuthority: false)
                 .WithCacheOptions(CacheOptions.EnableSharedCacheOptions)
                 .WithRedirectUri(AppRedirectUri)
                 .Build();
@@ -152,7 +159,7 @@ namespace Vano.Tools.Azure
             try
             {
                 string[] scopes = new[] { $"{this.AppResourceId.TrimEnd('/')}/.default" };
-
+                
                 _authResult = await _publicClientApp.AcquireTokenInteractive(scopes)
                     .WithPrompt(Prompt.SelectAccount)
                     .ExecuteAsync();
@@ -258,6 +265,7 @@ namespace Vano.Tools.Azure
 
             AzureMetadata metadata = new AzureMetadata()
             {
+                PortalEndpoint = response.Value<string>("portal"),
                 GraphEndpoint = response.Value<string>("graphEndpoint"),
                 LoginEndpoint = authentication.Value<string>("loginEndpoint"),
                 Audiences = authentication
@@ -437,7 +445,7 @@ namespace Vano.Tools.Azure
 
                 if (!response.IsSuccessStatusCode)
                 {
-                    throw new Exception(output);
+                    throw new AzureClientException(response.StatusCode, output);
                 }
 
                 return output;

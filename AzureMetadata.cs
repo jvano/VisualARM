@@ -4,6 +4,8 @@ namespace Vano.Tools.Azure
 {
     public class AzureMetadata
     {
+        public string PortalEndpoint { get; set; }
+
         public string LoginEndpoint { get; set; }
 
         public string GraphEndpoint { get; set; }

@@ -319,14 +319,29 @@ namespace Vano.Tools.Azure
 
                 Trace.WriteLine(string.Empty);
             }
+            catch (AzureClientException ex)
+            {
+                string responseToLog = string.Empty;
+
+                StringBuilder responseToLogBuilder = new StringBuilder();
+                responseToLogBuilder.AppendLine("RESPONSE HEADERS: ");
+                responseToLogBuilder.AppendLine(_client.HttpHeadersProcessor.GetFormattedResponseHeaders());
+                responseToLogBuilder.AppendLine("RESPONSE: ");
+                responseToLogBuilder.AppendLine(JsonHelper.FormatJson(ex.Response));
+                responseToLogBuilder.AppendLine(string.Empty);
+                responseToLog = responseToLogBuilder.ToString();
+
+                Trace.WriteLine(responseToLog);
+
+                UpdateRequestResponse(newRequestGuid, responseToLog);
+            }
             catch (Exception ex)
             {
                 string responseToLog = string.Empty;
 
                 StringBuilder responseToLogBuilder = new StringBuilder();
-                responseToLogBuilder.AppendLine(string.Empty);
                 responseToLogBuilder.AppendLine("ERROR:");
-                responseToLogBuilder.AppendLine(JsonHelper.FormatJson(ex.Message));
+                responseToLogBuilder.AppendLine(ex.Message);
                 responseToLogBuilder.AppendLine(string.Empty);
                 responseToLog = responseToLogBuilder.ToString();
 

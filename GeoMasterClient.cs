@@ -230,7 +230,7 @@ namespace Vano.Tools.Azure
 
                 if (!response.IsSuccessStatusCode)
                 {
-                    throw new Exception(output);
+                    throw new AzureClientException(response.StatusCode, output);
                 }
 
                 return output;
