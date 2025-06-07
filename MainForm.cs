@@ -52,9 +52,16 @@ namespace Vano.Tools.Azure
             ShowConnectDialog();
         }
 
-        private void addConnectionInfoToolStripButton_Click(object sender, EventArgs e)
+        private void connectionToolStripButton_Click(object sender, EventArgs e)
         {
-            ShowConnectDialog();
+            if (_client == null)
+            {
+                ShowConnectDialog();
+            }
+            else
+            {
+                UpdateConnectionStatus(ConnectionStatus.Disconnected);
+            }
         }
 
         private void ShowConnectDialog()
@@ -88,20 +95,24 @@ namespace Vano.Tools.Azure
             switch(status)
             {
                 case ConnectionStatus.Disconnected:
+                    _client = null;
                     this.mainProgressBar.Visible = false;
                     this.portalToolStripButton.Enabled = false;
                     this.cloudTypeToolStripComboBox.Items.Clear();
-                    this.addConnectionInfoToolStripButton.Enabled = true;
+                    this.subsToolStripComboBox.Items.Clear();
+                    this.resourceGroupsToolStripComboBox.Items.Clear();
+                    this.resourcesTreeView.Nodes.Clear();
+                    this.connectionToolStripButton.Text = "Connect to Cloud";
                     _privateGeoEndpoint = string.Empty;
                     break;
                 case ConnectionStatus.Connecting:
                     this.mainProgressBar.Visible = true;
-                    this.addConnectionInfoToolStripButton.Enabled = false;
+                    this.connectionToolStripButton.Enabled = false;
                     break;
                 case ConnectionStatus.Connected:
                     this.mainProgressBar.Visible = false;
                     this.portalToolStripButton.Enabled = true;
-                    this.addConnectionInfoToolStripButton.Enabled = false;
+                    this.connectionToolStripButton.Text = "Disconnect from Cloud";
                     this.portalToolStripButton.Text = $"Open Azure Portal ({_client.Metadata.PortalEndpoint})";
                     break;
             }
@@ -1139,6 +1150,14 @@ namespace Vano.Tools.Azure
         private void cancelToolStripButton_Click(object sender, EventArgs e)
         {
             _cts.Cancel();
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Are you sure you want to exit!", "VisualARM", MessageBoxButtons.OKCancel) == DialogResult.OK)
+            {
+                Application.Exit();
+            }
         }
     }
 }

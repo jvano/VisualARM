@@ -38,7 +38,7 @@
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
             this.cloudTypeToolStripComboBox = new System.Windows.Forms.ToolStripComboBox();
-            this.addConnectionInfoToolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.connectionToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripLabel3 = new System.Windows.Forms.ToolStripLabel();
             this.subsToolStripComboBox = new System.Windows.Forms.ToolStripComboBox();
@@ -175,8 +175,10 @@
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(92, 22);
+            this.exitToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F4)));
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.exitToolStripMenuItem.Text = "Exit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
             // batchToolStripMenuItem
             // 
@@ -200,7 +202,7 @@
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripLabel2,
             this.cloudTypeToolStripComboBox,
-            this.addConnectionInfoToolStripButton,
+            this.connectionToolStripButton,
             this.toolStripSeparator2,
             this.toolStripLabel3,
             this.subsToolStripComboBox,
@@ -227,17 +229,17 @@
             this.cloudTypeToolStripComboBox.Size = new System.Drawing.Size(250, 25);
             this.cloudTypeToolStripComboBox.SelectedIndexChanged += new System.EventHandler(this.cloudTypeToolStripComboBox_SelectedIndexChanged);
             // 
-            // addConnectionInfoToolStripButton
+            // connectionToolStripButton
             // 
-            this.addConnectionInfoToolStripButton.Enabled = false;
-            this.addConnectionInfoToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("addConnectionInfoToolStripButton.Image")));
-            this.addConnectionInfoToolStripButton.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.addConnectionInfoToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.addConnectionInfoToolStripButton.Name = "addConnectionInfoToolStripButton";
-            this.addConnectionInfoToolStripButton.Size = new System.Drawing.Size(121, 22);
-            this.addConnectionInfoToolStripButton.Text = "Connect to Cloud";
-            this.addConnectionInfoToolStripButton.ToolTipText = "Add connection";
-            this.addConnectionInfoToolStripButton.Click += new System.EventHandler(this.addConnectionInfoToolStripButton_Click);
+            this.connectionToolStripButton.Enabled = false;
+            this.connectionToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("connectionToolStripButton.Image")));
+            this.connectionToolStripButton.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.connectionToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.connectionToolStripButton.Name = "connectionToolStripButton";
+            this.connectionToolStripButton.Size = new System.Drawing.Size(121, 22);
+            this.connectionToolStripButton.Text = "Connect to Cloud";
+            this.connectionToolStripButton.ToolTipText = "Add connection";
+            this.connectionToolStripButton.Click += new System.EventHandler(this.connectionToolStripButton_Click);
             // 
             // toolStripSeparator2
             // 
@@ -315,7 +317,7 @@
             // toolStripStatusLabel3
             // 
             this.toolStripStatusLabel3.Name = "toolStripStatusLabel3";
-            this.toolStripStatusLabel3.Size = new System.Drawing.Size(995, 17);
+            this.toolStripStatusLabel3.Size = new System.Drawing.Size(1144, 17);
             this.toolStripStatusLabel3.Spring = true;
             // 
             // toolStripStatusLabel4
@@ -1128,7 +1130,7 @@
         private System.Windows.Forms.ToolStripLabel toolStripLabel3;
         private System.Windows.Forms.ToolStripComboBox subsToolStripComboBox;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
-        private System.Windows.Forms.ToolStripButton addConnectionInfoToolStripButton;
+        private System.Windows.Forms.ToolStripButton connectionToolStripButton;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripLabel toolStripLabel4;
         private System.Windows.Forms.ToolStripComboBox verbToolStripComboBox;
