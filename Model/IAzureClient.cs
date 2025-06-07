@@ -6,6 +6,8 @@ namespace Vano.Tools.Azure.Model
 {
     interface IAzureClient
     {
+        AzureMetadata Metadata { get; }
+
         string ResouceManagerEndpoint { get; }
 
         HttpHeadersProcessor HttpHeadersProcessor { get; set; }

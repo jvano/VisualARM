@@ -265,7 +265,7 @@ namespace Vano.Tools.Azure
 
             AzureMetadata metadata = new AzureMetadata()
             {
-                PortalEndpoint = response.Value<string>("portal"),
+                PortalEndpoint = response.Value<string>("portalEndpoint") ?? response.Value<string>("portal"),
                 GraphEndpoint = response.Value<string>("graphEndpoint"),
                 LoginEndpoint = authentication.Value<string>("loginEndpoint"),
                 Audiences = authentication

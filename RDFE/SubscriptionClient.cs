@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ServiceModel;
 using System.ServiceModel.Description;
 using Vano.Tools.Azure.RDFE.Contracts;
 

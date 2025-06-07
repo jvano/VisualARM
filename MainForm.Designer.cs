@@ -38,23 +38,32 @@
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
             this.cloudTypeToolStripComboBox = new System.Windows.Forms.ToolStripComboBox();
-            this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
+            this.addConnectionInfoToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripLabel3 = new System.Windows.Forms.ToolStripLabel();
             this.subsToolStripComboBox = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripLabel6 = new System.Windows.Forms.ToolStripLabel();
             this.resourceGroupsToolStripComboBox = new System.Windows.Forms.ToolStripComboBox();
+            this.portalToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.issuesToolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel3 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel4 = new System.Windows.Forms.ToolStripStatusLabel();
             this.createdByToolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.resourcesImageList = new System.Windows.Forms.ImageList(this.components);
+            this.toolStripLabel4 = new System.Windows.Forms.ToolStripLabel();
+            this.verbToolStripComboBox = new System.Windows.Forms.ToolStripComboBox();
+            this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
+            this.pathToolStripTextBox = new Vano.Tools.Azure.Controls.ToolStripSpringTextBox();
+            this.toolStrip2 = new System.Windows.Forms.ToolStrip();
+            this.cancelToolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.runToolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.mainProgressBar = new System.Windows.Forms.ProgressBar();
             this.mainSplitContainer = new System.Windows.Forms.SplitContainer();
             this.resourcesSplitContainer = new System.Windows.Forms.SplitContainer();
             this.resourcesTreeProgressBar = new System.Windows.Forms.ProgressBar();
             this.resourcesTreeView = new System.Windows.Forms.TreeView();
-            this.resourcesImageList = new System.Windows.Forms.ImageList(this.components);
             this.toolStrip4 = new System.Windows.Forms.ToolStrip();
             this.loadResourcesToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.panel3 = new System.Windows.Forms.Panel();
@@ -97,16 +106,10 @@
             this.panel5 = new System.Windows.Forms.Panel();
             this.label4 = new System.Windows.Forms.Label();
             this.requestLogListBox = new System.Windows.Forms.ListBox();
-            this.toolStripLabel4 = new System.Windows.Forms.ToolStripLabel();
-            this.verbToolStripComboBox = new System.Windows.Forms.ToolStripComboBox();
-            this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
-            this.pathToolStripTextBox = new Vano.Tools.Azure.Controls.ToolStripSpringTextBox();
-            this.toolStrip2 = new System.Windows.Forms.ToolStrip();
-            this.cancelToolStripButton = new System.Windows.Forms.ToolStripButton();
-            this.runToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
+            this.toolStrip2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mainSplitContainer)).BeginInit();
             this.mainSplitContainer.Panel1.SuspendLayout();
             this.mainSplitContainer.Panel2.SuspendLayout();
@@ -147,7 +150,6 @@
             this.splitContainer5.SuspendLayout();
             this.toolStrip7.SuspendLayout();
             this.panel5.SuspendLayout();
-            this.toolStrip2.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -158,7 +160,7 @@
             this.batchToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1594, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1743, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -198,15 +200,16 @@
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripLabel2,
             this.cloudTypeToolStripComboBox,
-            this.toolStripButton2,
+            this.addConnectionInfoToolStripButton,
             this.toolStripSeparator2,
             this.toolStripLabel3,
             this.subsToolStripComboBox,
             this.toolStripLabel6,
-            this.resourceGroupsToolStripComboBox});
+            this.resourceGroupsToolStripComboBox,
+            this.portalToolStripButton});
             this.toolStrip1.Location = new System.Drawing.Point(0, 24);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(1594, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(1743, 25);
             this.toolStrip1.TabIndex = 1;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -219,22 +222,22 @@
             // cloudTypeToolStripComboBox
             // 
             this.cloudTypeToolStripComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cloudTypeToolStripComboBox.Enabled = false;
             this.cloudTypeToolStripComboBox.Name = "cloudTypeToolStripComboBox";
             this.cloudTypeToolStripComboBox.Size = new System.Drawing.Size(250, 25);
             this.cloudTypeToolStripComboBox.SelectedIndexChanged += new System.EventHandler(this.cloudTypeToolStripComboBox_SelectedIndexChanged);
             // 
-            // toolStripButton2
+            // addConnectionInfoToolStripButton
             // 
-            this.toolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton2.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton2.Image")));
-            this.toolStripButton2.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton2.Name = "toolStripButton2";
-            this.toolStripButton2.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton2.Text = "toolStripButton2";
-            this.toolStripButton2.ToolTipText = "addConnectionInfoToolStripButton";
-            this.toolStripButton2.Visible = false;
-            this.toolStripButton2.Click += new System.EventHandler(this.toolStripButton2_Click);
+            this.addConnectionInfoToolStripButton.Enabled = false;
+            this.addConnectionInfoToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("addConnectionInfoToolStripButton.Image")));
+            this.addConnectionInfoToolStripButton.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.addConnectionInfoToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.addConnectionInfoToolStripButton.Name = "addConnectionInfoToolStripButton";
+            this.addConnectionInfoToolStripButton.Size = new System.Drawing.Size(121, 22);
+            this.addConnectionInfoToolStripButton.Text = "Connect to Cloud";
+            this.addConnectionInfoToolStripButton.ToolTipText = "Add connection";
+            this.addConnectionInfoToolStripButton.Click += new System.EventHandler(this.addConnectionInfoToolStripButton_Click);
             // 
             // toolStripSeparator2
             // 
@@ -268,6 +271,18 @@
             this.resourceGroupsToolStripComboBox.Name = "resourceGroupsToolStripComboBox";
             this.resourceGroupsToolStripComboBox.Size = new System.Drawing.Size(200, 25);
             // 
+            // portalToolStripButton
+            // 
+            this.portalToolStripButton.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.portalToolStripButton.Enabled = false;
+            this.portalToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("portalToolStripButton.Image")));
+            this.portalToolStripButton.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.portalToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.portalToolStripButton.Name = "portalToolStripButton";
+            this.portalToolStripButton.Size = new System.Drawing.Size(222, 22);
+            this.portalToolStripButton.Text = "Open Azure Portal for selected Cloud";
+            this.portalToolStripButton.Click += new System.EventHandler(this.portalToolStripButton_Click);
+            // 
             // statusStrip1
             // 
             this.statusStrip1.ImageScalingSize = new System.Drawing.Size(32, 32);
@@ -277,9 +292,9 @@
             this.toolStripStatusLabel3,
             this.toolStripStatusLabel4,
             this.createdByToolStripStatusLabel});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 792);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 905);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(1594, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(1743, 22);
             this.statusStrip1.TabIndex = 2;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -317,11 +332,103 @@
             this.createdByToolStripStatusLabel.Text = "https://github.com/jvano";
             this.createdByToolStripStatusLabel.Click += new System.EventHandler(this.createdByToolStripStatusLabel_Click);
             // 
+            // resourcesImageList
+            // 
+            this.resourcesImageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("resourcesImageList.ImageStream")));
+            this.resourcesImageList.TransparentColor = System.Drawing.Color.Transparent;
+            this.resourcesImageList.Images.SetKeyName(0, "WindowsAzure_16xLG.png");
+            this.resourcesImageList.Images.SetKeyName(1, "Namespace_654.png");
+            // 
+            // toolStripLabel4
+            // 
+            this.toolStripLabel4.Name = "toolStripLabel4";
+            this.toolStripLabel4.Size = new System.Drawing.Size(33, 22);
+            this.toolStripLabel4.Text = "Verb:";
+            // 
+            // verbToolStripComboBox
+            // 
+            this.verbToolStripComboBox.Items.AddRange(new object[] {
+            "GET",
+            "POST",
+            "PUT",
+            "PATCH",
+            "HEAD",
+            "DELETE"});
+            this.verbToolStripComboBox.Name = "verbToolStripComboBox";
+            this.verbToolStripComboBox.Size = new System.Drawing.Size(75, 25);
+            this.verbToolStripComboBox.SelectedIndexChanged += new System.EventHandler(this.verbToolStripComboBox_SelectedIndexChanged);
+            // 
+            // toolStripLabel1
+            // 
+            this.toolStripLabel1.Name = "toolStripLabel1";
+            this.toolStripLabel1.Size = new System.Drawing.Size(34, 22);
+            this.toolStripLabel1.Text = "Path:";
+            // 
+            // pathToolStripTextBox
+            // 
+            this.pathToolStripTextBox.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.pathToolStripTextBox.Name = "pathToolStripTextBox";
+            this.pathToolStripTextBox.Size = new System.Drawing.Size(100, 25);
+            this.pathToolStripTextBox.Text = "/subscriptions/";
+            this.pathToolStripTextBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.pathToolStripTextBox_KeyUp);
+            // 
+            // toolStrip2
+            // 
+            this.toolStrip2.ImageScalingSize = new System.Drawing.Size(32, 32);
+            this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripLabel4,
+            this.verbToolStripComboBox,
+            this.toolStripLabel1,
+            this.pathToolStripTextBox,
+            this.cancelToolStripButton,
+            this.runToolStripButton});
+            this.toolStrip2.Location = new System.Drawing.Point(0, 49);
+            this.toolStrip2.Name = "toolStrip2";
+            this.toolStrip2.Size = new System.Drawing.Size(1743, 25);
+            this.toolStrip2.TabIndex = 4;
+            this.toolStrip2.Text = "toolStrip2";
+            // 
+            // cancelToolStripButton
+            // 
+            this.cancelToolStripButton.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.cancelToolStripButton.Enabled = false;
+            this.cancelToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("cancelToolStripButton.Image")));
+            this.cancelToolStripButton.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.cancelToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.cancelToolStripButton.Name = "cancelToolStripButton";
+            this.cancelToolStripButton.Size = new System.Drawing.Size(63, 22);
+            this.cancelToolStripButton.Text = "Cancel";
+            this.cancelToolStripButton.ToolTipText = "Cancel";
+            this.cancelToolStripButton.Click += new System.EventHandler(this.cancelToolStripButton_Click);
+            // 
+            // runToolStripButton
+            // 
+            this.runToolStripButton.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.runToolStripButton.Enabled = false;
+            this.runToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("runToolStripButton.Image")));
+            this.runToolStripButton.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.runToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.runToolStripButton.Name = "runToolStripButton";
+            this.runToolStripButton.Size = new System.Drawing.Size(53, 22);
+            this.runToolStripButton.Text = "Send";
+            this.runToolStripButton.Click += new System.EventHandler(this.runToolStripButton_Click);
+            // 
+            // mainProgressBar
+            // 
+            this.mainProgressBar.Dock = System.Windows.Forms.DockStyle.Top;
+            this.mainProgressBar.Location = new System.Drawing.Point(0, 74);
+            this.mainProgressBar.MarqueeAnimationSpeed = 1;
+            this.mainProgressBar.Name = "mainProgressBar";
+            this.mainProgressBar.Size = new System.Drawing.Size(1743, 11);
+            this.mainProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
+            this.mainProgressBar.TabIndex = 18;
+            this.mainProgressBar.Visible = false;
+            // 
             // mainSplitContainer
             // 
             this.mainSplitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainSplitContainer.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
-            this.mainSplitContainer.Location = new System.Drawing.Point(0, 74);
+            this.mainSplitContainer.Location = new System.Drawing.Point(0, 85);
             this.mainSplitContainer.Name = "mainSplitContainer";
             // 
             // mainSplitContainer.Panel1
@@ -331,9 +438,9 @@
             // mainSplitContainer.Panel2
             // 
             this.mainSplitContainer.Panel2.Controls.Add(this.splitContainer4);
-            this.mainSplitContainer.Size = new System.Drawing.Size(1594, 718);
+            this.mainSplitContainer.Size = new System.Drawing.Size(1743, 820);
             this.mainSplitContainer.SplitterDistance = 346;
-            this.mainSplitContainer.TabIndex = 6;
+            this.mainSplitContainer.TabIndex = 19;
             // 
             // resourcesSplitContainer
             // 
@@ -355,8 +462,8 @@
             this.resourcesSplitContainer.Panel2.Controls.Add(this.templateListBox);
             this.resourcesSplitContainer.Panel2.Controls.Add(this.toolStrip6);
             this.resourcesSplitContainer.Panel2.Controls.Add(this.panel4);
-            this.resourcesSplitContainer.Size = new System.Drawing.Size(346, 718);
-            this.resourcesSplitContainer.SplitterDistance = 301;
+            this.resourcesSplitContainer.Size = new System.Drawing.Size(346, 820);
+            this.resourcesSplitContainer.SplitterDistance = 343;
             this.resourcesSplitContainer.SplitterWidth = 2;
             this.resourcesSplitContainer.TabIndex = 15;
             // 
@@ -364,6 +471,7 @@
             // 
             this.resourcesTreeProgressBar.Dock = System.Windows.Forms.DockStyle.Top;
             this.resourcesTreeProgressBar.Location = new System.Drawing.Point(0, 45);
+            this.resourcesTreeProgressBar.MarqueeAnimationSpeed = 1;
             this.resourcesTreeProgressBar.Name = "resourcesTreeProgressBar";
             this.resourcesTreeProgressBar.Size = new System.Drawing.Size(346, 11);
             this.resourcesTreeProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
@@ -378,16 +486,9 @@
             this.resourcesTreeView.Location = new System.Drawing.Point(0, 45);
             this.resourcesTreeView.Name = "resourcesTreeView";
             this.resourcesTreeView.SelectedImageIndex = 0;
-            this.resourcesTreeView.Size = new System.Drawing.Size(346, 256);
+            this.resourcesTreeView.Size = new System.Drawing.Size(346, 298);
             this.resourcesTreeView.TabIndex = 14;
             this.resourcesTreeView.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.resourcesTreeView_NodeMouseDoubleClick);
-            // 
-            // resourcesImageList
-            // 
-            this.resourcesImageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("resourcesImageList.ImageStream")));
-            this.resourcesImageList.TransparentColor = System.Drawing.Color.Transparent;
-            this.resourcesImageList.Images.SetKeyName(0, "WindowsAzure_16xLG.png");
-            this.resourcesImageList.Images.SetKeyName(1, "Namespace_654.png");
             // 
             // toolStrip4
             // 
@@ -438,9 +539,9 @@
             this.templateListBox.Location = new System.Drawing.Point(0, 50);
             this.templateListBox.Margin = new System.Windows.Forms.Padding(2);
             this.templateListBox.Name = "templateListBox";
-            this.templateListBox.Size = new System.Drawing.Size(346, 365);
+            this.templateListBox.Size = new System.Drawing.Size(346, 425);
             this.templateListBox.TabIndex = 16;
-            this.templateListBox.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.templateListBox_MouseDoubleClick);
+            this.templateListBox.DoubleClick += new System.EventHandler(this.templateListBox_DoubleClick);
             // 
             // toolStrip6
             // 
@@ -515,8 +616,8 @@
             // splitContainer4.Panel2
             // 
             this.splitContainer4.Panel2.Controls.Add(this.splitContainer5);
-            this.splitContainer4.Size = new System.Drawing.Size(1244, 718);
-            this.splitContainer4.SplitterDistance = 869;
+            this.splitContainer4.Size = new System.Drawing.Size(1393, 820);
+            this.splitContainer4.SplitterDistance = 1018;
             this.splitContainer4.TabIndex = 10;
             // 
             // splitContainer1
@@ -539,7 +640,7 @@
             this.splitContainer1.Panel2.Controls.Add(this.requestTreeProgressBar);
             this.splitContainer1.Panel2.Controls.Add(this.toolStrip3);
             this.splitContainer1.Panel2.Controls.Add(this.panel2);
-            this.splitContainer1.Size = new System.Drawing.Size(869, 718);
+            this.splitContainer1.Size = new System.Drawing.Size(1018, 820);
             this.splitContainer1.SplitterDistance = 228;
             this.splitContainer1.TabIndex = 8;
             // 
@@ -557,8 +658,8 @@
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.documentMap1);
-            this.splitContainer2.Size = new System.Drawing.Size(869, 178);
-            this.splitContainer2.SplitterDistance = 761;
+            this.splitContainer2.Size = new System.Drawing.Size(1018, 178);
+            this.splitContainer2.SplitterDistance = 910;
             this.splitContainer2.TabIndex = 12;
             // 
             // bodyColoredTextBox
@@ -595,7 +696,7 @@
             this.bodyColoredTextBox.RightBracket2 = '}';
             this.bodyColoredTextBox.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
             this.bodyColoredTextBox.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("bodyColoredTextBox.ServiceColors")));
-            this.bodyColoredTextBox.Size = new System.Drawing.Size(761, 178);
+            this.bodyColoredTextBox.Size = new System.Drawing.Size(910, 178);
             this.bodyColoredTextBox.TabIndex = 3;
             this.bodyColoredTextBox.Zoom = 100;
             // 
@@ -620,7 +721,7 @@
             this.clearBodyToolStripButton});
             this.toolStrip5.Location = new System.Drawing.Point(0, 25);
             this.toolStrip5.Name = "toolStrip5";
-            this.toolStrip5.Size = new System.Drawing.Size(869, 25);
+            this.toolStrip5.Size = new System.Drawing.Size(1018, 25);
             this.toolStrip5.TabIndex = 10;
             this.toolStrip5.Text = "toolStrip5";
             // 
@@ -667,7 +768,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(869, 25);
+            this.panel1.Size = new System.Drawing.Size(1018, 25);
             this.panel1.TabIndex = 0;
             // 
             // Body
@@ -694,8 +795,8 @@
             // splitContainer3.Panel2
             // 
             this.splitContainer3.Panel2.Controls.Add(this.documentMap2);
-            this.splitContainer3.Size = new System.Drawing.Size(869, 425);
-            this.splitContainer3.SplitterDistance = 759;
+            this.splitContainer3.Size = new System.Drawing.Size(1018, 527);
+            this.splitContainer3.SplitterDistance = 908;
             this.splitContainer3.TabIndex = 16;
             // 
             // traceColoredTextBox
@@ -732,7 +833,7 @@
             this.traceColoredTextBox.RightBracket2 = '}';
             this.traceColoredTextBox.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
             this.traceColoredTextBox.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("traceColoredTextBox.ServiceColors")));
-            this.traceColoredTextBox.Size = new System.Drawing.Size(759, 425);
+            this.traceColoredTextBox.Size = new System.Drawing.Size(908, 527);
             this.traceColoredTextBox.TabIndex = 3;
             this.traceColoredTextBox.Zoom = 100;
             // 
@@ -742,7 +843,7 @@
             this.documentMap2.ForeColor = System.Drawing.Color.Maroon;
             this.documentMap2.Location = new System.Drawing.Point(0, 0);
             this.documentMap2.Name = "documentMap2";
-            this.documentMap2.Size = new System.Drawing.Size(106, 425);
+            this.documentMap2.Size = new System.Drawing.Size(106, 527);
             this.documentMap2.TabIndex = 3;
             this.documentMap2.Target = this.traceColoredTextBox;
             this.documentMap2.Text = "documentMap2";
@@ -751,8 +852,9 @@
             // 
             this.requestTreeProgressBar.Dock = System.Windows.Forms.DockStyle.Top;
             this.requestTreeProgressBar.Location = new System.Drawing.Point(0, 50);
+            this.requestTreeProgressBar.MarqueeAnimationSpeed = 1;
             this.requestTreeProgressBar.Name = "requestTreeProgressBar";
-            this.requestTreeProgressBar.Size = new System.Drawing.Size(869, 11);
+            this.requestTreeProgressBar.Size = new System.Drawing.Size(1018, 11);
             this.requestTreeProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
             this.requestTreeProgressBar.TabIndex = 15;
             this.requestTreeProgressBar.Visible = false;
@@ -769,7 +871,7 @@
             this.autoClearToolStripButton});
             this.toolStrip3.Location = new System.Drawing.Point(0, 25);
             this.toolStrip3.Name = "toolStrip3";
-            this.toolStrip3.Size = new System.Drawing.Size(869, 25);
+            this.toolStrip3.Size = new System.Drawing.Size(1018, 25);
             this.toolStrip3.TabIndex = 9;
             this.toolStrip3.Text = "toolStrip3";
             // 
@@ -844,7 +946,7 @@
             this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel2.Location = new System.Drawing.Point(0, 0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(869, 25);
+            this.panel2.Size = new System.Drawing.Size(1018, 25);
             this.panel2.TabIndex = 8;
             // 
             // label1
@@ -873,7 +975,7 @@
             // splitContainer5.Panel2
             // 
             this.splitContainer5.Panel2.Controls.Add(this.requestLogListBox);
-            this.splitContainer5.Size = new System.Drawing.Size(371, 718);
+            this.splitContainer5.Size = new System.Drawing.Size(371, 820);
             this.splitContainer5.SplitterDistance = 49;
             this.splitContainer5.TabIndex = 11;
             // 
@@ -925,90 +1027,17 @@
             this.requestLogListBox.FormattingEnabled = true;
             this.requestLogListBox.Location = new System.Drawing.Point(0, 0);
             this.requestLogListBox.Name = "requestLogListBox";
-            this.requestLogListBox.Size = new System.Drawing.Size(371, 665);
+            this.requestLogListBox.Size = new System.Drawing.Size(371, 767);
             this.requestLogListBox.TabIndex = 11;
             this.requestLogListBox.DoubleClick += new System.EventHandler(this.requestLogListBox_DoubleClick);
-            // 
-            // toolStripLabel4
-            // 
-            this.toolStripLabel4.Name = "toolStripLabel4";
-            this.toolStripLabel4.Size = new System.Drawing.Size(33, 22);
-            this.toolStripLabel4.Text = "Verb:";
-            // 
-            // verbToolStripComboBox
-            // 
-            this.verbToolStripComboBox.Items.AddRange(new object[] {
-            "GET",
-            "POST",
-            "PUT",
-            "PATCH",
-            "HEAD",
-            "DELETE"});
-            this.verbToolStripComboBox.Name = "verbToolStripComboBox";
-            this.verbToolStripComboBox.Size = new System.Drawing.Size(75, 25);
-            this.verbToolStripComboBox.SelectedIndexChanged += new System.EventHandler(this.verbToolStripComboBox_SelectedIndexChanged);
-            // 
-            // toolStripLabel1
-            // 
-            this.toolStripLabel1.Name = "toolStripLabel1";
-            this.toolStripLabel1.Size = new System.Drawing.Size(34, 22);
-            this.toolStripLabel1.Text = "Path:";
-            // 
-            // pathToolStripTextBox
-            // 
-            this.pathToolStripTextBox.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.pathToolStripTextBox.Name = "pathToolStripTextBox";
-            this.pathToolStripTextBox.Size = new System.Drawing.Size(100, 25);
-            this.pathToolStripTextBox.Text = "/subscriptions/";
-            this.pathToolStripTextBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.pathToolStripTextBox_KeyUp);
-            // 
-            // toolStrip2
-            // 
-            this.toolStrip2.ImageScalingSize = new System.Drawing.Size(32, 32);
-            this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripLabel4,
-            this.verbToolStripComboBox,
-            this.toolStripLabel1,
-            this.pathToolStripTextBox,
-            this.cancelToolStripButton,
-            this.runToolStripButton});
-            this.toolStrip2.Location = new System.Drawing.Point(0, 49);
-            this.toolStrip2.Name = "toolStrip2";
-            this.toolStrip2.Size = new System.Drawing.Size(1594, 25);
-            this.toolStrip2.TabIndex = 4;
-            this.toolStrip2.Text = "toolStrip2";
-            // 
-            // cancelToolStripButton
-            // 
-            this.cancelToolStripButton.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.cancelToolStripButton.Enabled = false;
-            this.cancelToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("cancelToolStripButton.Image")));
-            this.cancelToolStripButton.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.cancelToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.cancelToolStripButton.Name = "cancelToolStripButton";
-            this.cancelToolStripButton.Size = new System.Drawing.Size(63, 22);
-            this.cancelToolStripButton.Text = "Cancel";
-            this.cancelToolStripButton.ToolTipText = "Cancel";
-            this.cancelToolStripButton.Click += new System.EventHandler(this.cancelToolStripButton_Click);
-            // 
-            // runToolStripButton
-            // 
-            this.runToolStripButton.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.runToolStripButton.Enabled = false;
-            this.runToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("runToolStripButton.Image")));
-            this.runToolStripButton.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.runToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.runToolStripButton.Name = "runToolStripButton";
-            this.runToolStripButton.Size = new System.Drawing.Size(53, 22);
-            this.runToolStripButton.Text = "Send";
-            this.runToolStripButton.Click += new System.EventHandler(this.runToolStripButton_Click);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1594, 814);
+            this.ClientSize = new System.Drawing.Size(1743, 927);
             this.Controls.Add(this.mainSplitContainer);
+            this.Controls.Add(this.mainProgressBar);
             this.Controls.Add(this.toolStrip2);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.toolStrip1);
@@ -1025,6 +1054,8 @@
             this.toolStrip1.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
+            this.toolStrip2.ResumeLayout(false);
+            this.toolStrip2.PerformLayout();
             this.mainSplitContainer.Panel1.ResumeLayout(false);
             this.mainSplitContainer.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.mainSplitContainer)).EndInit();
@@ -1080,8 +1111,6 @@
             this.toolStrip7.PerformLayout();
             this.panel5.ResumeLayout(false);
             this.panel5.PerformLayout();
-            this.toolStrip2.ResumeLayout(false);
-            this.toolStrip2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1099,46 +1128,15 @@
         private System.Windows.Forms.ToolStripLabel toolStripLabel3;
         private System.Windows.Forms.ToolStripComboBox subsToolStripComboBox;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
-        private System.Windows.Forms.ToolStripButton toolStripButton2;
+        private System.Windows.Forms.ToolStripButton addConnectionInfoToolStripButton;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-        private System.Windows.Forms.SplitContainer mainSplitContainer;
         private System.Windows.Forms.ToolStripLabel toolStripLabel4;
         private System.Windows.Forms.ToolStripComboBox verbToolStripComboBox;
         private System.Windows.Forms.ToolStripLabel toolStripLabel1;
         private Controls.ToolStripSpringTextBox pathToolStripTextBox;
         private System.Windows.Forms.ToolStrip toolStrip2;
-        private System.Windows.Forms.SplitContainer splitContainer1;
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Label Body;
-        private System.Windows.Forms.ToolStrip toolStrip3;
-        private System.Windows.Forms.ToolStripButton copyToolStripButton;
-        private System.Windows.Forms.ToolStripButton clearToolStripButton;
-        private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ToolStripButton runToolStripButton;
-        private System.Windows.Forms.ToolStrip toolStrip5;
-        private System.Windows.Forms.ToolStripButton clearBodyToolStripButton;
         private System.Windows.Forms.ImageList resourcesImageList;
-        private System.Windows.Forms.ToolStripButton autoClearToolStripButton;
-        private System.Windows.Forms.ToolStripButton copyBodyToolStripButton;
-        private System.Windows.Forms.ToolStripButton excludeBodyToolStripButton;
-        private System.Windows.Forms.SplitContainer splitContainer2;
-        private FastColoredTextBoxNS.FastColoredTextBox bodyColoredTextBox;
-        private FastColoredTextBoxNS.DocumentMap documentMap1;
-        private System.Windows.Forms.TreeView resourcesTreeView;
-        private System.Windows.Forms.SplitContainer resourcesSplitContainer;
-        private System.Windows.Forms.ProgressBar resourcesTreeProgressBar;
-        private System.Windows.Forms.ToolStrip toolStrip4;
-        private System.Windows.Forms.ToolStripButton loadResourcesToolStripButton;
-        private System.Windows.Forms.Panel panel3;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.ToolStrip toolStrip6;
-        private System.Windows.Forms.ToolStripLabel toolStripLabel5;
-        private System.Windows.Forms.Panel panel4;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.ToolStripComboBox templatesToolStripComboBox;
-        private System.Windows.Forms.ListBox templateListBox;
-        private System.Windows.Forms.ToolStripButton addRecipeToolStripButton;
         private System.Windows.Forms.ToolStripLabel toolStripLabel6;
         private System.Windows.Forms.ToolStripComboBox resourceGroupsToolStripComboBox;
         private System.Windows.Forms.ToolStripStatusLabel issuesToolStripStatusLabel;
@@ -1147,22 +1145,55 @@
         private System.Windows.Forms.ToolStripStatusLabel createdByToolStripStatusLabel;
         private System.Windows.Forms.ToolStripMenuItem batchToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem sitesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripButton cancelToolStripButton;
+        private System.Windows.Forms.ProgressBar mainProgressBar;
+        private System.Windows.Forms.SplitContainer mainSplitContainer;
+        private System.Windows.Forms.SplitContainer resourcesSplitContainer;
+        private System.Windows.Forms.ProgressBar resourcesTreeProgressBar;
+        private System.Windows.Forms.TreeView resourcesTreeView;
+        private System.Windows.Forms.ToolStrip toolStrip4;
+        private System.Windows.Forms.ToolStripButton loadResourcesToolStripButton;
+        private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ListBox templateListBox;
+        private System.Windows.Forms.ToolStrip toolStrip6;
+        private System.Windows.Forms.ToolStripLabel toolStripLabel5;
+        private System.Windows.Forms.ToolStripButton addRecipeToolStripButton;
+        private System.Windows.Forms.ToolStripComboBox templatesToolStripComboBox;
+        private System.Windows.Forms.Panel panel4;
+        private System.Windows.Forms.Label label3;
         private System.Windows.Forms.SplitContainer splitContainer4;
+        private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.SplitContainer splitContainer2;
+        private FastColoredTextBoxNS.FastColoredTextBox bodyColoredTextBox;
+        private FastColoredTextBoxNS.DocumentMap documentMap1;
+        private System.Windows.Forms.ToolStrip toolStrip5;
+        private System.Windows.Forms.ToolStripButton copyBodyToolStripButton;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripButton excludeBodyToolStripButton;
+        private System.Windows.Forms.ToolStripButton clearBodyToolStripButton;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Label Body;
+        private System.Windows.Forms.SplitContainer splitContainer3;
+        private FastColoredTextBoxNS.FastColoredTextBox traceColoredTextBox;
+        private FastColoredTextBoxNS.DocumentMap documentMap2;
+        private System.Windows.Forms.ProgressBar requestTreeProgressBar;
+        private System.Windows.Forms.ToolStrip toolStrip3;
+        private System.Windows.Forms.ToolStripButton copyToolStripButton;
+        private System.Windows.Forms.ToolStripButton clearToolStripButton;
+        private System.Windows.Forms.ToolStripButton wordWrapToolStripButton;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripButton hideTokensToolStripButton;
+        private System.Windows.Forms.ToolStripButton autoClearToolStripButton;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.SplitContainer splitContainer5;
         private System.Windows.Forms.ToolStrip toolStrip7;
         private System.Windows.Forms.ToolStripButton clearRequestsToolStripButton;
         private System.Windows.Forms.Panel panel5;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.ListBox requestLogListBox;
-        private System.Windows.Forms.ProgressBar requestTreeProgressBar;
-        private System.Windows.Forms.SplitContainer splitContainer3;
-        private FastColoredTextBoxNS.FastColoredTextBox traceColoredTextBox;
-        private FastColoredTextBoxNS.DocumentMap documentMap2;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripButton hideTokensToolStripButton;
-        private System.Windows.Forms.ToolStripButton wordWrapToolStripButton;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
-        private System.Windows.Forms.ToolStripButton cancelToolStripButton;
+        private System.Windows.Forms.ToolStripButton portalToolStripButton;
     }
 }
 

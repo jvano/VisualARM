@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Net;
-using System.Runtime.ConstrainedExecution;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace Vano.Tools.Azure
 {
     public static class Program
     {
-        /// <summary>
-        /// The main entry point for the application.
-        /// </summary>
+        // Capture the synchronization context of the main thread
+        internal static SynchronizationContext SyncContext => SynchronizationContext.Current ?? new WindowsFormsSynchronizationContext();
+
         [STAThread]
         public static void Main(string[] args)
         {

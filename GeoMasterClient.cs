@@ -58,6 +58,21 @@ namespace Vano.Tools.Azure
 
         #region Public properties
 
+        public AzureMetadata Metadata 
+        {
+            get
+            {
+                // not used as we use CSM-Direct but to keep the interface happy.
+                return new AzureMetadata()
+                {
+                    PortalEndpoint = "https://portal.azure.com",
+                    Audiences = new [] { this.GeoMasterEndpoint },
+                    GraphEndpoint = "https://graph.windows.net",
+                    LoginEndpoint = "https://login.microsoftonline.com",
+                };
+            }
+        }
+
         public string ResouceManagerEndpoint { get { return this.GeoMasterEndpoint; } }
 
         public string GeoMasterEndpoint { get; private set; }
@@ -74,37 +89,20 @@ namespace Vano.Tools.Azure
         {
             List<Subscription> subscriptions = new List<Subscription>();
 
-            try
+            SubscriptionClient rdfeClient = GetRdfeSubscriptionClient();            
+            var rdfeSubscriptions = rdfeClient.GetSubscriptions(marker: "", recordCount: 100, ownerUserName: "");
+            foreach(var rdfeSubscription in rdfeSubscriptions)
             {
-                SubscriptionClient rdfeClient = GetRdfeSubscriptionClient();            
-                var rdfeSubscriptions = rdfeClient.GetSubscriptions(marker: "", recordCount: 100, ownerUserName: "");
-                foreach(var rdfeSubscription in rdfeSubscriptions)
+                subscriptions.Add(new Subscription()
                 {
-                    subscriptions.Add(new Subscription()
-                    {
-                        Id = rdfeSubscription.Name,
-                        DisplayName = string.IsNullOrWhiteSpace(rdfeSubscription.Description) ? "[CSM-Direct]" : rdfeSubscription.Description,
-                        TenantId = "CsmDirect"
-                    });
-                }
-            }
-            catch
-            {
-                subscriptions.AddRange(new Subscription[]
-                {
-                    new Subscription()
-                    {
-                        Id = "00000000-0000-0000-0000-000000000000",
-                        DisplayName = "[CSM-Direct]",
-                        TenantId = "CsmDirect"
-                    }
+                    Id = rdfeSubscription.Name,
+                    DisplayName = string.IsNullOrWhiteSpace(rdfeSubscription.Description) ? "[CSM-Direct]" : rdfeSubscription.Description,
+                    TenantId = "CsmDirect"
                 });
             }
 
             // Make async call happy
-            await Task.Delay(0);
-
-            return subscriptions.OrderBy(sub => sub.DisplayName);
+            return await Task.FromResult(subscriptions.OrderBy(sub => sub.DisplayName));
         }
 
         public async Task<IEnumerable<Location>> GetLocations(Subscription subscription, CancellationToken cancellationToken = new CancellationToken())
@@ -268,7 +266,7 @@ namespace Vano.Tools.Azure
                 addressPostfix = addressPostfix.Substring(1);
             }
 
-            WebHttpBinding webHttpBinding = new WebHttpBinding();           
+            WebHttpBinding webHttpBinding = new WebHttpBinding();
             webHttpBinding.UseDefaultWebProxy = true;
             webHttpBinding.Security.Mode = WebHttpSecurityMode.Transport;
             webHttpBinding.Security.Transport.ClientCredentialType = HttpClientCredentialType.None;

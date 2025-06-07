@@ -15,6 +15,13 @@ using Vano.Tools.Azure.Model;
 
 namespace Vano.Tools.Azure
 {
+    public enum ConnectionStatus
+    {
+        Disconnected,
+        Connecting,
+        Connected
+    }
+
     public partial class MainForm : Form
     {
         private IAzureClient _client = null;
@@ -45,13 +52,14 @@ namespace Vano.Tools.Azure
             ShowConnectDialog();
         }
 
-        private void toolStripButton2_Click(object sender, EventArgs e)
+        private void addConnectionInfoToolStripButton_Click(object sender, EventArgs e)
         {
             ShowConnectDialog();
         }
 
         private void ShowConnectDialog()
         {
+            UpdateConnectionStatus(ConnectionStatus.Disconnected);
             using (CloudConnectionDialog dialog = new CloudConnectionDialog())
             {
                 if (dialog.ShowDialog() == DialogResult.OK)
@@ -59,6 +67,7 @@ namespace Vano.Tools.Azure
                     _connectionType = dialog.ConnectionType;
                     _privateGeoEndpoint = _connectionType == ConnectionType.AzureResourceManagerProxy ? dialog.PrivateGeoEndpoint : string.Empty;
 
+                    UpdateConnectionStatus(ConnectionStatus.Connecting);
                     this.cloudTypeToolStripComboBox.Items.Add(dialog.AzureResourceManager);
                     this.cloudTypeToolStripComboBox.SelectedIndex = this.cloudTypeToolStripComboBox.Items.Count - 1;
 
@@ -71,6 +80,30 @@ namespace Vano.Tools.Azure
                         });
                     }
                 }
+            }
+        }
+
+        private void UpdateConnectionStatus(ConnectionStatus status)
+        {
+            switch(status)
+            {
+                case ConnectionStatus.Disconnected:
+                    this.mainProgressBar.Visible = false;
+                    this.portalToolStripButton.Enabled = false;
+                    this.cloudTypeToolStripComboBox.Items.Clear();
+                    this.addConnectionInfoToolStripButton.Enabled = true;
+                    _privateGeoEndpoint = string.Empty;
+                    break;
+                case ConnectionStatus.Connecting:
+                    this.mainProgressBar.Visible = true;
+                    this.addConnectionInfoToolStripButton.Enabled = false;
+                    break;
+                case ConnectionStatus.Connected:
+                    this.mainProgressBar.Visible = false;
+                    this.portalToolStripButton.Enabled = true;
+                    this.addConnectionInfoToolStripButton.Enabled = false;
+                    this.portalToolStripButton.Text = $"Open Azure Portal ({_client.Metadata.PortalEndpoint})";
+                    break;
             }
         }
 
@@ -100,14 +133,18 @@ namespace Vano.Tools.Azure
                         geoMasterEndpoint: _azureResourceManagerEndpoint,
                         apiVersion: "2022-12-01"));
 
-                _subscriptions = await _client.GetSubscriptions(_cts.Token);
+                _subscriptions = await Task.Run<IEnumerable<Subscription>>(() => _client.GetSubscriptions(_cts.Token));
 
                 if (_subscriptions.Count() == 0)
                 {
+                    UpdateConnectionStatus(ConnectionStatus.Disconnected);
+
                     MessageBox.Show("No subscriptions found for this user.", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 
                     return;
                 }
+
+                UpdateConnectionStatus(ConnectionStatus.Connected);
 
                 foreach (var sub in _subscriptions)
                 {
@@ -116,14 +153,14 @@ namespace Vano.Tools.Azure
                         Tag = sub
                     });
                 }
-                
-                this.subsToolStripComboBox.Enabled = true;
-                this.cloudTypeToolStripComboBox.Enabled = false;
 
+                this.subsToolStripComboBox.Enabled = true;
                 this.subsToolStripComboBox.SelectedIndex = this.subsToolStripComboBox.Items.Count - 1;
             }
             catch (Exception ex)
             {
+                UpdateConnectionStatus(ConnectionStatus.Disconnected);
+
                 Trace.WriteLine("ERROR:");
                 Trace.WriteLine(JsonHelper.FormatJson(ex.Message));
                 Trace.WriteLine(string.Empty);
@@ -895,7 +932,7 @@ namespace Vano.Tools.Azure
             }
         }
 
-        private void templateListBox_MouseDoubleClick(object sender, MouseEventArgs e)
+        private void templateListBox_DoubleClick(object sender, EventArgs e)
         {
             Template template = templateListBox.SelectedItem as Template;
             if (template != null)
@@ -993,6 +1030,11 @@ namespace Vano.Tools.Azure
             this.RunCommand(((ToolStripStatusLabel)sender).Text);
         }
 
+        private void portalToolStripButton_Click(object sender, EventArgs e)
+        {
+            this.RunCommand(_client.Metadata.PortalEndpoint);
+        }
+
         private void RunCommand(string command)
         {
             try
@@ -1067,7 +1109,6 @@ namespace Vano.Tools.Azure
 
         private void requestLogListBox_DoubleClick(object sender, EventArgs e)
         {
-
             this.bodyColoredTextBox.Text = ((Request)this.requestLogListBox.SelectedItem).Body;
             this.verbToolStripComboBox.Text = ((Request)this.requestLogListBox.SelectedItem).Verb;
             this.pathToolStripTextBox.Text = ((Request)this.requestLogListBox.SelectedItem).Path;

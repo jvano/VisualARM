@@ -1,6 +1,7 @@
 ﻿using FastColoredTextBoxNS;
 using System;
 using System.Diagnostics;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace Vano.Tools.Azure
@@ -37,13 +38,26 @@ namespace Vano.Tools.Azure
 
         public override void Write(string message)
         {
-            _textbox.AppendText(message);
+            if (Thread.CurrentThread.IsBackground)
+            {
+                Program.SyncContext.Post(_ => _textbox.AppendText(message), null);
+            }
+            else
+            {
+                _textbox.AppendText(message);
+            }
         }
 
         public override void WriteLine(string message)
         {
-            _textbox.AppendText(message);
-            _textbox.AppendText(Environment.NewLine);
+            if (Thread.CurrentThread.IsBackground)
+            {
+                Program.SyncContext.Post(_ => _textbox.AppendText(message + Environment.NewLine), null);
+            }
+            else
+            {
+                _textbox.AppendText(message + Environment.NewLine);
+            }
         }
     }
 }
