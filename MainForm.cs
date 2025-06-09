@@ -52,8 +52,10 @@ namespace Vano.Tools.Azure
             ShowConnectDialog();
         }
 
-        private void connectionToolStripButton_Click(object sender, EventArgs e)
+        private async void connectionToolStripButton_Click(object sender, EventArgs e)
         {
+            await Task.Yield();
+
             if (_client == null)
             {
                 ShowConnectDialog();
@@ -98,22 +100,35 @@ namespace Vano.Tools.Azure
                     _client = null;
                     this.mainProgressBar.Visible = false;
                     this.portalToolStripButton.Enabled = false;
+                    this.portalToolStripButton.Text = $"Open Azure Portal";
                     this.cloudTypeToolStripComboBox.Items.Clear();
+                    this.subsToolStripComboBox.Enabled = false;
                     this.subsToolStripComboBox.Items.Clear();
+                    this.resourceGroupsToolStripComboBox.Enabled=false;
                     this.resourceGroupsToolStripComboBox.Items.Clear();
                     this.resourcesTreeView.Nodes.Clear();
                     this.connectionToolStripButton.Text = "Connect to Cloud";
+                    this.connectionToolStripButton.Enabled = true;
+                    this.runToolStripButton.Enabled = false;
+                    this.pathToolStripTextBox.Text = "/subscriptions/";
+                    this.bodyColoredTextBox.Text = String.Empty;
                     _privateGeoEndpoint = string.Empty;
                     break;
                 case ConnectionStatus.Connecting:
-                    this.mainProgressBar.Visible = true;
+                    this.IsBusy = true;
                     this.connectionToolStripButton.Enabled = false;
                     break;
                 case ConnectionStatus.Connected:
+                    this.IsBusy = false;
                     this.mainProgressBar.Visible = false;
-                    this.portalToolStripButton.Enabled = true;
                     this.connectionToolStripButton.Text = "Disconnect from Cloud";
-                    this.portalToolStripButton.Text = $"Open Azure Portal ({_client.Metadata.PortalEndpoint})";
+                    this.connectionToolStripButton.Enabled = true;
+                    if (_client.Metadata != null)
+                    {
+                        this.portalToolStripButton.Enabled = true;
+                        this.portalToolStripButton.Text = $"Open Azure Portal ({_client.Metadata.PortalEndpoint})";
+                    }
+
                     break;
             }
         }
@@ -133,6 +148,8 @@ namespace Vano.Tools.Azure
         {
             _azureResourceManagerEndpoint = (string)this.cloudTypeToolStripComboBox.SelectedItem;
 
+            await Task.Yield();
+
             try
             {
                 _client = _connectionType == ConnectionType.AzureResourceManager || _connectionType == ConnectionType.AzureResourceManagerProxy ?
@@ -144,42 +161,49 @@ namespace Vano.Tools.Azure
                         geoMasterEndpoint: _azureResourceManagerEndpoint,
                         apiVersion: "2022-12-01"));
 
-                _subscriptions = await Task.Run<IEnumerable<Subscription>>(() => _client.GetSubscriptions(_cts.Token));
+                await _client.Initialize();
 
-                if (_subscriptions.Count() == 0)
-                {
-                    UpdateConnectionStatus(ConnectionStatus.Disconnected);
-
-                    MessageBox.Show("No subscriptions found for this user.", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-
-                    return;
-                }
+                await LoadSubscriptions();
 
                 UpdateConnectionStatus(ConnectionStatus.Connected);
-
-                foreach (var sub in _subscriptions)
-                {
-                    this.subsToolStripComboBox.Items.Add(new ToolStripMenuItem(sub.ToString())
-                    {
-                        Tag = sub
-                    });
-                }
-
-                this.subsToolStripComboBox.Enabled = true;
-                this.subsToolStripComboBox.SelectedIndex = this.subsToolStripComboBox.Items.Count - 1;
             }
             catch (Exception ex)
             {
-                UpdateConnectionStatus(ConnectionStatus.Disconnected);
-
                 Trace.WriteLine("ERROR:");
                 Trace.WriteLine(JsonHelper.FormatJson(ex.Message));
                 Trace.WriteLine(string.Empty);
+
+                UpdateConnectionStatus(ConnectionStatus.Disconnected);
+
+                return;
             }
         }
 
-        private void subsToolStripComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        private async Task LoadSubscriptions()
         {
+            _subscriptions = await Task.Run<IEnumerable<Subscription>>(() => _client.GetSubscriptions(_cts.Token));
+
+            if (_subscriptions.Count() == 0)
+            {
+                throw new Exception("No subscriptions found.");
+            }
+
+            foreach (var sub in _subscriptions)
+            {
+                this.subsToolStripComboBox.Items.Add(new ToolStripMenuItem(sub.ToString())
+                {
+                    Tag = sub
+                });
+            }
+
+            this.subsToolStripComboBox.Enabled = true;
+            this.subsToolStripComboBox.SelectedIndex = this.subsToolStripComboBox.Items.Count - 1;
+        }
+
+        private async void subsToolStripComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            await Task.Yield();
+
             this.pathToolStripTextBox.Text = @"/";
 
             if (this.SelectedSubscription != null)
@@ -188,7 +212,6 @@ namespace Vano.Tools.Azure
             }
 
             this.LoadResources();
-            this.runToolStripButton.Enabled = true;
         }
 
         public Subscription SelectedSubscription 
@@ -261,12 +284,12 @@ namespace Vano.Tools.Azure
         {
             get
             {                
-                return !this.runToolStripButton.Enabled;
+                return this.mainProgressBar.Visible;
             }
             set
             {
-                _cts = new CancellationTokenSource();
-                this.cancelToolStripButton.Enabled = this.requestTreeProgressBar.Visible = value;
+                this.mainProgressBar.Visible = value;
+                this.cancelToolStripButton.Enabled = this.mainProgressBar.Visible = value;
                 this.runToolStripButton.Enabled = !value;
             }
         }
@@ -1149,7 +1172,12 @@ namespace Vano.Tools.Azure
 
         private void cancelToolStripButton_Click(object sender, EventArgs e)
         {
-            _cts.Cancel();
+            if (!_cts.IsCancellationRequested)
+            {
+                _cts.Cancel();
+            }
+
+            _cts = new CancellationTokenSource();
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)

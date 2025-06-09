@@ -1,4 +1,5 @@
 ﻿using Azure.Core;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -85,6 +86,11 @@ namespace Vano.Tools.Azure
 
         #region Public Methods - ARM Operations
 
+        public async Task Initialize()
+        {
+            await GetAuthSecret();
+        }
+
         public async Task<IEnumerable<Subscription>> GetSubscriptions(CancellationToken cancellationToken = new CancellationToken())
         {
             List<Subscription> subscriptions = new List<Subscription>();
@@ -108,37 +114,19 @@ namespace Vano.Tools.Azure
         public async Task<IEnumerable<Location>> GetLocations(Subscription subscription, CancellationToken cancellationToken = new CancellationToken())
         {
             List<Location> locations = new List<Location>();
-            try
-            {
-                SubscriptionClient rdfeClient = GetRdfeSubscriptionClient();
-                var webspaces = rdfeClient.GetWebSpaces(subscription.Id);
 
-                foreach (var webspace in webspaces)
-                {
-                    locations.Add(new Location()
-                    {
-                        Id = webspace.Name,
-                        Name = webspace.GeoRegion,
-                        DisplayName = webspace.GeoRegion
-                    });
-                }
-            }
-            catch
+            var tenantToken = await GetAuthSecret(subscription.TenantId);
+            JObject response = await CallAzureResourceManagerAsJObject("GET", string.Format(@"/subscriptions/{0}/providers/Microsoft.Web/geoRegions", subscription.Id), tenantToken, cancellationToken: cancellationToken);
+
+            foreach (var region in response["value"])
             {
-                // Return a fixed list
-                locations.AddRange(new Location[] 
+                locations.Add(new Location()
                 {
-                    new Location()
-                    {
-                        Id = "USAAnywhere",
-                        Name = "USA Anywhere",
-                        DisplayName = "USA Anywhere"
-                    }
+                    Id = region["id"]?.ToString(),
+                    Name = region["name"]?.ToString(),
+                    DisplayName = region["properties"]?["displayName"]?.ToString()
                 });
             }
-
-            // Make async call happy
-            await Task.Delay(0);
 
             return locations.OrderBy(sub => sub.DisplayName);
         }
@@ -195,6 +183,17 @@ namespace Vano.Tools.Azure
                 .Replace(" ", "%20"));
         }
 
+        private async Task<JObject> CallAzureResourceManagerAsJObject(string method, string path, string token, string body = null, Dictionary<string, string> parameters = null, string armEndpoint = null, string apiVersion = null, bool displaySecrets = false, CancellationToken cancellationToken = new CancellationToken())
+        {
+            string response = await CallAzureResourceManager(method, path, token, body, parameters, armEndpoint, apiVersion, displaySecrets, cancellationToken);
+            if (!string.IsNullOrWhiteSpace(response))
+            {
+                return JObject.Parse(response);
+            }
+
+            return new JObject();
+        }
+
         public async Task<string> CallAzureResourceManager(string method, string path, string token, string body = null, Dictionary<string, string> parameters = null, string armEndpoint = null, string apiVersion = null, bool displaySecrets = false, CancellationToken cancellationToken = new CancellationToken())
         {
             Uri requestUri = CreateAzureResourceManagerUri(path, parameters, armEndpoint, apiVersion);
@@ -236,6 +235,8 @@ namespace Vano.Tools.Azure
         }
 
         #endregion
+
+        #region Private Methods - RDFE Helper Methods
 
         private SubscriptionClient GetRdfeSubscriptionClient()
         {
@@ -283,5 +284,7 @@ namespace Vano.Tools.Azure
 
             return serviceEndpoint;
         }
+
+        #endregion
     }
 }

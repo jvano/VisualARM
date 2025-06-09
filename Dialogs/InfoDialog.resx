@@ -121,13 +121,6 @@
     <value>[FOR CSM-Direct]
 AntaresCmd.exe CreateUser USAAnywhereUser
 AntaresCmd.exe CreateSubscription 00000000-0000-0000-0000-000000000000 /ownerUserName:USAAnywhereUser
-AntaresCmd.exe CreateWebSpace 00000000-0000-0000-0000-000000000000 USAAnywhereWebspace VirtualDedicatedPlan /geoRegion:"West US 3" /geoLocation:"usw3" /stampName:"joaquinvmss1"
-AntaresCmd.exe UpdateGeoRegion "West US 3" /orgDomain:"PUBLIC;DREAMSPARK;MSFTPUBLIC;FUNCTIONS;DYNAMIC;LINUX;DSERIES;XENON;XENONV3"
-
-NOTE: You can use the following commands to get the info you need to configure CSM-Direct:
-GeoRegion: AntaresCmd.exe ListGeoRegions
-GeoLocation: AntaresCmd.exe ListGeoLocations &lt;geoRegion&gt;
-StampName: AntaresCmd.exe ListStamps &lt;GeoLocation&gt;
 
 [FOR DOGFOOD ENVIRONMENT] use auxtm230@live.com to login
 AntaresCmd.exe AddGeoRegion "East US" /displayName:"East US" /sortOrder:1 /orgDomain:"PUBLIC;DREAMSPARK;MSFTPUBLIC;FUNCTIONS;DYNAMIC;LINUX;DSERIES;XENON;XENONV3"
@@ -142,7 +135,7 @@ AntaresCmd.exe CreateWebSpace 00e7bb72-7725-4249-8e6b-0d2632b3bfc1 EastUSwebspac
   <data name="pictureBox3.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGOfPtRkwAAACBjSFJNAAB6
-        JQAAgIMAAPn/AACA6QAAdTAAAOpgAAA6mAAAF2+SX8VGAAAACXBIWXMAAAsRAAALEQF/ZF+RAAAByUlE
+        JQAAgIMAAPn/AACA6QAAdTAAAOpgAAA6mAAAF2+SX8VGAAAACXBIWXMAAAsQAAALEAGtI711AAAByUlE
         QVQ4T52SzUobURiGBwRXASEeoyVSiWisrZZi3QR/6iYYKyi6tDdglt31Dtz0BryDSRX30kU1iVFPOpS2
         qKRBFBOLxv7Mb1KTxVu+M53RTAcXLh5mON87z/cOHAmA5AeXWYzL7OofMe/c4b+DW4LCwWYEx7kh0Lt3
         fqeAyyzBZQbtPA7rxyzyqQ6SJLw5XwGXWQttPHzfh4a1KHBa0Myb9xMs8RSDcZFwBdWfboslb977cStt

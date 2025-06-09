@@ -1,4 +1,5 @@
-﻿using Microsoft.Identity.Client;
+﻿using Azure.Core;
+using Microsoft.Identity.Client;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -200,11 +202,9 @@ namespace Vano.Tools.Azure
 
         public async Task<IEnumerable<Subscription>> GetSubscriptions(CancellationToken cancellationToken = new CancellationToken())
         {
-            await Initialize();
-
             List<Subscription> subscriptions = new List<Subscription>();
 
-            IEnumerable<string> tenantsIds = await GetTenantsIds();
+            IEnumerable<string> tenantsIds = await GetTenantsIds(cancellationToken);
             foreach (string tenantId in tenantsIds)
             {
                 IEnumerable<Subscription> subscriptionsInTenant = null;
@@ -374,8 +374,10 @@ namespace Vano.Tools.Azure
 
             if (!client.DefaultRequestHeaders.Contains("User-Agent"))
             {
-                client.DefaultRequestHeaders.Add("User-Agent", "Visual ARM client");
+                client.DefaultRequestHeaders.Add("User-Agent", $"VisualARM/{Assembly.GetExecutingAssembly().GetName().Version}");
             }
+
+            client.Timeout = TimeSpan.FromSeconds(30);
 
             return client;
         }

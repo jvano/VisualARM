@@ -52,7 +52,7 @@
             this.infoPanel.Controls.Add(this.label5);
             this.infoPanel.Location = new System.Drawing.Point(8, 8);
             this.infoPanel.Name = "infoPanel";
-            this.infoPanel.Size = new System.Drawing.Size(963, 302);
+            this.infoPanel.Size = new System.Drawing.Size(963, 200);
             this.infoPanel.TabIndex = 10;
             // 
             // infoTextBox
@@ -66,7 +66,7 @@
             this.infoTextBox.Multiline = true;
             this.infoTextBox.Name = "infoTextBox";
             this.infoTextBox.ReadOnly = true;
-            this.infoTextBox.Size = new System.Drawing.Size(952, 268);
+            this.infoTextBox.Size = new System.Drawing.Size(952, 166);
             this.infoTextBox.TabIndex = 5;
             this.infoTextBox.Text = resources.GetString("infoTextBox.Text");
             // 
@@ -95,7 +95,7 @@
             // 
             this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.okButton.Location = new System.Drawing.Point(894, 315);
+            this.okButton.Location = new System.Drawing.Point(894, 213);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(75, 23);
             this.okButton.TabIndex = 11;
@@ -106,7 +106,7 @@
             // 
             this.doogFoodPortalLinkLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.doogFoodPortalLinkLabel.AutoSize = true;
-            this.doogFoodPortalLinkLabel.Location = new System.Drawing.Point(91, 320);
+            this.doogFoodPortalLinkLabel.Location = new System.Drawing.Point(91, 218);
             this.doogFoodPortalLinkLabel.Name = "doogFoodPortalLinkLabel";
             this.doogFoodPortalLinkLabel.Size = new System.Drawing.Size(171, 13);
             this.doogFoodPortalLinkLabel.TabIndex = 12;
@@ -118,7 +118,7 @@
             // 
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(5, 320);
+            this.label1.Location = new System.Drawing.Point(5, 218);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(80, 13);
             this.label1.TabIndex = 13;
@@ -129,7 +129,7 @@
             this.AcceptButton = this.okButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(977, 346);
+            this.ClientSize = new System.Drawing.Size(977, 244);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.doogFoodPortalLinkLabel);
             this.Controls.Add(this.okButton);

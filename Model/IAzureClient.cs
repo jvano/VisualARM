@@ -12,6 +12,8 @@ namespace Vano.Tools.Azure.Model
 
         HttpHeadersProcessor HttpHeadersProcessor { get; set; }
 
+        Task Initialize();
+
         Task<string> GetAuthSecret(string tenantId = null);
 
         Task<IEnumerable<Subscription>> GetSubscriptions(CancellationToken cancellationToken = new CancellationToken());

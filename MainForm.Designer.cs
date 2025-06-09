@@ -90,7 +90,6 @@
             this.splitContainer3 = new System.Windows.Forms.SplitContainer();
             this.traceColoredTextBox = new FastColoredTextBoxNS.FastColoredTextBox();
             this.documentMap2 = new FastColoredTextBoxNS.DocumentMap();
-            this.requestTreeProgressBar = new System.Windows.Forms.ProgressBar();
             this.toolStrip3 = new System.Windows.Forms.ToolStrip();
             this.copyToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.clearToolStripButton = new System.Windows.Forms.ToolStripButton();
@@ -176,7 +175,7 @@
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
             this.exitToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F4)));
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -231,7 +230,6 @@
             // 
             // connectionToolStripButton
             // 
-            this.connectionToolStripButton.Enabled = false;
             this.connectionToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("connectionToolStripButton.Image")));
             this.connectionToolStripButton.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.connectionToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
@@ -281,8 +279,8 @@
             this.portalToolStripButton.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.portalToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.portalToolStripButton.Name = "portalToolStripButton";
-            this.portalToolStripButton.Size = new System.Drawing.Size(222, 22);
-            this.portalToolStripButton.Text = "Open Azure Portal for selected Cloud";
+            this.portalToolStripButton.Size = new System.Drawing.Size(123, 22);
+            this.portalToolStripButton.Text = "Open Azure Portal";
             this.portalToolStripButton.Click += new System.EventHandler(this.portalToolStripButton_Click);
             // 
             // statusStrip1
@@ -639,7 +637,6 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.splitContainer3);
-            this.splitContainer1.Panel2.Controls.Add(this.requestTreeProgressBar);
             this.splitContainer1.Panel2.Controls.Add(this.toolStrip3);
             this.splitContainer1.Panel2.Controls.Add(this.panel2);
             this.splitContainer1.Size = new System.Drawing.Size(1018, 820);
@@ -787,7 +784,7 @@
             // 
             this.splitContainer3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer3.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
-            this.splitContainer3.Location = new System.Drawing.Point(0, 61);
+            this.splitContainer3.Location = new System.Drawing.Point(0, 50);
             this.splitContainer3.Name = "splitContainer3";
             // 
             // splitContainer3.Panel1
@@ -797,7 +794,7 @@
             // splitContainer3.Panel2
             // 
             this.splitContainer3.Panel2.Controls.Add(this.documentMap2);
-            this.splitContainer3.Size = new System.Drawing.Size(1018, 527);
+            this.splitContainer3.Size = new System.Drawing.Size(1018, 538);
             this.splitContainer3.SplitterDistance = 908;
             this.splitContainer3.TabIndex = 16;
             // 
@@ -835,7 +832,7 @@
             this.traceColoredTextBox.RightBracket2 = '}';
             this.traceColoredTextBox.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
             this.traceColoredTextBox.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("traceColoredTextBox.ServiceColors")));
-            this.traceColoredTextBox.Size = new System.Drawing.Size(908, 527);
+            this.traceColoredTextBox.Size = new System.Drawing.Size(908, 538);
             this.traceColoredTextBox.TabIndex = 3;
             this.traceColoredTextBox.Zoom = 100;
             // 
@@ -845,21 +842,10 @@
             this.documentMap2.ForeColor = System.Drawing.Color.Maroon;
             this.documentMap2.Location = new System.Drawing.Point(0, 0);
             this.documentMap2.Name = "documentMap2";
-            this.documentMap2.Size = new System.Drawing.Size(106, 527);
+            this.documentMap2.Size = new System.Drawing.Size(106, 538);
             this.documentMap2.TabIndex = 3;
             this.documentMap2.Target = this.traceColoredTextBox;
             this.documentMap2.Text = "documentMap2";
-            // 
-            // requestTreeProgressBar
-            // 
-            this.requestTreeProgressBar.Dock = System.Windows.Forms.DockStyle.Top;
-            this.requestTreeProgressBar.Location = new System.Drawing.Point(0, 50);
-            this.requestTreeProgressBar.MarqueeAnimationSpeed = 1;
-            this.requestTreeProgressBar.Name = "requestTreeProgressBar";
-            this.requestTreeProgressBar.Size = new System.Drawing.Size(1018, 11);
-            this.requestTreeProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
-            this.requestTreeProgressBar.TabIndex = 15;
-            this.requestTreeProgressBar.Visible = false;
             // 
             // toolStrip3
             // 
@@ -1179,7 +1165,6 @@
         private System.Windows.Forms.SplitContainer splitContainer3;
         private FastColoredTextBoxNS.FastColoredTextBox traceColoredTextBox;
         private FastColoredTextBoxNS.DocumentMap documentMap2;
-        private System.Windows.Forms.ProgressBar requestTreeProgressBar;
         private System.Windows.Forms.ToolStrip toolStrip3;
         private System.Windows.Forms.ToolStripButton copyToolStripButton;
         private System.Windows.Forms.ToolStripButton clearToolStripButton;
