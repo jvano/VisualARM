@@ -68,11 +68,14 @@
             this.loadResourcesToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.panel3 = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
+            this.toolStrip8 = new System.Windows.Forms.ToolStrip();
+            this.filterTemplateToolStripTextBox = new System.Windows.Forms.ToolStripTextBox();
+            this.toolStripLabel7 = new System.Windows.Forms.ToolStripLabel();
             this.templateListBox = new System.Windows.Forms.ListBox();
             this.toolStrip6 = new System.Windows.Forms.ToolStrip();
-            this.toolStripLabel5 = new System.Windows.Forms.ToolStripLabel();
             this.addRecipeToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.templatesToolStripComboBox = new System.Windows.Forms.ToolStripComboBox();
+            this.toolStripLabel5 = new System.Windows.Forms.ToolStripLabel();
             this.panel4 = new System.Windows.Forms.Panel();
             this.label3 = new System.Windows.Forms.Label();
             this.splitContainer4 = new System.Windows.Forms.SplitContainer();
@@ -119,6 +122,7 @@
             this.resourcesSplitContainer.SuspendLayout();
             this.toolStrip4.SuspendLayout();
             this.panel3.SuspendLayout();
+            this.toolStrip8.SuspendLayout();
             this.toolStrip6.SuspendLayout();
             this.panel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer4)).BeginInit();
@@ -230,12 +234,13 @@
             // 
             // connectionToolStripButton
             // 
+            this.connectionToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.connectionToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("connectionToolStripButton.Image")));
             this.connectionToolStripButton.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.connectionToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.connectionToolStripButton.Name = "connectionToolStripButton";
-            this.connectionToolStripButton.Size = new System.Drawing.Size(121, 22);
-            this.connectionToolStripButton.Text = "Connect to Cloud";
+            this.connectionToolStripButton.Size = new System.Drawing.Size(56, 22);
+            this.connectionToolStripButton.Text = "Connect";
             this.connectionToolStripButton.ToolTipText = "Add connection";
             this.connectionToolStripButton.Click += new System.EventHandler(this.connectionToolStripButton_Click);
             // 
@@ -459,6 +464,7 @@
             // 
             // resourcesSplitContainer.Panel2
             // 
+            this.resourcesSplitContainer.Panel2.Controls.Add(this.toolStrip8);
             this.resourcesSplitContainer.Panel2.Controls.Add(this.templateListBox);
             this.resourcesSplitContainer.Panel2.Controls.Add(this.toolStrip6);
             this.resourcesSplitContainer.Panel2.Controls.Add(this.panel4);
@@ -532,6 +538,32 @@
             this.label2.TabIndex = 0;
             this.label2.Text = "Resources:";
             // 
+            // toolStrip8
+            // 
+            this.toolStrip8.ImageScalingSize = new System.Drawing.Size(32, 32);
+            this.toolStrip8.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.filterTemplateToolStripTextBox,
+            this.toolStripLabel7});
+            this.toolStrip8.Location = new System.Drawing.Point(0, 50);
+            this.toolStrip8.Name = "toolStrip8";
+            this.toolStrip8.Size = new System.Drawing.Size(346, 25);
+            this.toolStrip8.TabIndex = 17;
+            this.toolStrip8.Text = "toolStrip8";
+            // 
+            // filterTemplateToolStripTextBox
+            // 
+            this.filterTemplateToolStripTextBox.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.filterTemplateToolStripTextBox.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.filterTemplateToolStripTextBox.Name = "filterTemplateToolStripTextBox";
+            this.filterTemplateToolStripTextBox.Size = new System.Drawing.Size(250, 25);
+            this.filterTemplateToolStripTextBox.TextChanged += new System.EventHandler(this.filterTemplateToolStripTextBox_TextChanged);
+            // 
+            // toolStripLabel7
+            // 
+            this.toolStripLabel7.Name = "toolStripLabel7";
+            this.toolStripLabel7.Size = new System.Drawing.Size(36, 22);
+            this.toolStripLabel7.Text = "Filter:";
+            // 
             // templateListBox
             // 
             this.templateListBox.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -547,20 +579,14 @@
             // 
             this.toolStrip6.ImageScalingSize = new System.Drawing.Size(32, 32);
             this.toolStrip6.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripLabel5,
             this.addRecipeToolStripButton,
-            this.templatesToolStripComboBox});
+            this.templatesToolStripComboBox,
+            this.toolStripLabel5});
             this.toolStrip6.Location = new System.Drawing.Point(0, 25);
             this.toolStrip6.Name = "toolStrip6";
             this.toolStrip6.Size = new System.Drawing.Size(346, 25);
             this.toolStrip6.TabIndex = 13;
             this.toolStrip6.Text = "toolStrip6";
-            // 
-            // toolStripLabel5
-            // 
-            this.toolStripLabel5.Name = "toolStripLabel5";
-            this.toolStripLabel5.Size = new System.Drawing.Size(58, 22);
-            this.toolStripLabel5.Text = "Category:";
             // 
             // addRecipeToolStripButton
             // 
@@ -579,8 +605,14 @@
             this.templatesToolStripComboBox.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.templatesToolStripComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.templatesToolStripComboBox.Name = "templatesToolStripComboBox";
-            this.templatesToolStripComboBox.Size = new System.Drawing.Size(200, 25);
+            this.templatesToolStripComboBox.Size = new System.Drawing.Size(222, 25);
             this.templatesToolStripComboBox.SelectedIndexChanged += new System.EventHandler(this.templatesToolStripComboBox_SelectedIndexChanged);
+            // 
+            // toolStripLabel5
+            // 
+            this.toolStripLabel5.Name = "toolStripLabel5";
+            this.toolStripLabel5.Size = new System.Drawing.Size(58, 22);
+            this.toolStripLabel5.Text = "Category:";
             // 
             // panel4
             // 
@@ -1058,6 +1090,8 @@
             this.toolStrip4.PerformLayout();
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
+            this.toolStrip8.ResumeLayout(false);
+            this.toolStrip8.PerformLayout();
             this.toolStrip6.ResumeLayout(false);
             this.toolStrip6.PerformLayout();
             this.panel4.ResumeLayout(false);
@@ -1181,6 +1215,9 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.ListBox requestLogListBox;
         private System.Windows.Forms.ToolStripButton portalToolStripButton;
+        private System.Windows.Forms.ToolStrip toolStrip8;
+        private System.Windows.Forms.ToolStripLabel toolStripLabel7;
+        private System.Windows.Forms.ToolStripTextBox filterTemplateToolStripTextBox;
     }
 }
 

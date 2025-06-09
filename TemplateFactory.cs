@@ -15,7 +15,7 @@ namespace Vano.Tools.Azure
         // https://learn.microsoft.com/en-us/rest/api/appservice/
         // https://github.com/Azure/azure-rest-api-specs/blob/main/specification/web/resource-manager/readme.md
         public const string SwaggerBranch = "stable";
-        public const string SwaggerApiVersion = "2022-09-01";
+        public const string SwaggerApiVersion = "2024-11-01";
         public const string SwaggerEndpointBase = "https://raw.githubusercontent.com/Azure/azure-rest-api-specs/main/specification/web/resource-manager";
         public const string SwaggerEndpointWeb = SwaggerEndpointBase + "/Microsoft.Web/" + SwaggerBranch + "/" + SwaggerApiVersion + "/";
         

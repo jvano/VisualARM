@@ -107,7 +107,7 @@ namespace Vano.Tools.Azure
                     this.resourceGroupsToolStripComboBox.Enabled=false;
                     this.resourceGroupsToolStripComboBox.Items.Clear();
                     this.resourcesTreeView.Nodes.Clear();
-                    this.connectionToolStripButton.Text = "Connect to Cloud";
+                    this.connectionToolStripButton.Text = "Connect";
                     this.connectionToolStripButton.Enabled = true;
                     this.runToolStripButton.Enabled = false;
                     this.pathToolStripTextBox.Text = "/subscriptions/";
@@ -121,7 +121,7 @@ namespace Vano.Tools.Azure
                 case ConnectionStatus.Connected:
                     this.IsBusy = false;
                     this.mainProgressBar.Visible = false;
-                    this.connectionToolStripButton.Text = "Disconnect from Cloud";
+                    this.connectionToolStripButton.Text = "Disconnect";
                     this.connectionToolStripButton.Enabled = true;
                     if (_client.Metadata != null)
                     {
@@ -954,15 +954,33 @@ namespace Vano.Tools.Azure
 
         private void templatesToolStripComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
+            RenderTemplateList();
+        }
+
+
+        private void filterTemplateToolStripTextBox_TextChanged(object sender, EventArgs e)
+        {
+            RenderTemplateList();
+        }
+
+        private void RenderTemplateList()
+        {
             TemplateCategory category = templatesToolStripComboBox.SelectedItem as TemplateCategory;
             if (category != null)
             {
-                templateListBox.Items.Clear();
+                IEnumerable<Template> templates = category.Templates;
 
-                foreach(Template template in category.Templates)
+                if (!string.IsNullOrEmpty(filterTemplateToolStripTextBox.Text))
                 {
-                    templateListBox.Items.Add(template);
+                    string filter = filterTemplateToolStripTextBox.Text;
+
+                    templates = templates.Where(template => 
+                        string.IsNullOrEmpty(template.Summary) ? 
+                        template.Name.IndexOf(filter, StringComparison.OrdinalIgnoreCase) != -1 :
+                        template.Name.IndexOf(filter, StringComparison.OrdinalIgnoreCase) != -1 || template.Summary.IndexOf(filter, StringComparison.OrdinalIgnoreCase) != -1);
                 }
+
+                templateListBox.DataSource = new BindingSource(templates, null);
             }
         }
 

@@ -156,6 +156,8 @@ namespace Vano.Tools.Azure
                 client.DefaultRequestHeaders.Add("User-Agent", $"VisualARM/{Assembly.GetExecutingAssembly().GetName().Version}");
             }
 
+            client.Timeout = TimeSpan.FromSeconds(30);
+
             return client;
         }
 
