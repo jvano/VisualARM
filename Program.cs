@@ -14,13 +14,6 @@ namespace Vano.Tools.Azure
         [STAThread]
         public static void Main(string[] args)
         {
-            if (args.Length == 0 && !Debugger.IsAttached)
-            {
-                ReRunProgram();
-
-                return;
-            }
-
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls13;
 
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
@@ -37,15 +30,6 @@ namespace Vano.Tools.Azure
             {
                 Trace.WriteLine(e.ToString());
             }
-        }
-
-        private static void ReRunProgram()
-        {
-            Process process = new Process();
-            process.StartInfo.FileName = Process.GetCurrentProcess().MainModule.FileName;
-            process.StartInfo.Verb = "runas";
-            process.StartInfo.Arguments = "/elevated";
-            process.Start();
         }
     }
 }
