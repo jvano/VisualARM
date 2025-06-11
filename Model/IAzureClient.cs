@@ -6,6 +6,8 @@ namespace Vano.Tools.Azure.Model
 {
     interface IAzureClient
     {
+        string ApiVersion { get; }
+
         AzureMetadata Metadata { get; }
 
         string ResouceManagerEndpoint { get; }

@@ -47,7 +47,7 @@ namespace Vano.Tools.Azure
 
         public GeoMasterClient(
             string geoMasterEndpoint,
-            string apiVersion = "2015-01-01")
+            string apiVersion = "2024-11-01")
         {
             this.GeoMasterEndpoint = geoMasterEndpoint;
             this.ApiVersion = apiVersion;

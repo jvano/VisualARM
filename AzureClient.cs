@@ -54,26 +54,23 @@ namespace Vano.Tools.Azure
 
         public AzureClient(
             string resourceManagerEndpoint = "management.azure.com",
-            string apiVersion = "2022-12-01",
+            string apiVersion = "2024-11-01",
             AzureMetadata metadata = null,
             Func<HttpMessageHandler> handlerFactory = null)
+            : this(resourceManagerEndpoint, apiVersion, null, null, handlerFactory)
         {
-            this.ResouceManagerEndpoint = resourceManagerEndpoint;
-            this.ApiVersion = apiVersion;
             this.Metadata = metadata;
-
-            _client = CreateHttpClient(handlerFactory);
         }
 
         public AzureClient(
             string resourceManagerEndpoint = "management.azure.com",
-            string apiVersion = "2022-12-01",
+            string apiVersion = "2024-11-01",
             string authenticationEndpoint = "https://login.windows.net",
             string appResourceId = "https://management.core.windows.net/",
             Func<HttpMessageHandler> handlerFactory = null)
         {
             this.ResouceManagerEndpoint = resourceManagerEndpoint;
-            this.ApiVersion = apiVersion;
+            this.ApiVersion = resourceManagerEndpoint.Contains("dogfood") ? "2024-08-01" : apiVersion;
             this.AuthenticationEndpoint = authenticationEndpoint;
             this.AppResourceId = appResourceId;
 
@@ -376,8 +373,6 @@ namespace Vano.Tools.Azure
             {
                 client.DefaultRequestHeaders.Add("User-Agent", $"VisualARM/{Assembly.GetExecutingAssembly().GetName().Version}");
             }
-
-            client.Timeout = TimeSpan.FromSeconds(30);
 
             return client;
         }

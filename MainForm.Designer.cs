@@ -63,7 +63,6 @@
             this.mainSplitContainer = new System.Windows.Forms.SplitContainer();
             this.resourcesSplitContainer = new System.Windows.Forms.SplitContainer();
             this.resourcesTreeProgressBar = new System.Windows.Forms.ProgressBar();
-            this.resourcesTreeView = new System.Windows.Forms.TreeView();
             this.toolStrip4 = new System.Windows.Forms.ToolStrip();
             this.loadResourcesToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.panel3 = new System.Windows.Forms.Panel();
@@ -108,6 +107,7 @@
             this.panel5 = new System.Windows.Forms.Panel();
             this.label4 = new System.Windows.Forms.Label();
             this.requestLogListBox = new System.Windows.Forms.ListBox();
+            this.resourcesTreeView = new System.Windows.Forms.TreeView();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -457,8 +457,8 @@
             // 
             // resourcesSplitContainer.Panel1
             // 
-            this.resourcesSplitContainer.Panel1.Controls.Add(this.resourcesTreeProgressBar);
             this.resourcesSplitContainer.Panel1.Controls.Add(this.resourcesTreeView);
+            this.resourcesSplitContainer.Panel1.Controls.Add(this.resourcesTreeProgressBar);
             this.resourcesSplitContainer.Panel1.Controls.Add(this.toolStrip4);
             this.resourcesSplitContainer.Panel1.Controls.Add(this.panel3);
             // 
@@ -483,18 +483,6 @@
             this.resourcesTreeProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
             this.resourcesTreeProgressBar.TabIndex = 14;
             this.resourcesTreeProgressBar.Visible = false;
-            // 
-            // resourcesTreeView
-            // 
-            this.resourcesTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.resourcesTreeView.ImageIndex = 0;
-            this.resourcesTreeView.ImageList = this.resourcesImageList;
-            this.resourcesTreeView.Location = new System.Drawing.Point(0, 45);
-            this.resourcesTreeView.Name = "resourcesTreeView";
-            this.resourcesTreeView.SelectedImageIndex = 0;
-            this.resourcesTreeView.Size = new System.Drawing.Size(346, 298);
-            this.resourcesTreeView.TabIndex = 14;
-            this.resourcesTreeView.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.resourcesTreeView_NodeMouseDoubleClick);
             // 
             // toolStrip4
             // 
@@ -1051,6 +1039,18 @@
             this.requestLogListBox.TabIndex = 11;
             this.requestLogListBox.DoubleClick += new System.EventHandler(this.requestLogListBox_DoubleClick);
             // 
+            // resourcesTreeView
+            // 
+            this.resourcesTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.resourcesTreeView.ImageIndex = 0;
+            this.resourcesTreeView.ImageList = this.resourcesImageList;
+            this.resourcesTreeView.Location = new System.Drawing.Point(0, 56);
+            this.resourcesTreeView.Name = "resourcesTreeView";
+            this.resourcesTreeView.SelectedImageIndex = 0;
+            this.resourcesTreeView.Size = new System.Drawing.Size(346, 287);
+            this.resourcesTreeView.TabIndex = 15;
+            this.resourcesTreeView.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.resourcesTreeView_NodeMouseDoubleClick);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1172,7 +1172,6 @@
         private System.Windows.Forms.SplitContainer mainSplitContainer;
         private System.Windows.Forms.SplitContainer resourcesSplitContainer;
         private System.Windows.Forms.ProgressBar resourcesTreeProgressBar;
-        private System.Windows.Forms.TreeView resourcesTreeView;
         private System.Windows.Forms.ToolStrip toolStrip4;
         private System.Windows.Forms.ToolStripButton loadResourcesToolStripButton;
         private System.Windows.Forms.Panel panel3;
@@ -1218,6 +1217,7 @@
         private System.Windows.Forms.ToolStrip toolStrip8;
         private System.Windows.Forms.ToolStripLabel toolStripLabel7;
         private System.Windows.Forms.ToolStripTextBox filterTemplateToolStripTextBox;
+        private System.Windows.Forms.TreeView resourcesTreeView;
     }
 }
 

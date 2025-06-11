@@ -155,11 +155,9 @@ namespace Vano.Tools.Azure
                 _client = _connectionType == ConnectionType.AzureResourceManager || _connectionType == ConnectionType.AzureResourceManagerProxy ?
                     ((IAzureClient)new AzureClient(
                         resourceManagerEndpoint: _azureResourceManagerEndpoint,
-                        apiVersion: "2022-12-01",
                         metadata: null)) :
                     ((IAzureClient)new GeoMasterClient(
-                        geoMasterEndpoint: _azureResourceManagerEndpoint,
-                        apiVersion: "2022-12-01"));
+                        geoMasterEndpoint: _azureResourceManagerEndpoint));
 
                 await _client.Initialize();
 
@@ -457,7 +455,7 @@ namespace Vano.Tools.Azure
             LoadResources();
         }
 
-        private void LoadResources()
+        private async void LoadResources()
         {
             this.loadResourcesToolStripButton.Enabled = false;
             this.resourcesTreeProgressBar.Visible = true;
@@ -466,16 +464,16 @@ namespace Vano.Tools.Azure
             this.resourcesTreeView.Nodes.Clear();
             try
             {
-                TreeNode rootNode = new TreeNode();
-                rootNode.Text = "Resources";
-                rootNode.ImageIndex = 0;
+                TreeNode node = await Task.Run(async () =>
+                {
+                    TreeNode rootNode = new TreeNode();
+                    rootNode.Text = "Resources";
+                    rootNode.ImageIndex = 0;
 
-                ThreadPool.QueueUserWorkItem(async (state) => 
-                {                                 
-                    IEnumerable<ResourceProvider> resourceProviders = await GetResourceProviders(subscription).ConfigureAwait(continueOnCapturedContext: false);
+                    IEnumerable<ResourceProvider> resourceProviders = await GetResourceProviders(subscription);
                     if (resourceProviders != null)
                     {
-                        IEnumerable<ResourceGroup> resourceGroups = await GetResourceGroups(resourceProviders, subscription).ConfigureAwait(continueOnCapturedContext: false);
+                        IEnumerable<ResourceGroup> resourceGroups = await GetResourceGroups(resourceProviders, subscription);
                         if (resourceGroups != null)
                         {
                             LoadResourceGroupsCombo(resourceGroups);
@@ -490,23 +488,21 @@ namespace Vano.Tools.Azure
                         rootNode.Expand();
                     }
 
-                    this.Invoke(new Action(() => 
-                    {
-                        this.resourcesTreeView.Nodes.Add(rootNode);
+                    rootNode.Expand();
 
-                        this.loadResourcesToolStripButton.Enabled = true;
+                    return rootNode;
+                });
 
-                        this.resourcesTreeProgressBar.Visible = false;
-
-                    }));
-                }, null);
+                this.resourcesTreeView.Nodes.Add(node);
             }
             catch (Exception ex)
             {
                 Trace.WriteLine("ERROR:");
                 Trace.WriteLine(JsonHelper.FormatJson(ex.Message));
                 Trace.WriteLine(string.Empty);
-
+            }
+            finally
+            {
                 this.loadResourcesToolStripButton.Enabled = true;
                 this.resourcesTreeProgressBar.Visible = false;
             }
@@ -548,7 +544,7 @@ namespace Vano.Tools.Azure
 
             if (_connectionType == ConnectionType.GeoMasterStamp)
             {
-                string apiVersion = "2016-09-01";
+                string apiVersion = _client.ApiVersion;
                                     
                 List<ResourceProvider> antaresOnlyResourceProviders = new List<ResourceProvider>()
                 {
@@ -692,22 +688,11 @@ namespace Vano.Tools.Azure
                     resourceTypeNode.ImageIndex = 1;
                     resourceTypeNode.SelectedImageIndex = 1;
 
-                    foreach (string apiVersion in resourceType.ApiVersions.OrderBy(v => v))
-                    {
-                        TreeNode apiVersionNode = new TreeNode();
-                        apiVersionNode.Text = apiVersion;
-                        apiVersionNode.Tag = apiVersion;
-                        apiVersionNode.ImageIndex = 1;
-                        apiVersionNode.SelectedImageIndex = 1;
 
-                        resourceTypeNode.Nodes.Add(apiVersionNode);
-                    }
 
-                    //resourceTypeNode.Expand();
                     providerNode.Nodes.Add(resourceTypeNode);
                 }
 
-                //providerNode.Expand();
                 providersNode.Nodes.Add(providerNode);
             }
 
@@ -753,26 +738,15 @@ namespace Vano.Tools.Azure
                         resourceTypeNode.ImageIndex = 1;
                         resourceTypeNode.SelectedImageIndex = 1;
 
-                        foreach (string apiVersion in resourceType.ApiVersions.OrderBy(v => v))
-                        {
-                            TreeNode apiVersionNode = new TreeNode();
-                            apiVersionNode.Text = apiVersion;
-                            apiVersionNode.Tag = apiVersion;
-                            apiVersionNode.ImageIndex = 1;
-                            apiVersionNode.SelectedImageIndex = 1;
 
-                            resourceTypeNode.Nodes.Add(apiVersionNode);
-                        }
-
-                        //resourceTypeNode.Expand();
                         providerNode.Nodes.Add(resourceTypeNode);
                     }
 
-                    //providerNode.Expand();
+
                     resourceGroupNode.Nodes.Add(providerNode);
                 }
 
-                //resourceGroupNode.Expand();
+
                 resourceGroupsNode.Nodes.Add(resourceGroupNode);
             }
 
@@ -989,7 +963,7 @@ namespace Vano.Tools.Azure
             Template template = templateListBox.SelectedItem as Template;
             if (template != null)
             {
-                string defaultApiVersion = "2016-09-01";
+                string defaultApiVersion = _client.ApiVersion;
                 if (_connectionType == ConnectionType.AzureResourceManagerProxy)
                 {
                     // GeoProxy will use this and stamp querysting parameter to forward requests
@@ -1018,6 +992,21 @@ namespace Vano.Tools.Azure
                     .Replace("{resourceGroupName}", resourceGroup)
                     .Replace("stamp=<stamp>&", geoProxyStampParameter)
                     .Replace("<api-version>", defaultApiVersion);
+
+                if (_connectionType == ConnectionType.AzureResourceManagerProxy)
+                {
+                    if(!pathToolStripTextBox.Text.Contains("?api-version="))
+                    {
+                        pathToolStripTextBox.Text += $"?stamp={geoProxyStampParameter}&api-version={defaultApiVersion}";
+                    }
+                }
+                else
+                {
+                    if (!pathToolStripTextBox.Text.Contains("?api-version="))
+                    {
+                        pathToolStripTextBox.Text += $"?api-version={defaultApiVersion}";
+                    }
+                }
 
                 bodyColoredTextBox.Text = string.IsNullOrWhiteSpace(template.Body) ? string.Empty :
                     template.Body
