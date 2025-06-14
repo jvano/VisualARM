@@ -19,7 +19,6 @@ namespace Vano.Tools.Azure
         public const string SwaggerEndpointBase = "https://raw.githubusercontent.com/Azure/azure-rest-api-specs/main/specification/web/resource-manager";
         public const string SwaggerEndpointWeb = SwaggerEndpointBase + "/Microsoft.Web/" + SwaggerBranch + "/" + SwaggerApiVersion + "/";
         
-
         public static async Task<IEnumerable<Template>> GetTemplates()
         {
             IEnumerable<Template> swagger = await GetTemplatesFromSwagger();
@@ -87,10 +86,10 @@ namespace Vano.Tools.Azure
                 /* Create ASP: Windows Server Farm */
                 new Template()
                 {
-                    Category = "Visual ARM [Create ASP + Web App]",
+                    Category = "Visual ARM [Windows]",
                     Name = "Create Windows ASP - PremiumV3 Small",
                     Verb = "PUT",
-                    Path = "/subscriptions/<subscription>/resourceGroups/<resourcegroup>/providers/Microsoft.Web/serverFarms/<serverfarm>?stamp=<stamp>&api-version=<api-version>",
+                    Path = "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/serverFarms/{serverFarmName}",
                     Body =
                         "{" + Environment.NewLine +
                         "    \"sku\": {" + Environment.NewLine +
@@ -98,9 +97,9 @@ namespace Vano.Tools.Azure
                         "        \"tier\": \"PremiumV3\"" + Environment.NewLine +
                         "    }," + Environment.NewLine +
                         "    \"kind\": \"app\"," + Environment.NewLine +
-                        "    \"location\": \"<location>\"," + Environment.NewLine +
+                        "    \"location\": \"{location}\"," + Environment.NewLine +
                         "    \"properties\": {" + Environment.NewLine +
-                        "        \"name\": \"<serverfarm>\"," + Environment.NewLine +
+                        "        \"name\": \"{serverFarmName}\"," + Environment.NewLine +
                         "        \"workerSizeId\": \"0\"," + Environment.NewLine +
                         "        \"numberOfWorkers\": \"1\"," + Environment.NewLine +
                         "        \"hostingEnvironment\": \"\"" + Environment.NewLine +
@@ -109,10 +108,10 @@ namespace Vano.Tools.Azure
                 },
                 new Template()
                 {
-                    Category = "Visual ARM [Create ASP + Web App]",
+                    Category = "Visual ARM [Windows]",
                     Name = "Create Windows ASP - PremiumV3 Medium",
                     Verb = "PUT",
-                    Path = "/subscriptions/<subscription>/resourceGroups/<resourcegroup>/providers/Microsoft.Web/serverFarms/<serverfarm>?stamp=<stamp>&api-version=<api-version>",
+                    Path = "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/serverFarms/{serverFarmName}",
                     Body =
                         "{" + Environment.NewLine +
                         "    \"sku\": {" + Environment.NewLine +
@@ -120,9 +119,9 @@ namespace Vano.Tools.Azure
                         "        \"tier\": \"PremiumV3\"" + Environment.NewLine +
                         "    }," + Environment.NewLine +
                         "    \"kind\": \"app\"," + Environment.NewLine +
-                        "    \"location\": \"<location>\"," + Environment.NewLine +
+                        "    \"location\": \"{location}\"," + Environment.NewLine +
                         "    \"properties\": {" + Environment.NewLine +
-                        "        \"name\": \"<serverfarm>\"," + Environment.NewLine +
+                        "        \"name\": \"{serverFarmName}\"," + Environment.NewLine +
                         "        \"workerSizeId\": \"0\"," + Environment.NewLine +
                         "        \"numberOfWorkers\": \"1\"," + Environment.NewLine +
                         "        \"hostingEnvironment\": \"\"" + Environment.NewLine +
@@ -131,10 +130,10 @@ namespace Vano.Tools.Azure
                 },
                 new Template()
                 {
-                    Category = "Visual ARM [Create ASP + Web App]",
+                    Category = "Visual ARM [Windows]",
                     Name = "Create Windows ASP - PremiumV3 Large",
                     Verb = "PUT",
-                    Path = "/subscriptions/<subscription>/resourceGroups/<resourcegroup>/providers/Microsoft.Web/serverFarms/<serverfarm>?stamp=<stamp>&api-version=<api-version>",
+                    Path = "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/serverFarms/{serverFarmName}",
                     Body =
                         "{" + Environment.NewLine +
                         "    \"sku\": {" + Environment.NewLine +
@@ -142,9 +141,9 @@ namespace Vano.Tools.Azure
                         "        \"tier\": \"PremiumV3\"" + Environment.NewLine +
                         "    }," + Environment.NewLine +
                         "    \"kind\": \"app\"," + Environment.NewLine +
-                        "    \"location\": \"<location>\"," + Environment.NewLine +
+                        "    \"location\": \"{location}\"," + Environment.NewLine +
                         "    \"properties\": {" + Environment.NewLine +
-                        "        \"name\": \"<serverfarm>\"," + Environment.NewLine +
+                        "        \"name\": \"{serverFarmName}\"," + Environment.NewLine +
                         "        \"workerSizeId\": \"0\"," + Environment.NewLine +
                         "        \"numberOfWorkers\": \"1\"," + Environment.NewLine +
                         "        \"hostingEnvironment\": \"\"" + Environment.NewLine +
@@ -154,10 +153,10 @@ namespace Vano.Tools.Azure
                 /* Create ASP: Windows Container Server Farm */
                 new Template()
                 {
-                    Category = "Visual ARM [Create ASP + Web App]",
+                    Category = "Visual ARM [Windows Container]",
                     Name = "Create Windows Container ASP - PremiumV3 Small",
                     Verb = "PUT",
-                    Path = "/subscriptions/<subscription>/resourceGroups/<resourcegroup>/providers/Microsoft.Web/serverFarms/<serverfarm>?stamp=<stamp>&api-version=<api-version>",
+                    Path = "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/serverFarms/{serverFarmName}",
                     Body =
                         "{" + Environment.NewLine +
                         "    \"sku\": {" + Environment.NewLine +
@@ -165,9 +164,9 @@ namespace Vano.Tools.Azure
                         "        \"tier\": \"PremiumV3\"" + Environment.NewLine +
                         "    }," + Environment.NewLine +
                         "    \"kind\": \"windows\"," + Environment.NewLine +
-                        "    \"location\": \"<location>\"," + Environment.NewLine +
+                        "    \"location\": \"{location}\"," + Environment.NewLine +
                         "    \"properties\": {" + Environment.NewLine +
-                        "        \"name\": \"<serverfarm>\"," + Environment.NewLine +
+                        "        \"name\": \"{serverFarmName}\"," + Environment.NewLine +
                         "        \"workerSizeId\": \"0\"," + Environment.NewLine +
                         "        \"numberOfWorkers\": \"1\"," + Environment.NewLine +
                         "        \"hyperv\": true," + Environment.NewLine +
@@ -177,10 +176,10 @@ namespace Vano.Tools.Azure
                 },
                 new Template()
                 {
-                    Category = "Visual ARM [Create ASP + Web App]",
+                    Category = "Visual ARM [Windows Container]",
                     Name = "Create Windows Container ASP - PremiumV3 Medium",
                     Verb = "PUT",
-                    Path = "/subscriptions/<subscription>/resourceGroups/<resourcegroup>/providers/Microsoft.Web/serverFarms/<serverfarm>?stamp=<stamp>&api-version=<api-version>",
+                    Path = "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/serverFarms/{serverFarmName}",
                     Body =
                         "{" + Environment.NewLine +
                         "    \"sku\": {" + Environment.NewLine +
@@ -188,9 +187,9 @@ namespace Vano.Tools.Azure
                         "        \"tier\": \"PremiumV3\"" + Environment.NewLine +
                         "    }," + Environment.NewLine +
                         "    \"kind\": \"windows\"," + Environment.NewLine +
-                        "    \"location\": \"<location>\"," + Environment.NewLine +
+                        "    \"location\": \"{location}\"," + Environment.NewLine +
                         "    \"properties\": {" + Environment.NewLine +
-                        "        \"name\": \"<serverfarm>\"," + Environment.NewLine +
+                        "        \"name\": \"{serverFarmName}\"," + Environment.NewLine +
                         "        \"workerSizeId\": \"0\"," + Environment.NewLine +
                         "        \"numberOfWorkers\": \"1\"," + Environment.NewLine +
                         "        \"hyperv\": true," + Environment.NewLine +
@@ -200,10 +199,10 @@ namespace Vano.Tools.Azure
                 },
                 new Template()
                 {
-                    Category = "Visual ARM [Create ASP + Web App]",
+                    Category = "Visual ARM [Windows Container]",
                     Name = "Create Windows Container ASP - PremiumV3 Large",
                     Verb = "PUT",
-                    Path = "/subscriptions/<subscription>/resourceGroups/<resourcegroup>/providers/Microsoft.Web/serverFarms/<serverfarm>?stamp=<stamp>&api-version=<api-version>",
+                    Path = "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/serverFarms/{serverFarmName}",
                     Body =
                         "{" + Environment.NewLine +
                         "    \"sku\": {" + Environment.NewLine +
@@ -211,9 +210,9 @@ namespace Vano.Tools.Azure
                         "        \"tier\": \"PremiumV3\"" + Environment.NewLine +
                         "    }," + Environment.NewLine +
                         "    \"kind\": \"windows\"," + Environment.NewLine +
-                        "    \"location\": \"<location>\"," + Environment.NewLine +
+                        "    \"location\": \"{location}\"," + Environment.NewLine +
                         "    \"properties\": {" + Environment.NewLine +
-                        "        \"name\": \"<serverfarm>\"," + Environment.NewLine +
+                        "        \"name\": \"{serverFarmName}\"," + Environment.NewLine +
                         "        \"workerSizeId\": \"0\"," + Environment.NewLine +
                         "        \"numberOfWorkers\": \"1\"," + Environment.NewLine +
                         "        \"hyperv\": true," + Environment.NewLine +
@@ -224,10 +223,10 @@ namespace Vano.Tools.Azure
                 /* Create ASP: Windows Container Server Farm */
                 new Template()
                 {
-                    Category = "Visual ARM [Create ASP + Web App]",
+                    Category = "Visual ARM [Linux]",
                     Name = "Create Linux ASP - PremiumV3 Small",
                     Verb = "PUT",
-                    Path = "/subscriptions/<subscription>/resourceGroups/<resourcegroup>/providers/Microsoft.Web/serverFarms/<serverfarm>?stamp=<stamp>&api-version=<api-version>",
+                    Path = "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/serverFarms/{serverFarmName}",
                     Body =
                         "{" + Environment.NewLine +
                         "    \"sku\": {" + Environment.NewLine +
@@ -235,9 +234,9 @@ namespace Vano.Tools.Azure
                         "        \"tier\": \"PremiumV3\"" + Environment.NewLine +
                         "    }," + Environment.NewLine +
                         "    \"kind\": \"linux\"," + Environment.NewLine +
-                        "    \"location\": \"<location>\"," + Environment.NewLine +
+                        "    \"location\": \"{location}\"," + Environment.NewLine +
                         "    \"properties\": {" + Environment.NewLine +
-                        "        \"name\": \"<serverfarm>\"," + Environment.NewLine +
+                        "        \"name\": \"{serverFarmName}\"," + Environment.NewLine +
                         "        \"workerSizeId\": \"0\"," + Environment.NewLine +
                         "        \"numberOfWorkers\": \"1\"," + Environment.NewLine +
                         "        \"reserved\": true," + Environment.NewLine +
@@ -247,10 +246,10 @@ namespace Vano.Tools.Azure
                 },
                 new Template()
                 {
-                    Category = "Visual ARM [Create ASP + Web App]",
+                    Category = "Visual ARM [Linux]",
                     Name = "Create Linux ASP - PremiumV3 Medium",
                     Verb = "PUT",
-                    Path = "/subscriptions/<subscription>/resourceGroups/<resourcegroup>/providers/Microsoft.Web/serverFarms/<serverfarm>?stamp=<stamp>&api-version=<api-version>",
+                    Path = "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/serverFarms/{serverFarmName}",
                     Body =
                         "{" + Environment.NewLine +
                         "    \"sku\": {" + Environment.NewLine +
@@ -258,9 +257,9 @@ namespace Vano.Tools.Azure
                         "        \"tier\": \"PremiumV3\"" + Environment.NewLine +
                         "    }," + Environment.NewLine +
                         "    \"kind\": \"linux\"," + Environment.NewLine +
-                        "    \"location\": \"<location>\"," + Environment.NewLine +
+                        "    \"location\": \"{location}\"," + Environment.NewLine +
                         "    \"properties\": {" + Environment.NewLine +
-                        "        \"name\": \"<serverfarm>\"," + Environment.NewLine +
+                        "        \"name\": \"{serverFarmName}\"," + Environment.NewLine +
                         "        \"workerSizeId\": \"0\"," + Environment.NewLine +
                         "        \"numberOfWorkers\": \"1\"," + Environment.NewLine +
                         "        \"reserved\": true," + Environment.NewLine +
@@ -270,10 +269,10 @@ namespace Vano.Tools.Azure
                 },
                 new Template()
                 {
-                    Category = "Visual ARM [Create ASP + Web App]",
+                    Category = "Visual ARM [Linux]",
                     Name = "Create Linux ASP - PremiumV3 Large",
                     Verb = "PUT",
-                    Path = "/subscriptions/<subscription>/resourceGroups/<resourcegroup>/providers/Microsoft.Web/serverFarms/<serverfarm>?stamp=<stamp>&api-version=<api-version>",
+                    Path = "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/serverFarms/{serverFarmName}",
                     Body =
                         "{" + Environment.NewLine +
                         "    \"sku\": {" + Environment.NewLine +
@@ -281,9 +280,9 @@ namespace Vano.Tools.Azure
                         "        \"tier\": \"PremiumV3\"" + Environment.NewLine +
                         "    }," + Environment.NewLine +
                         "    \"kind\": \"linux\"," + Environment.NewLine +
-                        "    \"location\": \"<location>\"," + Environment.NewLine +
+                        "    \"location\": \"{location}\"," + Environment.NewLine +
                         "    \"properties\": {" + Environment.NewLine +
-                        "        \"name\": \"<serverfarm>\"," + Environment.NewLine +
+                        "        \"name\": \"{serverFarmName}\"," + Environment.NewLine +
                         "        \"workerSizeId\": \"0\"," + Environment.NewLine +
                         "        \"numberOfWorkers\": \"1\"," + Environment.NewLine +
                         "        \"reserved\": true," + Environment.NewLine +
@@ -295,41 +294,69 @@ namespace Vano.Tools.Azure
                 /* Create Web App */
                 new Template()
                 {
-                    Category = "Visual ARM [Create ASP + Web App]",
-                    Name = "Create Windows Web App",
+                    Category = "Visual ARM [Windows]",
+                    Name = "Create Windows Classic Web App",
                     Verb = "PUT",
-                    Path = "/subscriptions/<subscription>/resourceGroups/<resourcegroup>/providers/Microsoft.Web/sites/<sitename>?stamp=<stamp>&api-version=<api-version>",
+                    Path = "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{name}",
                     Body = 
                         "{" + Environment.NewLine +
-                        "    \"location\": \"<location>\"," + Environment.NewLine +
+                        "    \"location\": \"{location}\"," + Environment.NewLine +
                         "    \"tags\": {" + Environment.NewLine +
-                        "        \"hidden-related:/subscriptions/<subscription>/resourceGroups/<resourcegroup>/providers/Microsoft.Web/serverFarms/<serverfarm>\": \"empty\"" + Environment.NewLine +
+                        "        \"hidden-related:/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/serverFarms/{serverFarmName}\": \"empty\"" + Environment.NewLine +
                         "    }," + Environment.NewLine +
                         "    \"properties\": {" + Environment.NewLine +
-                        "        \"name\": \"<sitename>\"," + Environment.NewLine +
+                        "        \"name\": \"{name}\"," + Environment.NewLine +
                         "        \"siteConfig\": {" + Environment.NewLine +
                         "            \"appSettings\": [" + Environment.NewLine +
                         "            ]" + Environment.NewLine +
                         "        }," + Environment.NewLine +
-                        "        \"serverFarmId\": \"/subscriptions/<subscription>/resourceGroups/<resourcegroup>/providers/Microsoft.Web/serverFarms/<serverfarm>\"," + Environment.NewLine +
+                        "        \"serverFarmId\": \"/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/serverFarms/{serverFarmName}\"," + Environment.NewLine +
                         "        \"hostingEnvironment\": \"\"" + Environment.NewLine +
                         "    }" + Environment.NewLine +
                         "}"
                 },
                 new Template()
                 {
-                    Category = "Visual ARM [Create ASP + Web App]",
-                    Name = "Create Windows Container",
+                    Category = "Visual ARM [Windows]",
+                    Name = "Create Windows Function App",
                     Verb = "PUT",
-                    Path = "/subscriptions/<subscription>/resourceGroups/<resourcegroup>/providers/Microsoft.Web/sites/<sitename>?stamp=<stamp>&api-version=<api-version>",
+                    Path = "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{name}",
                     Body =
                         "{" + Environment.NewLine +
-                        "    \"location\": \"<location>\"," + Environment.NewLine +
+                        "    \"location\": \"{location}\"," + Environment.NewLine +
                         "    \"tags\": {" + Environment.NewLine +
-                        "        \"hidden-related:/subscriptions/<subscription>/resourceGroups/<resourcegroup>/providers/Microsoft.Web/serverFarms/<serverfarm>\": \"empty\"" + Environment.NewLine +
+                        "        \"hidden-related:/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/serverFarms/{serverFarmName}\": \"empty\"" + Environment.NewLine +
                         "    }," + Environment.NewLine +
                         "    \"properties\": {" + Environment.NewLine +
-                        "        \"name\": \"<sitename>\"," + Environment.NewLine +
+                        "        \"name\": \"{name}\"," + Environment.NewLine +
+                        "        \"kind\": \"functionapp\"," + Environment.NewLine +
+                        "        \"siteConfig\": {" + Environment.NewLine +
+                        "            \"appSettings\": [" + Environment.NewLine +
+                        "                { \"name\": \"FUNCTIONS_EXTENSION_VERSION\", \"value\": \"~4\" }" + Environment.NewLine +
+                        "                { \"name\": \"FUNCTIONS_WORKER_RUNTIME\", \"value\": \"java\" }" + Environment.NewLine +
+                        "                { \"name\": \"AzureWebJobsStorage\", \"value\": \"DefaultEndpointsProtocol=https;AccountName={accountName};AccountKey={accountKey};EndpointSuffix=core.windows.net\" }" + Environment.NewLine +
+                        "            ]," + Environment.NewLine +
+                        "            \"javaVersion\": \"17\"" + Environment.NewLine +
+                        "        }," + Environment.NewLine +
+                        "        \"serverFarmId\": \"/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/serverFarms/{serverFarmName}\"," + Environment.NewLine +
+                        "        \"hostingEnvironment\": \"\"" + Environment.NewLine +
+                        "    }" + Environment.NewLine +
+                        "}"
+                },
+                new Template()
+                {
+                    Category = "Visual ARM [Windows Container]",
+                    Name = "Create Windows Container Web App",
+                    Verb = "PUT",
+                    Path = "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{name}",
+                    Body =
+                        "{" + Environment.NewLine +
+                        "    \"location\": \"{location}\"," + Environment.NewLine +
+                        "    \"tags\": {" + Environment.NewLine +
+                        "        \"hidden-related:/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/serverFarms/{serverFarmName}\": \"empty\"" + Environment.NewLine +
+                        "    }," + Environment.NewLine +
+                        "    \"properties\": {" + Environment.NewLine +
+                        "        \"name\": \"{name}\"," + Environment.NewLine +
                         "        \"siteConfig\": {" + Environment.NewLine +
                         "            \"appSettings\": [" + Environment.NewLine +
                         "                {" + Environment.NewLine +
@@ -340,25 +367,47 @@ namespace Vano.Tools.Azure
                         "            \"appCommandLine\": \"\"," + Environment.NewLine +
                         "            \"windowsFxVersion\": \"DOCKER|mcr.microsoft.com/azure-app-service/windows/aspnet:4.7.2-windowsservercore-ltsc2019\"" + Environment.NewLine +
                         "        }," + Environment.NewLine +
-                        "        \"serverFarmId\": \"/subscriptions/<subscription>/resourceGroups/<resourcegroup>/providers/Microsoft.Web/serverFarms/<serverfarm>\"," + Environment.NewLine +
+                        "        \"serverFarmId\": \"/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/serverFarms/{serverFarmName}\"," + Environment.NewLine +
                         "        \"hostingEnvironment\": \"\"" + Environment.NewLine +
                         "    }" + Environment.NewLine +
                         "}"
                 },
                 new Template()
                 {
-                    Category = "Visual ARM [Create ASP + Web App]",
-                    Name = "Create Linux Container",
+                    Category = "Visual ARM [Windows Container]",
+                    Name = "Create Windows Krypton Web App",
                     Verb = "PUT",
-                    Path = "/subscriptions/<subscription>/resourceGroups/<resourcegroup>/providers/Microsoft.Web/sites/<sitename>?stamp=<stamp>&api-version=<api-version>",
+                    Path = "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{name}",
                     Body =
                         "{" + Environment.NewLine +
-                        "    \"location\": \"<location>\"," + Environment.NewLine +
+                        "    \"location\": \"{location}\"," + Environment.NewLine +
                         "    \"tags\": {" + Environment.NewLine +
-                        "        \"hidden-related:/subscriptions/<subscription>/resourceGroups/<resourcegroup>/providers/Microsoft.Web/serverFarms/<serverfarm>\": \"empty\"" + Environment.NewLine +
+                        "        \"hidden-related:/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/serverFarms/{serverFarmName}\": \"empty\"" + Environment.NewLine +
                         "    }," + Environment.NewLine +
                         "    \"properties\": {" + Environment.NewLine +
-                        "        \"name\": \"<sitename>\"," + Environment.NewLine +
+                        "        \"name\": \"{name}\"," + Environment.NewLine +
+                        "        \"siteConfig\": {" + Environment.NewLine +
+                        "            \"windowsFxVersion\": \"ASPNET|8.0\"" + Environment.NewLine +
+                        "        }," + Environment.NewLine +
+                        "        \"serverFarmId\": \"/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/serverFarms/{serverFarmName}\"," + Environment.NewLine +
+                        "        \"hostingEnvironment\": \"\"" + Environment.NewLine +
+                        "    }" + Environment.NewLine +
+                        "}"
+                },
+                new Template()
+                {
+                    Category = "Visual ARM [Linux]",
+                    Name = "Create Linux Web App",
+                    Verb = "PUT",
+                    Path = "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{name}",
+                    Body =
+                        "{" + Environment.NewLine +
+                        "    \"location\": \"{location}\"," + Environment.NewLine +
+                        "    \"tags\": {" + Environment.NewLine +
+                        "        \"hidden-related:/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/serverFarms/{serverFarmName}\": \"empty\"" + Environment.NewLine +
+                        "    }," + Environment.NewLine +
+                        "    \"properties\": {" + Environment.NewLine +
+                        "        \"name\": \"{name}\"," + Environment.NewLine +
                         "        \"siteConfig\": {" + Environment.NewLine +
                         "            \"appSettings\": [" + Environment.NewLine +
                         "                {" + Environment.NewLine +
@@ -369,7 +418,7 @@ namespace Vano.Tools.Azure
                         "            \"appCommandLine\": \"\"," + Environment.NewLine +
                         "            \"linuxFxVersion\": \"DOCKER|tomcat:9.0\"" + Environment.NewLine +
                         "        }," + Environment.NewLine +
-                        "        \"serverFarmId\": \"/subscriptions/<subscription>/resourceGroups/<resourcegroup>/providers/Microsoft.Web/serverFarms/<serverfarm>\"," + Environment.NewLine +
+                        "        \"serverFarmId\": \"/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/serverFarms/{serverFarmName}\"," + Environment.NewLine +
                         "        \"hostingEnvironment\": \"\"" + Environment.NewLine +
                         "    }" + Environment.NewLine +
                         "}"
@@ -378,43 +427,43 @@ namespace Vano.Tools.Azure
                 /* Create Web App Slots */
                 new Template()
                 {
-                    Category = "Visual ARM [Create ASP + Web App]",
-                    Name = "Create Windows Web App Slot",
+                    Category = "Visual ARM [Windows]",
+                    Name = "Create Windows Classic Web App Slot",
                     Verb = "PUT",
-                    Path = "/subscriptions/<subscription>/resourceGroups/<resourcegroup>/providers/Microsoft.Web/sites/<sitename>/slots/{slotname}?stamp=<stamp>&api-version=<api-version>",
+                    Path = "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{name}/slots/{slotname}",
                     Body =
                         "{" + Environment.NewLine +
-                        "    \"location\": \"<location>\"," + Environment.NewLine +
+                        "    \"location\": \"{location}\"," + Environment.NewLine +
                         "    \"tags\": {" + Environment.NewLine +
-                        "        \"hidden-related:/subscriptions/<subscription>/resourceGroups/<resourcegroup>/providers/Microsoft.Web/serverFarms/<serverfarm>\": \"empty\"" + Environment.NewLine +
+                        "        \"hidden-related:/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/serverFarms/{serverFarmName}\": \"empty\"" + Environment.NewLine +
                         "    }," + Environment.NewLine +
                         "    \"properties\": {" + Environment.NewLine +
-                        "        \"name\": \"<sitename>({slotname})\"," + Environment.NewLine +
+                        "        \"name\": \"{name}({slotname})\"," + Environment.NewLine +
                         "        \"siteConfig\": {" + Environment.NewLine +
                         "            \"appSettings\": [" + Environment.NewLine +
                         "                {" + Environment.NewLine +
                         "                }" + Environment.NewLine +
                         "            ]" + Environment.NewLine +
                         "        }," + Environment.NewLine +
-                        "        \"serverFarmId\": \"/subscriptions/<subscription>/resourceGroups/<resourcegroup>/providers/Microsoft.Web/serverFarms/<serverfarm>\"," + Environment.NewLine +
+                        "        \"serverFarmId\": \"/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/serverFarms/{serverFarmName}\"," + Environment.NewLine +
                         "        \"hostingEnvironment\": \"\"" + Environment.NewLine +
                         "    }" + Environment.NewLine +
                         "}"
                 },
                 new Template()
                 {
-                    Category = "Visual ARM [Create ASP + Web App]",
-                    Name = "Create Windows Container Slot",
+                    Category = "Visual ARM [Windows Container]",
+                    Name = "Create Windows Container Web App Slot",
                     Verb = "PUT",
-                    Path = "/subscriptions/<subscription>/resourceGroups/<resourcegroup>/providers/Microsoft.Web/sites/<sitename>/slots/{slotname}?stamp=<stamp>&api-version=<api-version>",
+                    Path = "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{name}/slots/{slotname}",
                     Body =
                         "{" + Environment.NewLine +
-                        "    \"location\": \"<location>\"," + Environment.NewLine +
+                        "    \"location\": \"{location}\"," + Environment.NewLine +
                         "    \"tags\": {" + Environment.NewLine +
-                        "        \"hidden-related:/subscriptions/<subscription>/resourceGroups/<resourcegroup>/providers/Microsoft.Web/serverFarms/<serverfarm>\": \"empty\"" + Environment.NewLine +
+                        "        \"hidden-related:/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/serverFarms/{serverFarmName}\": \"empty\"" + Environment.NewLine +
                         "    }," + Environment.NewLine +
                         "    \"properties\": {" + Environment.NewLine +
-                        "        \"name\": \"<sitename>({slotname})\"," + Environment.NewLine +
+                        "        \"name\": \"{name}({slotname})\"," + Environment.NewLine +
                         "        \"siteConfig\": {" + Environment.NewLine +
                         "            \"appSettings\": [" + Environment.NewLine +
                         "                {" + Environment.NewLine +
@@ -425,25 +474,47 @@ namespace Vano.Tools.Azure
                         "            \"appCommandLine\": \"\"," + Environment.NewLine +
                         "            \"windowsFxVersion\": \"DOCKER|mcr.microsoft.com/azure-app-service/windows/aspnet:4.7.2-windowsservercore-ltsc2019\"" + Environment.NewLine +
                         "        }," + Environment.NewLine +
-                        "        \"serverFarmId\": \"/subscriptions/<subscription>/resourceGroups/<resourcegroup>/providers/Microsoft.Web/serverFarms/<serverfarm>\"," + Environment.NewLine +
+                        "        \"serverFarmId\": \"/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/serverFarms/{serverFarmName}\"," + Environment.NewLine +
                         "        \"hostingEnvironment\": \"\"" + Environment.NewLine +
                         "    }" + Environment.NewLine +
                         "}"
                 },
                 new Template()
                 {
-                    Category = "Visual ARM [Create ASP + Web App]",
-                    Name = "Create Linux Container Slot",
+                    Category = "Visual ARM [Windows Container]",
+                    Name = "Create Windows Krypton Web App Slot",
                     Verb = "PUT",
-                    Path = "/subscriptions/<subscription>/resourceGroups/<resourcegroup>/providers/Microsoft.Web/sites/<sitename>/slots/{slotname}?stamp=<stamp>&api-version=<api-version>",
+                    Path = "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{name}/slots/{slotname}",
                     Body =
                         "{" + Environment.NewLine +
-                        "    \"location\": \"<location>\"," + Environment.NewLine +
+                        "    \"location\": \"{location}\"," + Environment.NewLine +
                         "    \"tags\": {" + Environment.NewLine +
-                        "        \"hidden-related:/subscriptions/<subscription>/resourceGroups/<resourcegroup>/providers/Microsoft.Web/serverFarms/<serverfarm>\": \"empty\"" + Environment.NewLine +
+                        "        \"hidden-related:/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/serverFarms/{serverFarmName}\": \"empty\"" + Environment.NewLine +
                         "    }," + Environment.NewLine +
                         "    \"properties\": {" + Environment.NewLine +
-                        "        \"name\": \"<sitename>({slotname})\"," + Environment.NewLine +
+                        "        \"name\": \"{name}({slotname})\"," + Environment.NewLine +
+                        "        \"siteConfig\": {" + Environment.NewLine +
+                        "            \"windowsFxVersion\": \"ASPNET|8.0\"" + Environment.NewLine +
+                        "        }," + Environment.NewLine +
+                        "        \"serverFarmId\": \"/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/serverFarms/{serverFarmName}\"," + Environment.NewLine +
+                        "        \"hostingEnvironment\": \"\"" + Environment.NewLine +
+                        "    }" + Environment.NewLine +
+                        "}"
+                },
+                new Template()
+                {
+                    Category = "Visual ARM [Linux]",
+                    Name = "Create Linux Web App Slot",
+                    Verb = "PUT",
+                    Path = "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{name}/slots/{slotname}",
+                    Body =
+                        "{" + Environment.NewLine +
+                        "    \"location\": \"{location}\"," + Environment.NewLine +
+                        "    \"tags\": {" + Environment.NewLine +
+                        "        \"hidden-related:/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/serverFarms/{serverFarmName}\": \"empty\"" + Environment.NewLine +
+                        "    }," + Environment.NewLine +
+                        "    \"properties\": {" + Environment.NewLine +
+                        "        \"name\": \"{name}({slotname})\"," + Environment.NewLine +
                         "        \"siteConfig\": {" + Environment.NewLine +
                         "            \"appSettings\": [" + Environment.NewLine +
                         "                {" + Environment.NewLine +
@@ -454,7 +525,7 @@ namespace Vano.Tools.Azure
                         "            \"appCommandLine\": \"\"," + Environment.NewLine +
                         "            \"linuxFxVersion\": \"DOCKER|tomcat:9.0\"" + Environment.NewLine +
                         "        }," + Environment.NewLine +
-                        "        \"serverFarmId\": \"/subscriptions/<subscription>/resourceGroups/<resourcegroup>/providers/Microsoft.Web/serverFarms/<serverfarm>\"," + Environment.NewLine +
+                        "        \"serverFarmId\": \"/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/serverFarms/{serverFarmName}\"," + Environment.NewLine +
                         "        \"hostingEnvironment\": \"\"" + Environment.NewLine +
                         "    }" + Environment.NewLine +
                         "}"
@@ -463,70 +534,94 @@ namespace Vano.Tools.Azure
                 /* Common Tasks */
                 new Template()
                 {
-                    Category = "Visual ARM [Common Tasks]",
+                    Category = "Visual ARM [Common]",
                     Name = "List Web Apps",
                     Verb = "GET",
-                    Path = "/subscriptions/<subscription>/resourceGroups/<resourcegroup>/providers/Microsoft.Web/sites?stamp=<stamp>&api-version=<api-version>",
+                    Path = "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites",
                     Body = ""
                 },
                 new Template()
                 {
-                    Category = "Visual ARM [Common Tasks]",
+                    Category = "Visual ARM [Common]",
                     Name = "Stop Web App",
                     Verb = "POST",
-                    Path = "/subscriptions/<subscription>/resourceGroups/<resourcegroup>/providers/Microsoft.Web/sites/<sitename>/stop?stamp=<stamp>&api-version=<api-version>",
+                    Path = "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{name}/stop",
                     Body = ""
                 },
                 new Template()
                 {
-                    Category = "Visual ARM [Common Tasks]",
+                    Category = "Visual ARM [Common]",
                     Name = "Start Web App",
                     Verb = "Verb",
-                    Path = "/subscriptions/<subscription>/resourceGroups/<resourcegroup>/providers/Microsoft.Web/sites/<sitename>/start?stamp=<stamp>&api-version=<api-version>",
+                    Path = "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{name}/start",
                     Body = ""
                 },
                 new Template()
                 {
-                    Category = "Visual ARM [Common Tasks]",
+                    Category = "Visual ARM [Common]",
                     Name = "Get Site Config",
                     Verb = "GET",
-                    Path = "/subscriptions/<subscription>/resourceGroups/<resourcegroup>/providers/Microsoft.Web/sites/<sitename>/config?stamp=<stamp>&api-version=<api-version>",
+                    Path = "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{name}/config",
                     Body = ""
                 },
                 new Template()
                 {
-                    Category = "Visual ARM [Common Tasks]",
+                    Category = "Visual ARM [Common]",
                     Name = "Get App Settings",
                     Verb = "POST",
-                    Path = "/subscriptions/<subscription>/resourceGroups/<resourcegroup>/providers/Microsoft.Web/sites/<sitename>/config/appsettings/list?stamp=<stamp>&api-version=<api-version>",
+                    Path = "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{name}/config/appsettings/list",
                     Body = ""
                 },
                 new Template()
                 {
-                    Category = "Visual ARM [Common Tasks]",
+                    Category = "Visual ARM [Common]",
                     Name = "Get Publishing credentials",
                     Verb = "POST",
-                    Path = "/subscriptions/<subscription>/resourceGroups/<resourcegroup>/providers/Microsoft.Web/sites/<sitename>/config/publishingcredentials/list?stamp=<stamp>&api-version=<api-version>",
+                    Path = "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{name}/config/publishingcredentials/list",
                     Body = ""
+                },
+                new Template()
+                {
+                    Category = "Visual ARM [Common]",
+                    Name = "Get BasicAuth publishing credentials",
+                    Verb = "GET",
+                    Path = "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{name}/basicPublishingCredentialsPolicies/scm",
+                    Body = ""
+                },
+                new Template()
+                {
+                    Category = "Visual ARM [Common]",
+                    Name = "Enable BasicAuth publishing credentials",
+                    Verb = "PUT",
+                    Path = "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{name}/basicPublishingCredentialsPolicies/scm",
+                    Body =
+                        "{" + Environment.NewLine +
+                        "  \"name\": \"scm\"," + Environment.NewLine +
+                        "  \"type\": \"Microsoft.Web/sites/basicPublishingCredentialsPolicies\"," + Environment.NewLine +
+                        "  \"location\": \"{location}\"," + Environment.NewLine +
+                        "  \"properties\": {" + Environment.NewLine +
+                        "    \"allow\": true" + Environment.NewLine +
+                        "  }" + Environment.NewLine +
+                        "}"
                 },
                 /* Networking Tasks */
                 new Template()
                 {
-                    Category = "Visual ARM [Networking Tasks]",
+                    Category = "Visual ARM [Networking]",
                     Name = "Get VNet details",
                     Verb = "GET",
-                    Path = "/subscriptions/<subscription>/resourceGroups/<resourcegroup>/providers/Microsoft.Network/virtualNetworks/{vnetname}?stamp=<stamp>&api-version=2018-12-01",
+                    Path = "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/virtualNetworks/{vnetname}",
                     Body = ""
                 },
                 new Template()
                 {
-                    Category = "Visual ARM [Networking Tasks]",
+                    Category = "Visual ARM [Networking]",
                     Name = "Create Swift connection",
                     Verb = "PUT",
-                    Path = "/subscriptions/<subscription>/resourceGroups/<resourcegroup>/providers/Microsoft.Web/sites/<sitename>/networkConfig/VirtualNetwork?stamp=<stamp>&api-version=2016-08-01",
+                    Path = "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{name}/networkConfig/VirtualNetwork",
                     Body =
                         "{" + Environment.NewLine +
-                        "  \"id\": \"/subscriptions/<subscription>/resourceGroups/<resourcegroup>/providers/Microsoft.Web/sites/<sitename>/config/virtualNetwork\"," + Environment.NewLine +
+                        "  \"id\": \"/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{name}/config/virtualNetwork\"," + Environment.NewLine +
                         "  \"name\": \"virtualNetwork\"," + Environment.NewLine +
                         "  \"type\": \"Microsoft.Web/sites/config\"," + Environment.NewLine +
                         "  \"properties\": {" + Environment.NewLine +
@@ -537,13 +632,13 @@ namespace Vano.Tools.Azure
                 },
                 new Template()
                 {
-                    Category = "Visual ARM [Networking Tasks]",
+                    Category = "Visual ARM [Networking]",
                     Name = "Remove Swift connection",
                     Verb = "DELETE",
-                    Path = "/subscriptions/<subscription>/resourceGroups/<resourcegroup>/providers/Microsoft.Web/sites/<sitename>/networkConfig/VirtualNetwork?stamp=<stamp>&api-version=2016-08-01",
+                    Path = "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{name}/networkConfig/VirtualNetwork",
                     Body =
                         "{" + Environment.NewLine +
-                        "  \"id\": \"/subscriptions/<subscription>/resourceGroups/<resourcegroup>/providers/Microsoft.Web/sites/<sitename>/config/virtualNetwork\"," + Environment.NewLine +
+                        "  \"id\": \"/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{name}/config/virtualNetwork\"," + Environment.NewLine +
                         "  \"name\": \"virtualNetwork\"," + Environment.NewLine +
                         "  \"type\": \"Microsoft.Web/sites/config\"," + Environment.NewLine +
                         "  \"properties\": {" + Environment.NewLine +
@@ -555,10 +650,10 @@ namespace Vano.Tools.Azure
                 /* Hyper-V Container Tasks */
                 new Template()
                 {
-                    Category = "Visual ARM [Windows Container Tasks]",
+                    Category = "Visual ARM [Windows Container]",
                     Name = "Change Windows Container image",
                     Verb = "PUT",
-                    Path = "/subscriptions/<subscription>/resourceGroups/<resourcegroup>/providers/Microsoft.Web/sites/<sitename>/config/web?stamp=<stamp>&api-version=<api-version>",
+                    Path = "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{name}/config/web",
                     Body =
                         "{" + Environment.NewLine +
                         "    \"properties\":{" + Environment.NewLine +
@@ -568,19 +663,19 @@ namespace Vano.Tools.Azure
                 },
                 new Template()
                 {
-                    Category = "Visual ARM [Windows Container Tasks]",
+                    Category = "Visual ARM [Windows Container]",
                     Name = "Add SMB mapping to Windows Container [BYOS]",
                     Verb = "PUT",
-                    Path = "/subscriptions/<subscription>/resourceGroups/<resourcegroup>/providers/Microsoft.Web/sites/<sitename>/config/AzureStorageAccounts?stamp=<stamp>&api-version=2019-08-01",
+                    Path = "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{name}/config/AzureStorageAccounts",
                     Body =
                         "{" + Environment.NewLine +
                         "  \"properties\": {" + Environment.NewLine +
-                        "    \"<sharename>\": {" + Environment.NewLine +
+                        "    \"{sharename}\": {" + Environment.NewLine +
                         "      \"type\": \"AzureFiles\"," + Environment.NewLine +
-                        "      \"accountname\": \"<storageaccount-name>\"," + Environment.NewLine +
-                        "      \"accesskey\": \"<storageaccount-accesskey>\"," + Environment.NewLine +
-                        "      \"sharename\": \"<sharename>\"," + Environment.NewLine +
-                        "      \"mountpath\": \"/<sharename>\"" + Environment.NewLine +
+                        "      \"accountname\": \"{storageaccount-name}\"," + Environment.NewLine +
+                        "      \"accesskey\": \"{storageaccount-accesskey}\"," + Environment.NewLine +
+                        "      \"sharename\": \"{sharename}\"," + Environment.NewLine +
+                        "      \"mountpath\": \"/{sharename}\"" + Environment.NewLine +
                         "    }" + Environment.NewLine +
                         "  }" + Environment.NewLine +
                         "}"

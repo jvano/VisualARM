@@ -1,0 +1,135 @@
+<?xml version="1.0"?>
+<TemplateDocument xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Templates>
+    <Template>
+      <Category>Visual ARM [Windows]</Category>
+      <Name>Create Windows ASP - PremiumV3 Large</Name>
+      <Verb>PUT</Verb>
+      <Path>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/serverFarms/{serverFarmName}</Path>
+      <Body>{
+    "sku": {
+        "name": "P3v3",
+        "tier": "PremiumV3"
+    },
+    "kind": "app",
+    "location": "{location}",
+    "properties": {
+        "name": "{serverFarmName}",
+        "workerSizeId": "0",
+        "numberOfWorkers": "1",
+        "hostingEnvironment": ""
+    }
+}</Body>
+    </Template>
+    <Template>
+      <Category>Visual ARM [Windows]</Category>
+      <Name>Create Windows ASP - PremiumV3 Medium</Name>
+      <Verb>PUT</Verb>
+      <Path>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/serverFarms/{serverFarmName}</Path>
+      <Body>{
+    "sku": {
+        "name": "P2v3",
+        "tier": "PremiumV3"
+    },
+    "kind": "app",
+    "location": "{location}",
+    "properties": {
+        "name": "{serverFarmName}",
+        "workerSizeId": "0",
+        "numberOfWorkers": "1",
+        "hostingEnvironment": ""
+    }
+}</Body>
+    </Template>
+    <Template>
+      <Category>Visual ARM [Windows]</Category>
+      <Name>Create Windows ASP - PremiumV3 Small</Name>
+      <Verb>PUT</Verb>
+      <Path>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/serverFarms/{serverFarmName}</Path>
+      <Body>{
+    "sku": {
+        "name": "P1v3",
+        "tier": "PremiumV3"
+    },
+    "kind": "app",
+    "location": "{location}",
+    "properties": {
+        "name": "{serverFarmName}",
+        "workerSizeId": "0",
+        "numberOfWorkers": "1",
+        "hostingEnvironment": ""
+    }
+}</Body>
+    </Template>
+    <Template>
+      <Category>Visual ARM [Windows]</Category>
+      <Name>Create Windows Classic Web App</Name>
+      <Verb>PUT</Verb>
+      <Path>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{name}</Path>
+      <Body>{
+    "location": "{location}",
+    "tags": {
+        "hidden-related:/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/serverFarms/{serverFarmName}": "empty"
+    },
+    "properties": {
+        "name": "{name}",
+        "siteConfig": {
+            "appSettings": [
+            ]
+        },
+        "serverFarmId": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/serverFarms/{serverFarmName}",
+        "hostingEnvironment": ""
+    }
+}</Body>
+    </Template>
+    <Template>
+      <Category>Visual ARM [Windows]</Category>
+      <Name>Create Windows Classic Web App Slot</Name>
+      <Verb>PUT</Verb>
+      <Path>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{name}/slots/{slotname}</Path>
+      <Body>{
+    "location": "{location}",
+    "tags": {
+        "hidden-related:/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/serverFarms/{serverFarmName}": "empty"
+    },
+    "properties": {
+        "name": "{name}({slotname})",
+        "siteConfig": {
+            "appSettings": [
+                {
+                }
+            ]
+        },
+        "serverFarmId": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/serverFarms/{serverFarmName}",
+        "hostingEnvironment": ""
+    }
+}</Body>
+    </Template>
+    <Template>
+      <Category>Visual ARM [Windows]</Category>
+      <Name>Create Windows Function App</Name>
+      <Verb>PUT</Verb>
+      <Path>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{name}</Path>
+      <Body>{
+    "location": "{location}",
+    "tags": {
+        "hidden-related:/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/serverFarms/{serverFarmName}": "empty"
+    },
+    "properties": {
+        "name": "{name}",
+        "kind": "functionapp",
+        "siteConfig": {
+            "appSettings": [
+                { "name": "FUNCTIONS_EXTENSION_VERSION", "value": "~4" }
+                { "name": "FUNCTIONS_WORKER_RUNTIME", "value": "java" }
+                { "name": "AzureWebJobsStorage", "value": "DefaultEndpointsProtocol=https;AccountName={accountName};AccountKey={accountKey};EndpointSuffix=core.windows.net" }
+            ],
+            "javaVersion": "17"
+        },
+        "serverFarmId": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/serverFarms/{serverFarmName}",
+        "hostingEnvironment": ""
+    }
+}</Body>
+    </Template>
+  </Templates>
+</TemplateDocument>

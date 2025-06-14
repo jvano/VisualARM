@@ -59,10 +59,13 @@ namespace Vano.Tools.Azure.Model
 
         public void Save()
         {
-            XmlSerializer serializer = new XmlSerializer(typeof(TemplateDocument));
-
             string filePath = GetTemplatesFilePath();
+            Save(filePath);
+        }
 
+        public void Save(string filePath)
+        {
+            XmlSerializer serializer = new XmlSerializer(typeof(TemplateDocument));    
             using (FileStream stream = File.OpenWrite(filePath))
             {
                 serializer.Serialize(stream, this);

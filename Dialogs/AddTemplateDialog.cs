@@ -11,7 +11,7 @@ namespace Vano.Tools.Azure.Dialogs
 
             this.templateNameTextBox.Text = "Get Web App";
             this.verbsComboBox.SelectedIndex = 0;
-            this.pathTextBox.Text = "/subscriptions/<subscription>/resourceGroups/<resourcegroup>/providers/Microsoft.Web/sites/<sitename>?api-version=2016-09-01";
+            this.pathTextBox.Text = "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{name}";
         }
 
         public Template Template

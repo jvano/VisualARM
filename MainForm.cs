@@ -332,6 +332,24 @@ namespace Vano.Tools.Azure
                     Trace.WriteLine(string.Empty);
                 }
 
+                if (!string.IsNullOrEmpty(body))
+                {
+                    IEnumerable<string> parametersInBody = FindMissingParameters(body).Distinct();
+                    if (parametersInBody.Count() > 0)
+                    {
+                        valid = false;
+
+                        Trace.WriteLine("BODY: The following parameters require a value:");
+
+                        foreach (string parameter in parametersInBody)
+                        {
+                            Trace.WriteLine("    " + parameter);
+                        }
+
+                        Trace.WriteLine(string.Empty);
+                    }
+                }
+
                 if (!valid)
                 {
                     return;
@@ -431,13 +449,6 @@ namespace Vano.Tools.Azure
         private IEnumerable<string> FindMissingParameters(string str)
         {
             List<string> parameters = new List<string>();
-            foreach (Match m in Regex.Matches(input: str, pattern: @"<[\w-]+>"))
-            {
-                if (!parameters.Contains(m.Value))
-                {
-                    parameters.Add(m.Value);
-                }
-            }
 
             foreach (Match m in Regex.Matches(input: str, pattern: @"{[\w-]+}"))
             {
@@ -918,6 +929,11 @@ namespace Vano.Tools.Azure
             foreach (TemplateCategory category in categories)
             {
                 templatesToolStripComboBox.Items.Add(category);
+
+                // Useful if we want to save the templates loaded from Swagger to our own template format.
+                // TemplateDocument doc = new TemplateDocument(category.Templates.OrderBy(t => t.Name));
+                // string path = System.IO.Path.Combine(System.IO.Path.GetTempPath(), category.Name + ".xml");
+                // doc.Save(path);
             }
 
             if (templatesToolStripComboBox.Items.Count > 0)
@@ -942,19 +958,20 @@ namespace Vano.Tools.Azure
             TemplateCategory category = templatesToolStripComboBox.SelectedItem as TemplateCategory;
             if (category != null)
             {
-                IEnumerable<Template> templates = category.Templates;
+                IEnumerable<Template> templates = category.Templates.OrderBy(t => t.Name);
 
                 if (!string.IsNullOrEmpty(filterTemplateToolStripTextBox.Text))
                 {
                     string filter = filterTemplateToolStripTextBox.Text;
 
-                    templates = templates.Where(template => 
-                        string.IsNullOrEmpty(template.Summary) ? 
-                        template.Name.IndexOf(filter, StringComparison.OrdinalIgnoreCase) != -1 :
-                        template.Name.IndexOf(filter, StringComparison.OrdinalIgnoreCase) != -1 || template.Summary.IndexOf(filter, StringComparison.OrdinalIgnoreCase) != -1);
+                    templates = templates
+                        .Where(template => 
+                            string.IsNullOrEmpty(template.Summary) ? 
+                            template.Name.IndexOf(filter, StringComparison.OrdinalIgnoreCase) != -1 :
+                            template.Name.IndexOf(filter, StringComparison.OrdinalIgnoreCase) != -1 || template.Summary.IndexOf(filter, StringComparison.OrdinalIgnoreCase) != -1);
                 }
 
-                templateListBox.DataSource = new BindingSource(templates, null);
+                templateListBox.DataSource = new BindingSource(templates.ToList(), null);
             }
         }
 
@@ -963,18 +980,11 @@ namespace Vano.Tools.Azure
             Template template = templateListBox.SelectedItem as Template;
             if (template != null)
             {
-                string defaultApiVersion = _client.ApiVersion;
-                if (_connectionType == ConnectionType.AzureResourceManagerProxy)
-                {
-                    // GeoProxy will use this and stamp querysting parameter to forward requests
-                    defaultApiVersion += "-privatepreview";
-                }
+                 string defaultApiVersion = _client.ApiVersion;
 
-                string geoProxyStampParameter = !string.IsNullOrEmpty(_privateGeoEndpoint) ? "stamp=" + _privateGeoEndpoint + "&" : "";
-
-                string resourceGroup = "<resourcegroup>";
-                string location = "<location>";
-                string subscription = this.SelectedSubscription?.Id ?? "<subscription>";
+                string resourceGroup = "{resourceGroupName}";
+                string location = "{location}";
+                string subscription = this.SelectedSubscription?.Id ?? "{subscriptionId}";
                 string defaultResourceGroup = this.SelectedResourceGroup?.Name;
                 if (!string.IsNullOrEmpty(defaultResourceGroup))
                 {
@@ -985,36 +995,32 @@ namespace Vano.Tools.Azure
                 }
 
                 verbToolStripComboBox.Text = template.Verb;
-                pathToolStripTextBox.Text = template.Path
-                    .Replace("<subscription>", subscription)
+                string path = template.Path
                     .Replace("{subscriptionId}", subscription)
-                    .Replace("<resourcegroup>", resourceGroup)
-                    .Replace("{resourceGroupName}", resourceGroup)
-                    .Replace("stamp=<stamp>&", geoProxyStampParameter)
-                    .Replace("<api-version>", defaultApiVersion);
+                    .Replace("{resourceGroupName}", resourceGroup);
 
-                if (_connectionType == ConnectionType.AzureResourceManagerProxy)
+                if (path.Contains("api-version="))
                 {
-                    if(!pathToolStripTextBox.Text.Contains("?api-version="))
+                    if (_connectionType == ConnectionType.AzureResourceManagerProxy)
                     {
-                        pathToolStripTextBox.Text += $"?stamp={geoProxyStampParameter}&api-version={defaultApiVersion}";
+                        path.Replace("api-version=", $"stamp={_privateGeoEndpoint}&api-version={defaultApiVersion}");
                     }
+                }
+                else if (path.Contains("?"))
+                {
+                    path += _connectionType == ConnectionType.AzureResourceManagerProxy ? $"&stamp={_privateGeoEndpoint}&api-version={defaultApiVersion}" : $"&api-version={defaultApiVersion}";
                 }
                 else
                 {
-                    if (!pathToolStripTextBox.Text.Contains("?api-version="))
-                    {
-                        pathToolStripTextBox.Text += $"?api-version={defaultApiVersion}";
-                    }
+                    path += _connectionType == ConnectionType.AzureResourceManagerProxy ? $"?stamp={_privateGeoEndpoint}&api-version={defaultApiVersion}" : $"?api-version={defaultApiVersion}";
                 }
+
+                pathToolStripTextBox.Text = path;
 
                 bodyColoredTextBox.Text = string.IsNullOrWhiteSpace(template.Body) ? string.Empty :
                     template.Body
-                        .Replace("<subscription>", subscription)
                         .Replace("{subscriptionId}", subscription)
-                        .Replace("<resourcegroup>", resourceGroup)
                         .Replace("{resourceGroupName}", resourceGroup)
-                        .Replace("<location>", location)
                         .Replace("{location}", location);
 
                 if (MessageBox.Show(string.Format("Would you like to run the '{0}' template?", template.Name), this.Text, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question) == DialogResult.Yes)
@@ -1102,20 +1108,18 @@ namespace Vano.Tools.Azure
                 resourceGroupParameter = this.SelectedResourceGroup.Id;
             }
 
-
             using (SitesBatchDialog dialog = new SitesBatchDialog(resourceGroupParameter, this.bodyColoredTextBox.Text))
             {
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
-
                     decimal numberOfSites = dialog.NumberOfSites;
                     string siteNamePrefix = dialog.SiteNamePrefix;
 
                     for (int i = 0; i < numberOfSites; i++)
                     {
                         string siteName = string.Concat(dialog.SiteNamePrefix, "-", i);
-                        this.pathToolStripTextBox.Text = string.Concat(dialog.ResourceGroup, "/providers/Microsoft.Web/sites/", siteName, "?api-version=2016-09-01");
-                        this.bodyColoredTextBox.Text = dialog.RequestBodyTemplate.Replace("<sitename>", siteName);
+                        this.pathToolStripTextBox.Text = string.Concat(dialog.ResourceGroup, "/providers/Microsoft.Web/sites/", siteName, "?api-version=" + _client.ApiVersion);
+                        this.bodyColoredTextBox.Text = dialog.RequestBodyTemplate.Replace("{name}", siteName);
                         SendRequest();
                     }
                 }

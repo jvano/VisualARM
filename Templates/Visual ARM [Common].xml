@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<TemplateDocument xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Templates>
+    <Template>
+      <Category>Visual ARM [Common]</Category>
+      <Name>Enable BasicAuth publishing credentials</Name>
+      <Verb>PUT</Verb>
+      <Path>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{name}/basicPublishingCredentialsPolicies/scm</Path>
+      <Body>{
+  "name": "scm",
+  "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
+  "location": "{location}",
+  "properties": {
+    "allow": true
+  }
+}</Body>
+    </Template>
+    <Template>
+      <Category>Visual ARM [Common]</Category>
+      <Name>Get App Settings</Name>
+      <Verb>POST</Verb>
+      <Path>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{name}/config/appsettings/list</Path>
+      <Body />
+    </Template>
+    <Template>
+      <Category>Visual ARM [Common]</Category>
+      <Name>Get BasicAuth publishing credentials</Name>
+      <Verb>GET</Verb>
+      <Path>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{name}/basicPublishingCredentialsPolicies/scm</Path>
+      <Body />
+    </Template>
+    <Template>
+      <Category>Visual ARM [Common]</Category>
+      <Name>Get Publishing credentials</Name>
+      <Verb>POST</Verb>
+      <Path>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{name}/config/publishingcredentials/list</Path>
+      <Body />
+    </Template>
+    <Template>
+      <Category>Visual ARM [Common]</Category>
+      <Name>Get Site Config</Name>
+      <Verb>GET</Verb>
+      <Path>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{name}/config</Path>
+      <Body />
+    </Template>
+    <Template>
+      <Category>Visual ARM [Common]</Category>
+      <Name>List Web Apps</Name>
+      <Verb>GET</Verb>
+      <Path>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites</Path>
+      <Body />
+    </Template>
+    <Template>
+      <Category>Visual ARM [Common]</Category>
+      <Name>Start Web App</Name>
+      <Verb>Verb</Verb>
+      <Path>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{name}/start</Path>
+      <Body />
+    </Template>
+    <Template>
+      <Category>Visual ARM [Common]</Category>
+      <Name>Stop Web App</Name>
+      <Verb>POST</Verb>
+      <Path>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{name}/stop</Path>
+      <Body />
+    </Template>
+  </Templates>
+</TemplateDocument>

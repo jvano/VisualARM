@@ -62,6 +62,7 @@
             this.mainProgressBar = new System.Windows.Forms.ProgressBar();
             this.mainSplitContainer = new System.Windows.Forms.SplitContainer();
             this.resourcesSplitContainer = new System.Windows.Forms.SplitContainer();
+            this.resourcesTreeView = new System.Windows.Forms.TreeView();
             this.resourcesTreeProgressBar = new System.Windows.Forms.ProgressBar();
             this.toolStrip4 = new System.Windows.Forms.ToolStrip();
             this.loadResourcesToolStripButton = new System.Windows.Forms.ToolStripButton();
@@ -70,7 +71,6 @@
             this.toolStrip8 = new System.Windows.Forms.ToolStrip();
             this.filterTemplateToolStripTextBox = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripLabel7 = new System.Windows.Forms.ToolStripLabel();
-            this.templateListBox = new System.Windows.Forms.ListBox();
             this.toolStrip6 = new System.Windows.Forms.ToolStrip();
             this.addRecipeToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.templatesToolStripComboBox = new System.Windows.Forms.ToolStripComboBox();
@@ -107,7 +107,7 @@
             this.panel5 = new System.Windows.Forms.Panel();
             this.label4 = new System.Windows.Forms.Label();
             this.requestLogListBox = new System.Windows.Forms.ListBox();
-            this.resourcesTreeView = new System.Windows.Forms.TreeView();
+            this.templateListBox = new System.Windows.Forms.ListBox();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -464,14 +464,26 @@
             // 
             // resourcesSplitContainer.Panel2
             // 
-            this.resourcesSplitContainer.Panel2.Controls.Add(this.toolStrip8);
             this.resourcesSplitContainer.Panel2.Controls.Add(this.templateListBox);
+            this.resourcesSplitContainer.Panel2.Controls.Add(this.toolStrip8);
             this.resourcesSplitContainer.Panel2.Controls.Add(this.toolStrip6);
             this.resourcesSplitContainer.Panel2.Controls.Add(this.panel4);
             this.resourcesSplitContainer.Size = new System.Drawing.Size(346, 820);
             this.resourcesSplitContainer.SplitterDistance = 343;
             this.resourcesSplitContainer.SplitterWidth = 2;
             this.resourcesSplitContainer.TabIndex = 15;
+            // 
+            // resourcesTreeView
+            // 
+            this.resourcesTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.resourcesTreeView.ImageIndex = 0;
+            this.resourcesTreeView.ImageList = this.resourcesImageList;
+            this.resourcesTreeView.Location = new System.Drawing.Point(0, 56);
+            this.resourcesTreeView.Name = "resourcesTreeView";
+            this.resourcesTreeView.SelectedImageIndex = 0;
+            this.resourcesTreeView.Size = new System.Drawing.Size(346, 287);
+            this.resourcesTreeView.TabIndex = 15;
+            this.resourcesTreeView.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.resourcesTreeView_NodeMouseDoubleClick);
             // 
             // resourcesTreeProgressBar
             // 
@@ -551,17 +563,6 @@
             this.toolStripLabel7.Name = "toolStripLabel7";
             this.toolStripLabel7.Size = new System.Drawing.Size(36, 22);
             this.toolStripLabel7.Text = "Filter:";
-            // 
-            // templateListBox
-            // 
-            this.templateListBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.templateListBox.FormattingEnabled = true;
-            this.templateListBox.Location = new System.Drawing.Point(0, 50);
-            this.templateListBox.Margin = new System.Windows.Forms.Padding(2);
-            this.templateListBox.Name = "templateListBox";
-            this.templateListBox.Size = new System.Drawing.Size(346, 425);
-            this.templateListBox.TabIndex = 16;
-            this.templateListBox.DoubleClick += new System.EventHandler(this.templateListBox_DoubleClick);
             // 
             // toolStrip6
             // 
@@ -1039,17 +1040,16 @@
             this.requestLogListBox.TabIndex = 11;
             this.requestLogListBox.DoubleClick += new System.EventHandler(this.requestLogListBox_DoubleClick);
             // 
-            // resourcesTreeView
+            // templateListBox
             // 
-            this.resourcesTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.resourcesTreeView.ImageIndex = 0;
-            this.resourcesTreeView.ImageList = this.resourcesImageList;
-            this.resourcesTreeView.Location = new System.Drawing.Point(0, 56);
-            this.resourcesTreeView.Name = "resourcesTreeView";
-            this.resourcesTreeView.SelectedImageIndex = 0;
-            this.resourcesTreeView.Size = new System.Drawing.Size(346, 287);
-            this.resourcesTreeView.TabIndex = 15;
-            this.resourcesTreeView.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.resourcesTreeView_NodeMouseDoubleClick);
+            this.templateListBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.templateListBox.FormattingEnabled = true;
+            this.templateListBox.Location = new System.Drawing.Point(0, 75);
+            this.templateListBox.Margin = new System.Windows.Forms.Padding(2);
+            this.templateListBox.Name = "templateListBox";
+            this.templateListBox.Size = new System.Drawing.Size(346, 400);
+            this.templateListBox.TabIndex = 18;
+            this.templateListBox.DoubleClick += new System.EventHandler(this.templateListBox_DoubleClick);
             // 
             // MainForm
             // 
@@ -1176,7 +1176,6 @@
         private System.Windows.Forms.ToolStripButton loadResourcesToolStripButton;
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.ListBox templateListBox;
         private System.Windows.Forms.ToolStrip toolStrip6;
         private System.Windows.Forms.ToolStripLabel toolStripLabel5;
         private System.Windows.Forms.ToolStripButton addRecipeToolStripButton;
@@ -1218,6 +1217,7 @@
         private System.Windows.Forms.ToolStripLabel toolStripLabel7;
         private System.Windows.Forms.ToolStripTextBox filterTemplateToolStripTextBox;
         private System.Windows.Forms.TreeView resourcesTreeView;
+        private System.Windows.Forms.ListBox templateListBox;
     }
 }
 

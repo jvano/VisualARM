@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<TemplateDocument xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Templates>
+    <Template>
+      <Category>Visual ARM [Networking]</Category>
+      <Name>Create Swift connection</Name>
+      <Verb>PUT</Verb>
+      <Path>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{name}/networkConfig/VirtualNetwork</Path>
+      <Body>{
+  "id": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{name}/config/virtualNetwork",
+  "name": "virtualNetwork",
+  "type": "Microsoft.Web/sites/config",
+  "properties": {
+    "subnetResourceId": "/subscriptions/{targetsubscription}/resourceGroups/{targetresourcegroup}/providers/Microsoft.Network/virtualNetworks/{targetvnet}/subnets/{targetsubnet}",
+    "swiftSupported": true
+  }
+}</Body>
+    </Template>
+    <Template>
+      <Category>Visual ARM [Networking]</Category>
+      <Name>Get VNet details</Name>
+      <Verb>GET</Verb>
+      <Path>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/virtualNetworks/{vnetname}</Path>
+      <Body />
+    </Template>
+    <Template>
+      <Category>Visual ARM [Networking]</Category>
+      <Name>Remove Swift connection</Name>
+      <Verb>DELETE</Verb>
+      <Path>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{name}/networkConfig/VirtualNetwork</Path>
+      <Body>{
+  "id": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{name}/config/virtualNetwork",
+  "name": "virtualNetwork",
+  "type": "Microsoft.Web/sites/config",
+  "properties": {
+    "subnetResourceId": "/subscriptions/{targetsubscription}/resourceGroups/{targetresourcegroup}/providers/Microsoft.Network/virtualNetworks/{targetvnet}/subnets/{targetsubnet}",
+    "swiftSupported": true
+  }
+}</Body>
+    </Template>
+  </Templates>
+</TemplateDocument>

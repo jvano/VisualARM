@@ -70,7 +70,7 @@ namespace Vano.Tools.Azure
             Func<HttpMessageHandler> handlerFactory = null)
         {
             this.ResouceManagerEndpoint = resourceManagerEndpoint;
-            this.ApiVersion = resourceManagerEndpoint.Contains("dogfood") ? "2024-08-01" : apiVersion;
+            this.ApiVersion = resourceManagerEndpoint.Contains("dogfood") ? "2022-03-01-privatepreview" : apiVersion;
             this.AuthenticationEndpoint = authenticationEndpoint;
             this.AppResourceId = appResourceId;
 
