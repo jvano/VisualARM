@@ -42,10 +42,14 @@ namespace Vano.Tools.Azure.Model
 
         public static TemplateDocument FromFile()
         {
+            string filePath = GetCustomTemplatesFilePath();
+
+            return FromFile(filePath);
+        }
+
+        public static TemplateDocument FromFile(string filePath)
+        {
             XmlSerializer serializer = new XmlSerializer(typeof(TemplateDocument));
-
-            string filePath = GetTemplatesFilePath();
-
             if (!File.Exists(filePath))
             {
                 return null;
@@ -59,29 +63,24 @@ namespace Vano.Tools.Azure.Model
 
         public void Save()
         {
-            string filePath = GetTemplatesFilePath();
+            string filePath = GetCustomTemplatesFilePath();
             Save(filePath);
         }
 
         public void Save(string filePath)
         {
-            XmlSerializer serializer = new XmlSerializer(typeof(TemplateDocument));    
+            XmlSerializer serializer = new XmlSerializer(typeof(TemplateDocument));
             using (FileStream stream = File.OpenWrite(filePath))
             {
                 serializer.Serialize(stream, this);
             }
         }
 
-        private static string GetTemplatesFilePath()
+        public static string GetCustomTemplatesFilePath()
         {
-            string appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            string appFolder = Path.Combine(appData, "AzureResourceManagerClient");
-            if (!Directory.Exists(appFolder))
-            {
-                Directory.CreateDirectory(appFolder);
-            }
+            string customTemplatesFolder = Template.GetCustomTemplatesFolderPath();
 
-            string filePath = Path.Combine(appFolder, "Templates.txt");
+            string filePath = Path.Combine(customTemplatesFolder, "CustomTemplates.xml");
 
             return filePath;
         }
@@ -113,6 +112,54 @@ namespace Vano.Tools.Azure.Model
             return !string.IsNullOrWhiteSpace(Summary) ?
                 this.Name + " - " + this.Summary :
                 this.Name;
+        }
+
+        public static string GetCustomTemplatesFolderPath()
+        {
+            string baseFolder = GetTemplatesRootFolderPath();
+            string customTemplatesFolder = System.IO.Path.Combine(baseFolder, "Templates.Custom");
+            if (!Directory.Exists(customTemplatesFolder))
+            {
+                Directory.CreateDirectory(customTemplatesFolder);
+            }
+
+            return customTemplatesFolder;
+        }
+
+        public static string GetGitHubTemplatesFolder()
+        {
+            string baseFolder = GetTemplatesRootFolderPath();
+            string gitHubTemplatesFolder = System.IO.Path.Combine(baseFolder, "Templates.GitHub");
+            if (!Directory.Exists(gitHubTemplatesFolder))
+            {
+                Directory.CreateDirectory(gitHubTemplatesFolder);
+            }
+
+            return gitHubTemplatesFolder;
+        }
+
+        public static string GetSwaggerTemplatesFolder()
+        {
+            string baseFolder = GetTemplatesRootFolderPath();
+            string swaggerTemplatesFolder = System.IO.Path.Combine(baseFolder, "Templates.Swagger");
+            if (!Directory.Exists(swaggerTemplatesFolder))
+            {
+                Directory.CreateDirectory(swaggerTemplatesFolder);
+            }
+
+            return swaggerTemplatesFolder;
+        }
+
+        public static string GetTemplatesRootFolderPath()
+        {
+            string appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            string appFolder = System.IO.Path.Combine(appData, "VisualARM");
+            if (!Directory.Exists(appFolder))
+            {
+                Directory.CreateDirectory(appFolder);
+            }
+
+            return appFolder;
         }
     }
 }
