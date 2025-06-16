@@ -112,16 +112,13 @@
       <Path>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{name}</Path>
       <Body>{
     "location": "{location}",
-    "tags": {
-        "hidden-related:/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/serverFarms/{serverFarmName}": "empty"
-    },
+    "kind": "functionapp",
     "properties": {
         "name": "{name}",
-        "kind": "functionapp",
         "siteConfig": {
             "appSettings": [
-                { "name": "FUNCTIONS_EXTENSION_VERSION", "value": "~4" }
-                { "name": "FUNCTIONS_WORKER_RUNTIME", "value": "java" }
+                { "name": "FUNCTIONS_EXTENSION_VERSION", "value": "~4" },
+                { "name": "FUNCTIONS_WORKER_RUNTIME", "value": "java" },
                 { "name": "AzureWebJobsStorage", "value": "DefaultEndpointsProtocol=https;AccountName={accountName};AccountKey={accountKey};EndpointSuffix=core.windows.net" }
             ],
             "javaVersion": "17"
