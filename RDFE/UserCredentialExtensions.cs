@@ -15,7 +15,7 @@ namespace Vano.Tools.Azure.RDFE
         public static readonly AADAuthParameter UserAADAuthParameter = new AADAuthParameter()
         {
             AuthorityHost = "https://login.microsoftonline.com/", // Hardcode to Public Azure
-            Scope = "https://management.azure.com/.default",
+            Scope = "https://appservice.azure.com/.default",
             TenantId = "72f988bf-86f1-41af-91ab-2d7cd011db47", // MSFT
         };
 
