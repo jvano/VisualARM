@@ -34,6 +34,7 @@ namespace Vano.Tools.Azure
         private string _privateGeoEndpoint;
         private TemplateDocument _customTemplatesDocument;
         private BindingList<Request> _requests = new BindingList<Request>();
+        private bool _subscriptionSortByDisplayName = true;
         private int MaxRequestsToKeep = 100;
 
         public MainForm()
@@ -186,16 +187,31 @@ namespace Vano.Tools.Azure
                 throw new Exception("No subscriptions found.");
             }
 
-            foreach (var sub in _subscriptions)
+            LoadSubscriptionsItems();
+
+            this.subsToolStripComboBox.Enabled = true;
+            this.subsToolStripComboBox.SelectedIndex = this.subsToolStripComboBox.Items.Count - 1;
+        }
+
+        private void LoadSubscriptionsItems()
+        {
+            this.subsToolStripComboBox.Items.Clear();
+
+            IEnumerable<Subscription> orderedSubscriptions = _subscriptionSortByDisplayName ?
+                _subscriptions.OrderBy(sub => sub.DisplayName) :
+                _subscriptions.OrderBy(sub => sub.Id);
+
+            foreach (var sub in orderedSubscriptions)
             {
-                this.subsToolStripComboBox.Items.Add(new ToolStripMenuItem(sub.ToString())
+                string text = _subscriptionSortByDisplayName ?
+                    $"{sub.DisplayName} - {sub.Id}" :
+                    $"{sub.Id} - {sub.DisplayName}";
+                
+                this.subsToolStripComboBox.Items.Add(new ToolStripMenuItem(text)
                 {
                     Tag = sub
                 });
             }
-
-            this.subsToolStripComboBox.Enabled = true;
-            this.subsToolStripComboBox.SelectedIndex = this.subsToolStripComboBox.Items.Count - 1;
         }
 
         private async void subsToolStripComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -666,7 +682,12 @@ namespace Vano.Tools.Azure
                         Id = provider.Value<string>("id"),
                         Name = provider.Value<string>("name"),
                         Location = provider.Value<string>("location"),
-                        Providers = CloneProviders(resourceProviders.Where(p => p.Name.StartsWith("Microsoft.Web")))
+                        Providers = CloneProviders(providers: resourceProviders.Where(p => 
+                            p.Name.Equals("Microsoft.Web", StringComparison.OrdinalIgnoreCase) ||
+                            p.Name.Equals("Microsoft.App", StringComparison.OrdinalIgnoreCase) ||
+                            p.Name.Equals("Microsoft.ApiManagement", StringComparison.OrdinalIgnoreCase) ||
+                            p.Name.Equals("Microsoft.CognitiveServices", StringComparison.OrdinalIgnoreCase) ||
+                            p.Name.Equals("Microsoft.Resources", StringComparison.OrdinalIgnoreCase)))
                     });
             }
 

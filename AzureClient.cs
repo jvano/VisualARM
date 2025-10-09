@@ -237,7 +237,7 @@ namespace Vano.Tools.Azure
                 }
             }
 
-            return subscriptions.OrderBy(sub => sub.DisplayName);
+            return subscriptions;
         }
 
         public async Task<IEnumerable<Location>> GetLocations(Subscription subscription, CancellationToken cancellationToken = new CancellationToken())

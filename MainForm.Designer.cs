@@ -68,6 +68,7 @@
             this.loadResourcesToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.panel3 = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
+            this.templateListBox = new System.Windows.Forms.ListBox();
             this.toolStrip8 = new System.Windows.Forms.ToolStrip();
             this.filterTemplateToolStripTextBox = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripLabel7 = new System.Windows.Forms.ToolStripLabel();
@@ -107,7 +108,6 @@
             this.panel5 = new System.Windows.Forms.Panel();
             this.label4 = new System.Windows.Forms.Label();
             this.requestLogListBox = new System.Windows.Forms.ListBox();
-            this.templateListBox = new System.Windows.Forms.ListBox();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -228,6 +228,7 @@
             // 
             this.cloudTypeToolStripComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cloudTypeToolStripComboBox.Enabled = false;
+            this.cloudTypeToolStripComboBox.Font = new System.Drawing.Font("Consolas", 9F);
             this.cloudTypeToolStripComboBox.Name = "cloudTypeToolStripComboBox";
             this.cloudTypeToolStripComboBox.Size = new System.Drawing.Size(250, 25);
             this.cloudTypeToolStripComboBox.SelectedIndexChanged += new System.EventHandler(this.cloudTypeToolStripComboBox_SelectedIndexChanged);
@@ -259,8 +260,9 @@
             // 
             this.subsToolStripComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.subsToolStripComboBox.Enabled = false;
+            this.subsToolStripComboBox.Font = new System.Drawing.Font("Consolas", 9F);
             this.subsToolStripComboBox.Name = "subsToolStripComboBox";
-            this.subsToolStripComboBox.Size = new System.Drawing.Size(500, 25);
+            this.subsToolStripComboBox.Size = new System.Drawing.Size(550, 25);
             this.subsToolStripComboBox.SelectedIndexChanged += new System.EventHandler(this.subsToolStripComboBox_SelectedIndexChanged);
             // 
             // toolStripLabel6
@@ -273,8 +275,9 @@
             // 
             this.resourceGroupsToolStripComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.resourceGroupsToolStripComboBox.Enabled = false;
+            this.resourceGroupsToolStripComboBox.Font = new System.Drawing.Font("Consolas", 9F);
             this.resourceGroupsToolStripComboBox.Name = "resourceGroupsToolStripComboBox";
-            this.resourceGroupsToolStripComboBox.Size = new System.Drawing.Size(200, 25);
+            this.resourceGroupsToolStripComboBox.Size = new System.Drawing.Size(250, 25);
             // 
             // portalToolStripButton
             // 
@@ -352,6 +355,7 @@
             // 
             // verbToolStripComboBox
             // 
+            this.verbToolStripComboBox.Font = new System.Drawing.Font("Consolas", 9F);
             this.verbToolStripComboBox.Items.AddRange(new object[] {
             "GET",
             "POST",
@@ -360,7 +364,7 @@
             "HEAD",
             "DELETE"});
             this.verbToolStripComboBox.Name = "verbToolStripComboBox";
-            this.verbToolStripComboBox.Size = new System.Drawing.Size(75, 25);
+            this.verbToolStripComboBox.Size = new System.Drawing.Size(80, 25);
             this.verbToolStripComboBox.SelectedIndexChanged += new System.EventHandler(this.verbToolStripComboBox_SelectedIndexChanged);
             // 
             // toolStripLabel1
@@ -371,7 +375,7 @@
             // 
             // pathToolStripTextBox
             // 
-            this.pathToolStripTextBox.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.pathToolStripTextBox.Font = new System.Drawing.Font("Consolas", 9F);
             this.pathToolStripTextBox.Name = "pathToolStripTextBox";
             this.pathToolStripTextBox.Size = new System.Drawing.Size(100, 25);
             this.pathToolStripTextBox.Text = "/subscriptions/";
@@ -476,6 +480,7 @@
             // resourcesTreeView
             // 
             this.resourcesTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.resourcesTreeView.Font = new System.Drawing.Font("Consolas", 9F);
             this.resourcesTreeView.ImageIndex = 0;
             this.resourcesTreeView.ImageList = this.resourcesImageList;
             this.resourcesTreeView.Location = new System.Drawing.Point(0, 56);
@@ -538,6 +543,19 @@
             this.label2.TabIndex = 0;
             this.label2.Text = "Resources:";
             // 
+            // templateListBox
+            // 
+            this.templateListBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.templateListBox.Font = new System.Drawing.Font("Consolas", 9F);
+            this.templateListBox.FormattingEnabled = true;
+            this.templateListBox.ItemHeight = 14;
+            this.templateListBox.Location = new System.Drawing.Point(0, 75);
+            this.templateListBox.Margin = new System.Windows.Forms.Padding(2);
+            this.templateListBox.Name = "templateListBox";
+            this.templateListBox.Size = new System.Drawing.Size(346, 400);
+            this.templateListBox.TabIndex = 18;
+            this.templateListBox.DoubleClick += new System.EventHandler(this.templateListBox_DoubleClick);
+            // 
             // toolStrip8
             // 
             this.toolStrip8.ImageScalingSize = new System.Drawing.Size(32, 32);
@@ -553,7 +571,7 @@
             // filterTemplateToolStripTextBox
             // 
             this.filterTemplateToolStripTextBox.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.filterTemplateToolStripTextBox.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.filterTemplateToolStripTextBox.Font = new System.Drawing.Font("Consolas", 9F);
             this.filterTemplateToolStripTextBox.Name = "filterTemplateToolStripTextBox";
             this.filterTemplateToolStripTextBox.Size = new System.Drawing.Size(250, 25);
             this.filterTemplateToolStripTextBox.TextChanged += new System.EventHandler(this.filterTemplateToolStripTextBox_TextChanged);
@@ -593,6 +611,7 @@
             // 
             this.templatesToolStripComboBox.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.templatesToolStripComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.templatesToolStripComboBox.Font = new System.Drawing.Font("Consolas", 9F);
             this.templatesToolStripComboBox.Name = "templatesToolStripComboBox";
             this.templatesToolStripComboBox.Size = new System.Drawing.Size(222, 25);
             this.templatesToolStripComboBox.SelectedIndexChanged += new System.EventHandler(this.templatesToolStripComboBox_SelectedIndexChanged);
@@ -1033,23 +1052,14 @@
             // requestLogListBox
             // 
             this.requestLogListBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.requestLogListBox.Font = new System.Drawing.Font("Consolas", 9F);
             this.requestLogListBox.FormattingEnabled = true;
+            this.requestLogListBox.ItemHeight = 14;
             this.requestLogListBox.Location = new System.Drawing.Point(0, 0);
             this.requestLogListBox.Name = "requestLogListBox";
             this.requestLogListBox.Size = new System.Drawing.Size(371, 767);
             this.requestLogListBox.TabIndex = 11;
             this.requestLogListBox.DoubleClick += new System.EventHandler(this.requestLogListBox_DoubleClick);
-            // 
-            // templateListBox
-            // 
-            this.templateListBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.templateListBox.FormattingEnabled = true;
-            this.templateListBox.Location = new System.Drawing.Point(0, 75);
-            this.templateListBox.Margin = new System.Windows.Forms.Padding(2);
-            this.templateListBox.Name = "templateListBox";
-            this.templateListBox.Size = new System.Drawing.Size(346, 400);
-            this.templateListBox.TabIndex = 18;
-            this.templateListBox.DoubleClick += new System.EventHandler(this.templateListBox_DoubleClick);
             // 
             // MainForm
             // 

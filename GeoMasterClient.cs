@@ -108,7 +108,7 @@ namespace Vano.Tools.Azure
             }
 
             // Make async call happy
-            return await Task.FromResult(subscriptions.OrderBy(sub => sub.DisplayName));
+            return await Task.FromResult(subscriptions);
         }
 
         public async Task<IEnumerable<Location>> GetLocations(Subscription subscription, CancellationToken cancellationToken = new CancellationToken())
